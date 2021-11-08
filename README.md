@@ -1,5 +1,3 @@
 # Jan Reisiegel - Přepracování aplikace pro přihlašování na soboty s technikou
-##Časový plán
-| Stručný popis | Předpokládané datum dokončení |
-| ----------- | ----------- |
-| Vytvoření databáze | začátek prosince |
+## Volba struktury
+K vyvynutí aplikace použiji ASP.NET with react, ve kterém bude v jazyce c# naprogramované api. Vzhled aplikace bude kódován v reactu za pomoci komponent od 
