@@ -1,1 +1,1 @@
-# MP2021-22_Reisiegel-Jan_Prepracovani-aplikace-pro-prihlasovani-na-Soboty-s-technikou
+# Jan Reisiegel - Přepracování aplikace pro přihlašování na soboty s technikou
