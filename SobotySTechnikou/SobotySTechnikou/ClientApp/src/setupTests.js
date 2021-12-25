@@ -12,10 +12,10 @@ window.fetch = () => {
     {
       ok: true,
       json: () => Promise.resolve({
-        "authority": "https://localhost:7080",
+        "authority": "https://localhost:7297",
         "client_id": "SobotySTechnikou",
-        "redirect_uri": "https://localhost:7080/authentication/login-callback",
-        "post_logout_redirect_uri": "https://localhost:7080/authentication/logout-callback",
+        "redirect_uri": "https://localhost:7297/authentication/login-callback",
+        "post_logout_redirect_uri": "https://localhost:7297/authentication/logout-callback",
         "response_type": "id_token token",
         "scope": "SobotySTechnikouAPI openid profile"
      })

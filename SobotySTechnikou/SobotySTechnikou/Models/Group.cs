@@ -6,20 +6,22 @@ namespace SobotySTechnikou.Models
     public class Group
     {
         [Key]
-        public string ID { get; set; }
+        public string Id { get; set; } = string.Empty;
         [Required]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         [Required]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
         [Required]
-        public bool Opened { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        [ForeignKey("ActionID")]
-        public Action Action { get; set; }
+        public int Capacity { get; set; }
+        public bool Open { get; set; }
+        [ForeignKey("HeadLectorId")]
+        public ApplicationUser? HeadLector { get; set; }
+        public string? HeadLectorId { get; set; }
         [Required]
-        public string ActionID { get; set; }
-        public ICollection<ApplicationUser> Users { get; set; }
-        
+        public string ActionId { get; set; } = string.Empty;
+        [ForeignKey("ActionId")]
+        public Action? Action { get; set; }
+
+        public ICollection<UserInGroup>? UsersInGroup { get; set; }
     }
 }

@@ -58,7 +58,7 @@ namespace SobotySTechnikou.Data.Migrations
                     Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Expiration = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 50800, nullable: false)
+                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 52970, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -76,7 +76,7 @@ namespace SobotySTechnikou.Data.Migrations
                     Algorithm = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     IsX509Certificate = table.Column<bool>(type: "bit", nullable: false),
                     DataProtected = table.Column<bool>(type: "bit", nullable: false),
-                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 50800, nullable: false)
+                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 52970, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -96,7 +96,7 @@ namespace SobotySTechnikou.Data.Migrations
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Expiration = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ConsumedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 50800, nullable: false)
+                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 52970, nullable: false)
                 },
                 constraints: table =>
                 {
