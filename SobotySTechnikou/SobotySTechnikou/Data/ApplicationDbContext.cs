@@ -25,7 +25,7 @@ namespace SobotySTechnikou.Data
             
             modelBuilder.Entity<UserInGroup>().HasKey(t => new { t.UserId, t.GroupId });
             //modelBuilder.Entity<ApplicationUser>().HasKey(t => t.Id);
-            /*
+            
             modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
             {
                 Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1",
@@ -40,7 +40,7 @@ namespace SobotySTechnikou.Data
             });
 
             var hasher = new PasswordHasher<ApplicationUser>();
-            /*modelBuilder.Entity<ApplicationUser>().HasData(new ApplicationUser
+            modelBuilder.Entity<ApplicationUser>().HasData(new ApplicationUser
             {
                 Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
                 Email = "info@my-gallery.eu",
@@ -53,7 +53,7 @@ namespace SobotySTechnikou.Data
                 SecurityStamp = string.Empty,
                 FirstName = "Admin",
                 LastName = "PSLIB",
-                //BirthDate = DateTime.Today.ToString(),
+                BirthDate = DateTime.Today.ToString(),
                 Gender = Gender.Other,
                 School = "Střední průmyslová škola strojní a elektrotechnická Liberec",
                 Year =  Year.Class10
@@ -62,7 +62,7 @@ namespace SobotySTechnikou.Data
             {
                 RoleId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1",
                 UserId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
-            });*/
+            });
             modelBuilder.Entity<UserInGroup>(entity =>
             {
                 entity.HasOne(x => x.Group).WithMany(x => x.UsersInGroup).HasForeignKey(x => x.GroupId).OnDelete(DeleteBehavior.Restrict);

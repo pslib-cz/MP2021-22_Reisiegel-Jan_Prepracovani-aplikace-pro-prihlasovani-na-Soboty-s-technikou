@@ -21,6 +21,8 @@ namespace SobotySTechnikou.Models
         public string ActionId { get; set; } = string.Empty;
         [ForeignKey("ActionId")]
         public Action? Action { get; set; }
+        public DateTime CreateTime { get; set; }
+        public DateTime UpdatedTime { get; set; }
 
         public ICollection<UserInGroup>? UsersInGroup { get; set; }
     }
