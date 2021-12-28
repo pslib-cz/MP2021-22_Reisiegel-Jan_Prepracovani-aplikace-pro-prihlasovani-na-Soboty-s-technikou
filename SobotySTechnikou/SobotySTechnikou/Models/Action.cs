@@ -28,7 +28,9 @@ namespace SobotySTechnikou.Models
     }
     public enum ActionType
     {
-        Online,
-        Offline
+        [Display(Name = "Distančně")]
+        Online = 0,
+        [Display(Name = "Prezenčně")]
+        Offline = 1,
     }
 }

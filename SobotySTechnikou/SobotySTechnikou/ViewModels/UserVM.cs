@@ -1,0 +1,19 @@
+﻿using SobotySTechnikou.Models;
+
+namespace SobotySTechnikou.ViewModels
+{
+    public class UserVM
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public DateTime BirthDate { get; set; }
+        public Gender Gender { get; set; }
+        public string School { get; set; }
+        public Year Year { get; set; }
+        public bool PotentionalStudent { get; set; }
+        public Condition Condition { get; set; }
+        public string UserName { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
+    }
+}
