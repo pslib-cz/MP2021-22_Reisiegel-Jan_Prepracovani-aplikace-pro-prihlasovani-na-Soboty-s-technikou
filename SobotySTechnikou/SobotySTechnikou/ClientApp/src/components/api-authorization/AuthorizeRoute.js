@@ -1,6 +1,6 @@
 import React from 'react'
 import { Component } from 'react'
-import { Route, Redirect } from 'react-router-dom'
+import { Route, Navigate } from 'react-router-dom'
 import { ApplicationPaths, QueryParameterNames } from './ApiAuthorizationConstants'
 import authService from './AuthorizeService'
 
@@ -38,7 +38,7 @@ export default class AuthorizeRoute extends Component {
                     if (authenticated) {
                         return <Component {...props} />
                     } else {
-                        return <Redirect to={redirectUrl} />
+                        return <Navigate path={redirectUrl} />
                     }
                 }} />
         }
@@ -54,3 +54,4 @@ export default class AuthorizeRoute extends Component {
         await this.populateAuthenticationState();
     }
 }
+//<Redirect from="" to={redirectUrl} />

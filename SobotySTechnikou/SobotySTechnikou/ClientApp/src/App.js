@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route } from 'react-router';
+import { Routes, Route } from "react-router-dom";
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
 import { FetchData } from './components/FetchData';
@@ -9,18 +9,31 @@ import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizat
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
 
 import './custom.css'
+import { AuthProvider } from './providers/AuthProvider';
+import { Paths } from './configuration/main';
+import SignInCallback from './components/Auth/SignInCallback';
+import SignOutCallback from './components/Auth/SignOutCallback';
+import SilentRenewCallback from './components/Auth/SilentRenewCallback';
+import NotFound from './components/general/NotFound';
 
 export default class App extends Component {
   static displayName = App.name;
 
-  render () {
+  render() {
     return (
-      <Layout>
-        <Route exact path='/' component={Home} />
-        <Route path='/counter' component={Counter} />
-        <AuthorizeRoute path='/fetch-data' component={FetchData} />
-        <Route path={ApplicationPaths.ApiAuthorizationPrefix} component={ApiAuthorizationRoutes} />
-      </Layout>
+      <AuthProvider>
+          <Layout>
+            <Routes>
+              <Route path={Paths.LoginCallback} element={<SignInCallback />} />
+              <Route path={Paths.LogoutCallback} element={<SignOutCallback />} />
+              <Route path={Paths.RenewCallback} element={<SilentRenewCallback />} />
+              <Route index path='/' element={<Home />} />
+              <Route path='/counter' element={<Counter />} />
+              <Route path='/fetch-data' element={<FetchData />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Layout>
+      </AuthProvider>
     );
   }
 }
