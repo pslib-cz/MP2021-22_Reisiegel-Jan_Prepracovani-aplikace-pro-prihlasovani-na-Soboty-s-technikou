@@ -1,16 +1,17 @@
 
-import { Button } from 'bootstrap';
-import React, { Component } from 'react';
+import { Button } from 'reactstrap';
+import React from 'react';
 import { useAuthContext } from '../providers/AuthProvider';
 
 export const Home = () => {
-  const [{ userManager, accessToken }] = useAuthContext();
+    const [{ userManager, accessToken }] = useAuthContext();
+    console.log(userManager)
   return (
-    <div className='text-center'>
-      {userManager ?
+      <div className='text-center'>
+          {userManager ? 
         accessToken ?
           <Button color="danger" onClick={() => { userManager.signoutRedirect() }} >Odhlásit</Button>
-          : <Button color="success" onClick={() => { userManager.signinRedirect({ redirectUrl: "/public" }) }} >Přihlásit</Button>
+          : <Button color="success" onClick={() => { userManager.signinRedirect({ redirectUrl: "/" }) }} >Přihlásit</Button>
         : null
       }
     </div>
@@ -18,3 +19,4 @@ export const Home = () => {
 }
 
 export default Home;
+

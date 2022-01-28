@@ -6,14 +6,15 @@ import './NavMenu.css';
 import { useAuthContext } from '../providers/AuthProvider';
 
 export const NavMenu = props => {
-    const [{ profile, accessToken, isUserLoading }] = useAuthContext();
+    const [{ profile, accessToken, isUserLoading, userManager }] = useAuthContext();
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
+    console.log(profile);
     return (
         <header>
             <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" light>
                 <Container>
-                    <NavbarBrand tag={Link} to="/">IdentityReactDemo</NavbarBrand>
+                    <NavbarBrand tag={Link} to="/">Soboty s technikou</NavbarBrand>
                     <NavbarToggler onClick={toggle} />
                     <Collapse isOpen={isOpen} navbar>
                         <Nav className="me-auto" navbar>
@@ -36,11 +37,12 @@ export const NavMenu = props => {
                         <Nav className="ml-auto" navbar>
                             <NavItem>
                                 {
-                                    isUserLoading
-                                        ?
-                                        <Spinner size="sm" />
-                                        :
-                                        <NavLink tag={Link} to="/">{accessToken ? profile.name : "Sign In"}</NavLink>
+                                    userManager ?
+                                        accessToken?
+                                        <NavLink tag={Link} to="/home" onClick={() => {userManager.signoutRedirect()}}>{profile.name}</NavLink> :
+                                        <NavLink tag={Link} to="/home" onClick={() => { userManager.signinRedirect({redirectUrl: "/"}) }}>Přihlásit se</NavLink>:
+                                    null
+
                                 }
                             </NavItem>
                         </Nav>
