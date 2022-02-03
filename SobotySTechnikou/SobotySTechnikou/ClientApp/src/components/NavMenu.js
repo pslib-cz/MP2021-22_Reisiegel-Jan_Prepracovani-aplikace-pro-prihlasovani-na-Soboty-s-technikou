@@ -1,54 +1,54 @@
 import React, { Component, useState } from 'react';
-import { Collapse, Container, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink, Spinner } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { LoginMenu } from './api-authorization/LoginMenu';
 import './NavMenu.css';
 import { useAuthContext } from '../providers/AuthProvider';
+import { Dropdown, Nav, Navbar } from 'rsuite';
+import { Spinner } from 'reactstrap';
 
 export const NavMenu = props => {
     const [{ profile, accessToken, isUserLoading, userManager }] = useAuthContext();
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
-    console.log(profile);
+    console.log(accessToken);
     return (
-        <header>
-            <Navbar className="navbar-expand-sm navbar-toggleable-sm ng-white border-bottom box-shadow mb-3" light>
-                <Container>
-                    <NavbarBrand tag={Link} to="/">Soboty s technikou</NavbarBrand>
-                    <NavbarToggler onClick={toggle} />
-                    <Collapse isOpen={isOpen} navbar>
-                        <Nav className="me-auto" navbar>
-                            <NavItem>
-                                <NavLink tag={Link} to="/">Home</NavLink>
-                            </NavItem>
-                            <NavItem>
-                                <NavLink tag={Link} to="/public">Public</NavLink>
-                            </NavItem>
-                            <NavItem>
-                                <NavLink tag={Link} to="/protected">Protected</NavLink>
-                            </NavItem>
-                            <NavItem>
-                                <NavLink tag={Link} to="/unprotected">Unprotected</NavLink>
-                            </NavItem>
-                            <NavItem>
-                                <NavLink tag={Link} to="/admin">Admin</NavLink>
-                            </NavItem>
-                        </Nav>
-                        <Nav className="ml-auto" navbar>
-                            <NavItem>
-                                {
-                                    userManager ?
-                                        accessToken?
-                                        <NavLink tag={Link} to="/home" onClick={() => {userManager.signoutRedirect()}}>{profile.name}</NavLink> :
-                                        <NavLink tag={Link} to="/home" onClick={() => { userManager.signinRedirect({redirectUrl: "/"}) }}>Přihlásit se</NavLink>:
-                                    null
+        <Navbar>
+            <Nav>
+                <Nav.Item as={Link} to={"/"}>
+                    Domu
+                </Nav.Item>
+                <Nav.Item as={Link} to={"/Users"}>
+                    Domu
+                </Nav.Item>
+                <Nav.Item as={Link} to={"/Public"}>
+                    Domu
+                </Nav.Item>
+                <Nav.Item as={Link} to={"/admin"}>
+                    Domu
+                </Nav.Item>
+                <Nav.Item as={Link} to={"/protected"}>
+                    Domu
+                </Nav.Item>
+            </Nav>
+            <Nav pullRight>
+                {
+                    accessToken ?
+                        <Nav.Item tag={Link} to="/profile">{profile.name}</Nav.Item>
+                        : isUserLoading ?
+                            <Spinner size={"sm"} />
+                            : null
+                }
 
-                                }
-                            </NavItem>
-                        </Nav>
-                    </Collapse>
-                </Container>
-            </Navbar>
-        </header>
+                {
+                    userManager ?
+                        accessToken ?
+                            <Nav.Item tag={Link} to="/profile" onClick={() => { userManager.signoutRedirect() }}>Odhlásit</Nav.Item> :
+                            <Nav.Item tag={Link} to="/home" onClick={() => { userManager.signinRedirect({ redirectUrl: "/" }) }}>Přihlásit se</Nav.Item> :
+                        null
+
+                }
+                
+            </Nav>
+        </Navbar >
     )
 }

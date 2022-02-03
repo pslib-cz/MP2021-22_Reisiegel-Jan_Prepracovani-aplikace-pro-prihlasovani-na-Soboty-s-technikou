@@ -34,6 +34,7 @@ namespace SobotySTechnikou.Controllers
         public async Task<ActionResult<UserVM>> GetUser()
         {
             var userId = User.Claims.Where(x=>x.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
+            Console.WriteLine(userId);
             if (userId is null)
                 return BadRequest();
             var userInfo = await _context.Users
@@ -42,7 +43,7 @@ namespace SobotySTechnikou.Controllers
                 {
                     FirstName = x.FirstName,
                     LastName = x.LastName,
-                    BirthDate = DateTime.Parse(x.BirthDate),
+                    BirthDate = DateTime.Parse(x.BirthDate).ToShortDateString(),
                     Gender = x.Gender,
                     School = x.School,
                     Year = x.Year,

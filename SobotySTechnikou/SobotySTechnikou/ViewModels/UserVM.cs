@@ -6,7 +6,7 @@ namespace SobotySTechnikou.ViewModels
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public DateTime BirthDate { get; set; }
+        public string BirthDate { get; set; }
         public Gender Gender { get; set; }
         public string School { get; set; }
         public Year Year { get; set; }

@@ -12,6 +12,7 @@ import SignInCallback from './components/Auth/SignInCallback';
 import SignOutCallback from './components/Auth/SignOutCallback';
 import SilentRenewCallback from './components/Auth/SilentRenewCallback';
 import NotFound from './components/general/NotFound';
+import Profile from './components/UserComponents/ProfileComponent';
 
 export default class App extends Component {
   static displayName = App.name;
@@ -27,6 +28,7 @@ export default class App extends Component {
               <Route index path='/' element={<Home />} />
               <Route path='/counter' element={<Counter />} />
               <Route path='/fetch-data' element={<FetchData />} />
+              <Route path="/profile" element={<Profile />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>
