@@ -1,0 +1,23 @@
+﻿@page
+@model RegisterConfirmationModel
+@{
+    ViewData["Title"] = "Potvrzení registrace";
+}
+
+<h1>@ViewData["Title"]</h1>
+@{
+    if (@Model.DisplayConfirmAccountLink)
+    {
+<p>
+    Tato aplikace aktuálně nemá registrovaného skutečného odesílatele e-mailu, viz <a href="https://aka.ms/aspaccountconf">dokumentace</a> jak nakonfigurovat skutečného odesílatele e-mailu.
+    Ověřovací kód, za normálnícch okolností zasílán emailem: <a id="confirm-link" href="@Model.EmailConfirmationUrl">Klikněte pro potvrzení emailu</a>
+</p>
+    }
+    else
+    {
+<p>
+        Zkontrolujte svůj e-mail a potvrďte svůj účet.
+</p>
+    }
+}
+

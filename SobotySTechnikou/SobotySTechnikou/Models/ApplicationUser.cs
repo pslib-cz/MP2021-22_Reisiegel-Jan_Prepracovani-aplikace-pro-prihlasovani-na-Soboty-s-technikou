@@ -7,14 +7,14 @@ namespace SobotySTechnikou.Models
     {
 
         [Required]
-        public string FirstName { get; set; } = string.Empty;
+        public string FirstName { get; set; } = "Nevyplněno";
         [Required]
-        public string LastName { get; set; } = string.Empty;
-        public string BirthDate { get; set; } = string.Empty;
+        public string LastName { get; set; } = "Nevyplněno";
+        public string BirthDate { get; set; } = "Nevyplněno";
         [Required]
         public Gender Gender { get; set; }
         [Required]
-        public string School { get; set; } = string.Empty;
+        public string School { get; set; } = "Nevyplněno";
         [Required]
         public Year Year { get; set; }
         public bool PotentionalStudent { get; set; }

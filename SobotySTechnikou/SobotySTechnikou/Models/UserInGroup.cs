@@ -6,11 +6,11 @@ namespace SobotySTechnikou.Models
     public class UserInGroup
     {
         [Key]
-        public string UserId { get; set; } = string.Empty;
+        public string UserId { get; set; } = "Nevyplněno";
         [ForeignKey("UserId")]
         public ApplicationUser? User { get; set; }
         [Key]
-        public string GroupId { get; set; } = string.Empty;
+        public string GroupId { get; set; } = "Nevyplněno";
         [ForeignKey("GroupId")]
         public Group? Group { get; set; }
         

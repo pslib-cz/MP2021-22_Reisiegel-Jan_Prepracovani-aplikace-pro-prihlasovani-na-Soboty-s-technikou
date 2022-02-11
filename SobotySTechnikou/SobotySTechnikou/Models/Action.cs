@@ -5,11 +5,11 @@ namespace SobotySTechnikou.Models
     public class Action
     {
         [Key]
-        public string Id { get; set; } = string.Empty;
+        public string Id { get; set; } = "Nevyplněno";
         [Required]
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; } = "Nevyplněno";
         [Required]
-        public string Description { get; set; } = string.Empty;
+        public string Description { get; set; } = "Nevyplněno";
         [Required]
         public int Year { get; set; }
         [Required]

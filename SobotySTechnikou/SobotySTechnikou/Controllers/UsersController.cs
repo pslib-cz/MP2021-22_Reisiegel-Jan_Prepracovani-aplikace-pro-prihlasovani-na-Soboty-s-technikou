@@ -62,7 +62,10 @@ namespace SobotySTechnikou.Controllers
         [HttpGet("AllUsers")]
         public async Task<ActionResult<ICollection<ApplicationUser>>> GetAll()
         {
-            return await _context.Users.Where(x => x.Id != "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX").ToListAsync();
+            var allUsers = await _context.Users.ToListAsync();
+            if (allUsers == null)
+                return StatusCode(418);
+            return allUsers;
         }
 
         [Authorize(Policy = "Administrator")]
@@ -105,6 +108,19 @@ namespace SobotySTechnikou.Controllers
             if (users.Count <= 0)
                 return NotFound();
             return Ok(users);
+        }
+
+        [Authorize]
+        [HttpGet("/IsCompleted")]
+        public async Task<bool> GetCompleted()
+        {
+            var userId = User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
+            if(userId == null)
+            {
+                return false;
+            }
+            var user = await  _context.Users.FindAsync(userId);
+            return false;
         }
     }
 }

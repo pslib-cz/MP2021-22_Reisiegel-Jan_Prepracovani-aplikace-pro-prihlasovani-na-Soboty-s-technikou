@@ -6,11 +6,11 @@ namespace SobotySTechnikou.Models
     public class Group
     {
         [Key]
-        public string Id { get; set; } = string.Empty;
+        public string Id { get; set; } = "Nevyplněno";
         [Required]
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; } = "Nevyplněno";
         [Required]
-        public string Description { get; set; } = string.Empty;
+        public string Description { get; set; } = "Nevyplněno";
         [Required]
         public int Capacity { get; set; }
         public bool Open { get; set; }
@@ -18,7 +18,7 @@ namespace SobotySTechnikou.Models
         public ApplicationUser? HeadLector { get; set; }
         public string? HeadLectorId { get; set; }
         [Required]
-        public string ActionId { get; set; } = string.Empty;
+        public string ActionId { get; set; } = "Nevyplněno";
         [ForeignKey("ActionId")]
         public Action? Action { get; set; }
         public DateTime CreateTime { get; set; }
