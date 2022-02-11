@@ -34,7 +34,7 @@ builder.Services.AddAuthentication("Bearer").AddIdentityServerJwt();
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("Administrator", policy => policy.RequireRole("Administrator"));
+    options.AddPolicy("Administrator", policy => policy.RequireRole("XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1"));
     options.AddPolicy("Lector", policy => policy.RequireRole("Lector"));
 });
 

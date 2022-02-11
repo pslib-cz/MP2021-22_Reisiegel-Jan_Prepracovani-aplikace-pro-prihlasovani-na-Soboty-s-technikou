@@ -11,6 +11,7 @@ const Users = props => {
     const getUsers = () => {
         setIsLoading(true);
         setError(false);
+        console.log(accessToken);
         axios.get("/api/Users/AllUsers", {
             headers: {
                 "Content-Type": "application/json",

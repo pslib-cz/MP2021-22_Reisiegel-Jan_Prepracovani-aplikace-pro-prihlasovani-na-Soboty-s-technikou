@@ -29,7 +29,7 @@ namespace SobotySTechnikou.Controllers
             return new UserIdentificator { Id = userId };
         }
 
-        [Authorize]
+        [Authorize(Policy = "Administrator")]
         [HttpGet("UserInfo")]
         public async Task<ActionResult<UserVM>> GetUser()
         {
@@ -58,11 +58,12 @@ namespace SobotySTechnikou.Controllers
             return Ok(userInfo);
         }
 
-        [Authorize(Policy = "Administrator")]
+        [Authorize]//(Roles = "Administrator")
         [HttpGet("AllUsers")]
         public async Task<ActionResult<ICollection<ApplicationUser>>> GetAll()
         {
             var allUsers = await _context.Users.ToListAsync();
+            var not = User;
             if (allUsers == null)
                 return StatusCode(418);
             return allUsers;
