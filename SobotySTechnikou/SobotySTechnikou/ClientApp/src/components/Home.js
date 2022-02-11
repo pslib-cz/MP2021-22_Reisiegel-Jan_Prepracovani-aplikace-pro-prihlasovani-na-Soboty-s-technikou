@@ -8,12 +8,7 @@ export const Home = () => {
     console.log(userManager)
   return (
       <div className='text-center'>
-          {userManager ? 
-        accessToken ?
-          <Button color="danger" onClick={() => { userManager.signoutRedirect() }} >Odhlásit</Button>
-          : <Button color="success" onClick={() => { userManager.signinRedirect({ redirectUrl: "/" }) }} >Přihlásit</Button>
-        : null
-      }
+          
     </div>
   )
 }
