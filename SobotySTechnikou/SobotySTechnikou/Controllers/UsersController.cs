@@ -29,7 +29,7 @@ namespace SobotySTechnikou.Controllers
             return new UserIdentificator { Id = userId };
         }
 
-        [Authorize(Policy = "Administrator")]
+        [Authorize]
         [HttpGet("UserInfo")]
         public async Task<ActionResult<UserVM>> GetUser()
         {
@@ -69,7 +69,7 @@ namespace SobotySTechnikou.Controllers
             return allUsers;
         }
 
-        [Authorize(Policy = "Administrator")]
+        [Authorize] //(Roles = "Administrator")
         [HttpPost("{userId}/ChangeAuthorization/{function}")]
         public async Task<ActionResult> UserAddPolicy(string userId, string function)
         {
@@ -89,7 +89,7 @@ namespace SobotySTechnikou.Controllers
             return CreatedAtAction("GetUsersByRole", new { roleid = policy.Id }, user);
         }
 
-        [Authorize(Policy = "Administrator")]
+        [Authorize] //(Roles = "Administrator")
         [HttpGet("{roleId}")]
         public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUsersByRole(string roleId)
         {
@@ -112,15 +112,15 @@ namespace SobotySTechnikou.Controllers
         }
 
         [Authorize]
-        [HttpGet("/IsCompleted")]
-        public async Task<bool> GetCompleted()
+        [HttpGet("IsCompleted")]
+        public async Task<ActionResult<bool>> GetCompleted()
         {
             var userId = User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
             if(userId == null)
             {
-                return false;
+                return true;
             }
-            var user = await  _context.Users.FindAsync(userId);
+            //var user = await _context.Users.FindAsync(userId);
             return false;
         }
     }

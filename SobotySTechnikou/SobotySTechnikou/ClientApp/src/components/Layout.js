@@ -8,29 +8,28 @@ export class Layout extends Component {
 
   render() {
     return (
-      
-      <Container>
-        <Header><NavMenu /></Header>
-        <Content>
-          <Container>
-            <Content>
-              <Row>
-                <Col lg={2}>
-                </Col>
-                <Col lg={16}>
-                  {this.props.children}
-                </Col>
-                <Col lg={4}>
-                  <SideMenu />
-                </Col>
-                <Col lg={2}>
-                </Col>
-              </Row>
-            </Content>
-          </Container>
-        </Content>
-        <Footer></Footer>
-      </Container>
+        <Container>
+          <Header><NavMenu /></Header>
+          <Content>
+            <Container>
+              <Content>
+                <Row>
+                  <Col lg={2}>
+                  </Col>
+                  <Col lg={16}>
+                    {this.props.children}
+                  </Col>
+                  <Col lg={4}>
+                    <SideMenu />
+                  </Col>
+                  <Col lg={2}>
+                  </Col>
+                </Row>
+              </Content>
+            </Container>
+          </Content>
+          <Footer></Footer>
+        </Container>
     );
   }
 }

@@ -18,6 +18,7 @@ namespace SobotySTechnikou.Models
         [Required]
         public Year Year { get; set; }
         public bool PotentionalStudent { get; set; }
+        //public bool BeInformed { get; set; }
         public Condition Condition { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
@@ -40,7 +41,7 @@ namespace SobotySTechnikou.Models
         Class7,
         [Display(Name = "8. třída ZŠ")]
         Class8,
-        [Display(Name = "8. třída ZŠ")]
+        [Display(Name = "9. třída ZŠ")]
         Class9,
         [Display(Name = "Vyšší třída (SŠ)")]
         Class10,

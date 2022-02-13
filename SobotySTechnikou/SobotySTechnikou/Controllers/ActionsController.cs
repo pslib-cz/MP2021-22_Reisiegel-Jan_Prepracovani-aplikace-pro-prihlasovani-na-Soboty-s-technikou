@@ -37,8 +37,7 @@ namespace SobotySTechnikou.Controllers
             return Ok(action);
         }
 
-        [Authorize(Policy = "Administrator")]
-        [Authorize(Policy = "Lector")]
+        [Authorize] //(Roles = "Administrator, Lector")
         [HttpPut]
         public async Task<ActionResult> PutAction(Models.Action actionInput)
         {
@@ -63,8 +62,7 @@ namespace SobotySTechnikou.Controllers
             return Ok();
         }
 
-        [Authorize(Policy = "Administrator")]
-        [Authorize(Policy = "Lector")]
+        [Authorize] //(Roles = "Administrator, Lector")
         [HttpPost]
         public async Task<ActionResult<Models.Action>> PostAction(ActionIM actionInput)
         {
@@ -89,8 +87,7 @@ namespace SobotySTechnikou.Controllers
             return CreatedAtAction("GetAction", new { id = action.Id }, action);
         }
 
-        [Authorize(Policy = "Administrator")]
-        [Authorize(Policy = "Lector")]
+        [Authorize]//(Roles = "Administrator, Lector")
         [HttpDelete]
         public async Task<ActionResult> DeleteAction(string id)
         {

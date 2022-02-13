@@ -41,8 +41,7 @@ namespace SobotySTechnikou.Controllers
             return Ok(group);
         }
 
-        [Authorize(Policy = "Administrator")]
-        [Authorize(Policy = "Lector")]
+        [Authorize] //(Roles = "Administrator, Lector")
         [HttpPost]
         public async Task<ActionResult<Group>> Post(GroupIM group)
         {
@@ -67,8 +66,7 @@ namespace SobotySTechnikou.Controllers
             return CreatedAtAction("GetGroup", new { id = newGroup.Id }, newGroup);
         }
 
-        [Authorize(Policy = "Administrator")]
-        [Authorize(Policy = "Lector")]
+        [Authorize] //(Roles = "Administrator, Lector")
         [HttpPut]
         public async Task<ActionResult> Put(Group inputGroup)
         {
@@ -91,8 +89,7 @@ namespace SobotySTechnikou.Controllers
             return Ok();
         }
 
-        [Authorize(Policy = "Administrator")]
-        [Authorize(Policy = "Lector")]
+        [Authorize] //(Roles = "Administrator, Lector")
         [HttpDelete]
         public async Task<ActionResult> Delete(string id)
         {
@@ -106,8 +103,7 @@ namespace SobotySTechnikou.Controllers
             return Ok();
         }
 
-        [Authorize(Policy = "Administrator")]
-        [Authorize(Policy = "Lector")]
+        [Authorize] //(Roles = "Administrator, Lector")
         [HttpGet("{id}/Users")]
         public async Task<ActionResult<ICollection<ApplicationUser>>> GetUsers(string id)
         {
