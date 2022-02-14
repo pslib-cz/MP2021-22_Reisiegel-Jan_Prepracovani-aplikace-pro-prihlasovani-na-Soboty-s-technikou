@@ -14,6 +14,9 @@ import SilentRenewCallback from './components/Auth/SilentRenewCallback';
 import NotFound from './components/general/NotFound';
 import Profile from './components/UsersComponents/ProfileComponent';
 import Users from './components/UsersComponents/Users';
+import AllActions from './components/ActionsComponents/AllActions';
+import AllGroups from './components/GroupsComponents/AllGroups';
+import NewAction from './components/ActionsComponents/NewAction';
 
 
 export default class App extends Component {
@@ -32,6 +35,9 @@ export default class App extends Component {
               <Route path='/fetch-data' element={<FetchData />} />
               <Route path="/Profile" element={<Profile />} />
               <Route path="/Users" element={<Users />} />
+              <Route path="/AllActions" element={<AllActions />} />
+              <Route path="/NewAction" element={<NewAction />} />
+              <Route path="/AllGroups" element={<AllGroups />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>

@@ -21,9 +21,10 @@ namespace SobotySTechnikou.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Group>>> Get()
+        public async Task<ActionResult<IEnumerable<Group>>> Get(string name, SobotySTechnikou.Models.Action action, bool open)
         {
-            IQueryable<Group> groups = _context.Groups;
+            IQueryable<Group> groups = _context.Groups
+                .Include(x => x.Action);
             return await groups.ToListAsync();
         }
 

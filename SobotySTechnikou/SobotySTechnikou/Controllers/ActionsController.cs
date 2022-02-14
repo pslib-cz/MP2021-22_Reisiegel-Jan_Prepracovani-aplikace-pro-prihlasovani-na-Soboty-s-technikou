@@ -21,9 +21,25 @@ namespace SobotySTechnikou.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Models.Action>>> Get()
+        public async Task<ActionResult<IEnumerable<Models.Action>>> Get(string name, int? year, bool? isActive, bool? availability)
         {
             IQueryable<SobotySTechnikou.Models.Action> actions = _context.Actions;
+            if (!String.IsNullOrEmpty(name))
+            {
+                actions = actions.Where(x=>x.Name.Contains(name));
+            }
+            if (year != null)
+            {
+                actions = actions.Where(x => x.Year.ToString().Contains(year.ToString()));
+            }
+            if(isActive != null)
+            {
+                actions = actions.Where(x=>x.Active == isActive);
+            }
+            if (availability != null)
+            {
+                actions = actions.Where(x=>x.Availability == availability);
+            }
             return await actions.ToListAsync();
         }
 

@@ -27,11 +27,11 @@ export const NavMenu = props => {
                         <Nav.Item as={Link} to={"/Users"}>
                             Uživatelé
                         </Nav.Item>
-                        <Nav.Item as={Link} to={"/Public"}>
-                            Domu
+                        <Nav.Item as={Link} to={"/AllActions"}>
+                            Akce
                         </Nav.Item>
-                        <Nav.Item as={Link} to={"/admin"}>
-                            Domu
+                        <Nav.Item as={Link} to={"/AllGroups"}>
+                            Skupiny
                         </Nav.Item>
                         <Nav.Item as={Link} to={"/protected"}>
                             Domu
