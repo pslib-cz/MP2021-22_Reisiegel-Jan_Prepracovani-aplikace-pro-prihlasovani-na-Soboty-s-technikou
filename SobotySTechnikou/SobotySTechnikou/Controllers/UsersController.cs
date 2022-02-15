@@ -33,7 +33,7 @@ namespace SobotySTechnikou.Controllers
         [HttpGet("UserInfo")]
         public async Task<ActionResult<UserVM>> GetUser()
         {
-            var userId = User.Claims.Where(x=>x.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
+            var userId = User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
             Console.WriteLine(userId);
             if (userId is null)
                 return BadRequest();
@@ -43,7 +43,7 @@ namespace SobotySTechnikou.Controllers
                 {
                     FirstName = x.FirstName,
                     LastName = x.LastName,
-                    BirthDate = DateTime.Parse(x.BirthDate).ToShortDateString(),
+                    BirthDate = DateTime.Parse(x.BirthDate),
                     Gender = x.Gender,
                     School = x.School,
                     Year = x.Year,
@@ -75,7 +75,10 @@ namespace SobotySTechnikou.Controllers
         {
             if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(function))
                 return BadRequest();
-            var policy = _context.Roles.Where(x => x.Name == function).FirstOrDefault();
+            var policy2 = _context.UserRoles.Where(x => x.UserId == userId).FirstOrDefault();
+            if (policy2 != null && !String.IsNullOrEmpty(function))
+                _context.UserRoles.Remove(policy2);
+            var policy = _context.Roles.Where(x => x.Id == function).FirstOrDefault();
             var user = await _context.Users.FindAsync(userId);
             if ((user is null) || (policy is null))
                 return NotFound();
@@ -116,12 +119,88 @@ namespace SobotySTechnikou.Controllers
         public async Task<ActionResult<bool>> GetCompleted()
         {
             var userId = User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
-            if(userId == null)
+            if (userId == null)
             {
-                return true;
+                return NotFound();
             }
-            //var user = await _context.Users.FindAsync(userId);
-            return false;
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+                return NotFound();
+            if (String.IsNullOrEmpty(user.FirstName) || String.IsNullOrEmpty(user.LastName))
+                return false;
+            return true;
+        }
+
+        [Authorize]
+        [HttpGet("User/{mail}")]
+        public async Task<ActionResult<UserVM>> GetUserByMail(string mail)
+        {
+            var user = await _context.Users.Where(x => x.Email == mail)
+                .Select(x => new UserVM
+                {
+                    Id = x.Id,
+                    Email = x.Email,
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    BirthDate = DateTime.Parse(x.BirthDate),
+                    Gender = x.Gender,
+                    School=x.School,
+                    Year=x.Year,
+                    PotentionalStudent=x.PotentionalStudent,
+                    Condition=x.Condition,
+                    BeInformed=x.BeInformed,
+                    EmailConfirmed=x.EmailConfirmed,
+                }).FirstOrDefaultAsync();
+            if (user == null)
+                return NotFound();
+            user.RoleString = await _context.UserRoles.Where(x => x.UserId == user.Id).Select(x => x.RoleId).FirstOrDefaultAsync();
+            if (user == null)
+                return NotFound();
+            return Ok(user);
+        }
+
+        [Authorize]
+        [HttpPut("{userId}")]
+        public async Task<ActionResult> PutUser(string userId, UserVM user)
+        {
+            if(userId == null)
+                return BadRequest();
+            var thisUser = _context.Users.Find(userId);
+            if (thisUser == null)
+                return NotFound();
+            thisUser.FirstName = user.FirstName;
+            thisUser.LastName = user.LastName;
+            thisUser.BirthDate = user.BirthDate.ToString();
+            thisUser.Gender = user.Gender;
+            thisUser.School = user.School;
+            thisUser.Year = user.Year;
+            thisUser.PotentionalStudent = user.PotentionalStudent;
+            thisUser.Condition = user.Condition;
+            thisUser.BeInformed = user.BeInformed;
+            thisUser.EmailConfirmed = user.EmailConfirmed;
+            thisUser.Email = user.Email;
+
+            _context.Entry(thisUser).State = EntityState.Modified;
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserExist(thisUser.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return Ok();
+        }
+        private bool UserExist(string id)
+        {
+            return _context.Users.Any(e => e.Id == id);
         }
     }
 }

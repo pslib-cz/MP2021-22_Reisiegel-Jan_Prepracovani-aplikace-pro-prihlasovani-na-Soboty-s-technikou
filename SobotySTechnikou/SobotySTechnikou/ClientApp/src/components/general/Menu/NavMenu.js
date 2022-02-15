@@ -33,8 +33,8 @@ export const NavMenu = props => {
                         <Nav.Item as={Link} to={"/AllGroups"}>
                             Skupiny
                         </Nav.Item>
-                        <Nav.Item as={Link} to={"/protected"}>
-                            Domu
+                        <Nav.Item as={Link} to={"/Edit"}>
+                            Upravit účet
                         </Nav.Item>
                     </Nav>
                     <Nav pullRight>

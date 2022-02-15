@@ -44,7 +44,7 @@ const Profile = props => {
             <div>
                 <Row>
                     <Col lg={15} lgOffset={4}>
-                        <Panel shaded bordered header={userData.firstName + "" + userData.lastName}>
+                        <Panel shaded bordered header={userData.firstName + " " + userData.lastName}>
                             <Row>
                                 <Col lg={7} style={{ textAlign: "right", fontSize: "1.5em" }}>
                                     Uživatelské jméno:

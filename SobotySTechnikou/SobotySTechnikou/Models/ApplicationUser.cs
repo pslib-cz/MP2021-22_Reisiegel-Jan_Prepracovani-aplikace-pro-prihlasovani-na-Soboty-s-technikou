@@ -7,22 +7,22 @@ namespace SobotySTechnikou.Models
     {
 
         [Required]
-        public string FirstName { get; set; } = "Nevyplněno";
+        public string FirstName { get; set; } = "";
         [Required]
-        public string LastName { get; set; } = "Nevyplněno";
-        public string BirthDate { get; set; } = "Nevyplněno";
+        public string LastName { get; set; } = "";
+        public string BirthDate { get; set; }
         [Required]
         public Gender Gender { get; set; }
         [Required]
-        public string School { get; set; } = "Nevyplněno";
+        public string School { get; set; } = "";
         [Required]
         public Year Year { get; set; }
         public bool PotentionalStudent { get; set; }
-        //public bool BeInformed { get; set; }
+        public bool BeInformed { get; set; }
         public Condition Condition { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-
+        
 
         public ICollection<Group>? GroupsHeadLector { get; set; }
         public ICollection<UserInGroup>? UserInGroups { get; set; }
@@ -31,12 +31,14 @@ namespace SobotySTechnikou.Models
     }
     public enum Gender
     {
+        Other,
         Male,
-        Female,
-        Other
+        Female
     }
     public enum Year
     {
+        [Display(Name ="Nevybráno")]
+        none,
         [Display(Name = "7. a nižší třída ZŠ")]
         Class7,
         [Display(Name = "8. třída ZŠ")]

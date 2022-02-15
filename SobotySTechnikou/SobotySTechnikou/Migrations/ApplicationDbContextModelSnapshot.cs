@@ -17,7 +17,7 @@ namespace SobotySTechnikou.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "6.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -193,14 +193,14 @@ namespace SobotySTechnikou.Migrations
                         new
                         {
                             Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1",
-                            ConcurrencyStamp = "a3a970a6-6b41-40cc-8e43-d06554cab962",
+                            ConcurrencyStamp = "ec36a620-dd89-4cf9-8370-b2d155775019",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2",
-                            ConcurrencyStamp = "4d15419a-dd7f-4efb-ba6a-0632d4c7b61e",
+                            ConcurrencyStamp = "f9ec8bd6-f3fc-4a94-9b90-5322bc157738",
                             Name = "Lector",
                             NormalizedName = "LECTOR"
                         });
@@ -373,6 +373,9 @@ namespace SobotySTechnikou.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<bool>("BeInformed")
+                        .HasColumnType("bit");
+
                     b.Property<string>("BirthDate")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -468,26 +471,27 @@ namespace SobotySTechnikou.Migrations
                         {
                             Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
                             AccessFailedCount = 0,
-                            BirthDate = "27.12.2021 0:00:00",
-                            ConcurrencyStamp = "45c16c16-393e-48d1-bce1-86ddfa994971",
+                            BeInformed = false,
+                            BirthDate = "15.02.2022 0:00:00",
+                            ConcurrencyStamp = "b05bd792-2475-4ff3-9ffb-b1818ff7c6a8",
                             Condition = 0,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Email = "info@my-gallery.eu",
+                            Email = "sobota@pslib.cz",
                             EmailConfirmed = true,
                             FirstName = "Admin",
                             Gender = 2,
                             LastName = "PSLIB",
                             LockoutEnabled = false,
-                            NormalizedEmail = "INFO@MY-GALLERY.EU",
+                            NormalizedEmail = "SOBOTA@PSLIB.CZ",
                             NormalizedUserName = "INFO@MY-GALLERY.EU",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAtAdGyiKS+izd2CNJnFn/q6v+6F2+Fl623cdGXrOq61RCKLN0HpzPcU45rQLXSlrA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJBoC95wP/0KnV4bs3tZQANqb5XFfbMAfHlG2jciDheaXf4eXAtgN5Hg/IAx/cEcGQ==",
                             PhoneNumberConfirmed = false,
                             PotentionalStudent = false,
                             School = "Střední průmyslová škola strojní a elektrotechnická Liberec",
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
                             UpdatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            UserName = "info@my-gallery.eu",
+                            UserName = "sobota@pslib.cz",
                             Year = 3
                         });
                 });

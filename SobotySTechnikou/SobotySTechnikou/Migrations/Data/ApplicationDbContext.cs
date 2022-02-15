@@ -40,14 +40,15 @@ namespace SobotySTechnikou.Data
             });
 
             var hasher = new PasswordHasher<ApplicationUser>();
+
             modelBuilder.Entity<ApplicationUser>().HasData(new ApplicationUser
             {
                 Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
-                Email = "info@my-gallery.eu",
-                NormalizedEmail = "INFO@MY-GALLERY.EU",
+                Email = "sobota@pslib.cz",
+                NormalizedEmail = "SOBOTA@PSLIB.CZ",
                 EmailConfirmed = true,
                 LockoutEnabled = false,
-                UserName = "info@my-gallery.eu",
+                UserName = "sobota@pslib.cz",
                 NormalizedUserName = "INFO@MY-GALLERY.EU",
                 PasswordHash = hasher.HashPassword(null, "Admin_1234"),
                 SecurityStamp = string.Empty,
@@ -56,7 +57,8 @@ namespace SobotySTechnikou.Data
                 BirthDate = DateTime.Today.ToString(),
                 Gender = Gender.Other,
                 School = "Střední průmyslová škola strojní a elektrotechnická Liberec",
-                Year =  Year.Class10
+                Year =  Year.Class10,
+                BeInformed = false,
             });
             modelBuilder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>
             {

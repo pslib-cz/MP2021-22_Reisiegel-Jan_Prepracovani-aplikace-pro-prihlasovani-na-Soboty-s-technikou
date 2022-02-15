@@ -84,6 +84,9 @@ namespace SobotySTechnikou.Controllers
         {
             if (actionInput == null)
                 return BadRequest();
+            var existAction = await _context.Actions.Where(x=>x.Name == actionInput.Name).ToListAsync();
+            if (existAction != null)
+                return StatusCode(418);
             Models.Action action = new Models.Action
             {
                 Id = Guid.NewGuid().ToString(),

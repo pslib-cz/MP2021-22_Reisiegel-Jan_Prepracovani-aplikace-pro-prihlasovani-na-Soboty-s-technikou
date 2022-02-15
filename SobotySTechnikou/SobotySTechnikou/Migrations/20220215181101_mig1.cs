@@ -56,6 +56,7 @@ namespace SobotySTechnikou.Migrations
                     School = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Year = table.Column<int>(type: "int", nullable: false),
                     PotentionalStudent = table.Column<bool>(type: "bit", nullable: false),
+                    BeInformed = table.Column<bool>(type: "bit", nullable: false),
                     Condition = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -315,17 +316,17 @@ namespace SobotySTechnikou.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1", "a3a970a6-6b41-40cc-8e43-d06554cab962", "Administrator", "ADMINISTRATOR" });
+                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1", "ec36a620-dd89-4cf9-8370-b2d155775019", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2", "4d15419a-dd7f-4efb-ba6a-0632d4c7b61e", "Lector", "LECTOR" });
+                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2", "f9ec8bd6-f3fc-4a94-9b90-5322bc157738", "Lector", "LECTOR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "BirthDate", "ConcurrencyStamp", "Condition", "CreatedAt", "Email", "EmailConfirmed", "FirstName", "Gender", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PotentionalStudent", "School", "SecurityStamp", "TwoFactorEnabled", "UpdatedAt", "UserName", "Year" },
-                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX", 0, "27.12.2021 0:00:00", "45c16c16-393e-48d1-bce1-86ddfa994971", 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "info@my-gallery.eu", true, "Admin", 2, "PSLIB", false, null, "INFO@MY-GALLERY.EU", "INFO@MY-GALLERY.EU", "AQAAAAEAACcQAAAAEAtAdGyiKS+izd2CNJnFn/q6v+6F2+Fl623cdGXrOq61RCKLN0HpzPcU45rQLXSlrA==", null, false, false, "Střední průmyslová škola strojní a elektrotechnická Liberec", "", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "info@my-gallery.eu", 3 });
+                columns: new[] { "Id", "AccessFailedCount", "BeInformed", "BirthDate", "ConcurrencyStamp", "Condition", "CreatedAt", "Email", "EmailConfirmed", "FirstName", "Gender", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PotentionalStudent", "School", "SecurityStamp", "TwoFactorEnabled", "UpdatedAt", "UserName", "Year" },
+                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX", 0, false, "15.02.2022 0:00:00", "b05bd792-2475-4ff3-9ffb-b1818ff7c6a8", 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "sobota@pslib.cz", true, "Admin", 2, "PSLIB", false, null, "SOBOTA@PSLIB.CZ", "INFO@MY-GALLERY.EU", "AQAAAAEAACcQAAAAEJBoC95wP/0KnV4bs3tZQANqb5XFfbMAfHlG2jciDheaXf4eXAtgN5Hg/IAx/cEcGQ==", null, false, false, "Střední průmyslová škola strojní a elektrotechnická Liberec", "", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "sobota@pslib.cz", 3 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
