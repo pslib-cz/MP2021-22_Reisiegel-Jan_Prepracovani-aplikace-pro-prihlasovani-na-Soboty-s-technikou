@@ -7,31 +7,140 @@
 <h1>@ViewData["Title"]</h1>
 
 <div class="row">
-    <div class="col-md-4">
+    @if (Model.SameEmail)
+    {
+        <div class="alert alert-danger" role="alert">
+            Heslo bylo již použito. Pokud máte již založený účet, přihlaste se a změňte si informace, nebo pro registraci použijte jiný email.
+        </div>
+    }
+    <div class="col-md-12">
         <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+
             <h2>Vytvořit nový účet</h2>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-floating">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" />
-                <label asp-for="Input.Email"></label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            <div class="row">
+                <div class="col-md-4">
+                    <h4>Osobní údaje</h4>
+                    <div class="row">
+                        <label asp-for="Input.FirstName"></label>
+                        <div class="form-floating">
+                            <input class="form-control" placeholder="Jiří" aria-required="true" />
+
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label asp-for="Input.LastName"></label>
+                        <div class="form-floating">
+                            <input asp-for="Input.LastName" class="form-control" placeholder="Novák" aria-required="true" />
+
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label asp-for="Input.BirthDate"></label>
+                        <div class="form-floating">
+                            <input asp-for="Input.BirthDate" type="date" class="form-control" aria-required="true" />
+
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label asp-for="Input.Gender"></label>
+                        <div class="form-floating">
+
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" asp-for="Input.Gender" value="@Gender.Male">
+                                <label class="form-check-label" asp-for="Input.Gender">Muž</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" asp-for="Input.Gender" type="radio" value="@Gender.Female">
+                                <label class="form-check-label" asp-for="Input.Gender">Žrna</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="col-md-4">
+                    <h4>Škola, kterou navštěvuji</h4>
+                    <div class="row">
+                        <label asp-for="Input.School"></label>
+                        <div class="form-floating">
+                            <input asp-for="Input.School" class="form-control" placeholder="ZŠ Vrchlického, Libere"  />
+
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label asp-for="Input.Year"></label>
+                        <div class="form-floating">
+                            <select class="form-select" asp-for="Input.Year" aria-required="true">
+                                <option value="@Year.none">Nevybráno</option>
+                                <option value="@Year.Class7">7. třída a nužší</option>
+                                <option value="@Year.Class8">8. třída</option>
+                                <option value="@Year.Class9">9. třída</option>
+                                <option value="@Year.Class10">Vyšší ročník (SŠ)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <div class="form-floating">
+                            <input class="form-check-input" type="checkbox" asp-for="Input.PotentionStudent">
+                            <label class="form-check-label" asp-for="Input.PotentionStudent"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="row">
+                        <h4>Přihlašovací údaje</h4>
+                        <label asp-for="Input.Email"></label>
+                        <div class="form-floating">
+                            <input asp-for="Input.Email" class="form-control" aria-required="true" />
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label asp-for="Input.Password"></label>
+                        <div class="form-floating">
+                            <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
+
+                            <span asp-validation-for="Input.Password" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row">
+                        <label asp-for="Input.ConfirmPassword"></label>
+                        <div class="form-floating">
+                            <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
+
+                            <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row justify-content-md-center">
+                        <div class="col">
+                            <label class="form-check-label" asp-for="Input.BeInformed"></label>
+                            <div class="form-floating">
+                                <input class="form-check-input" type="checkbox" asp-for="Input.BeInformed" id="flexCheckDefault">
+
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                </div>
             </div>
-            <div class="form-floating">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.Password"></label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            <div class="row">
+                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Registrovat</button>
             </div>
-            <div class="form-floating">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" />
-                <label asp-for="Input.ConfirmPassword"></label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Registrovat</button>
         </form>
     </div>
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+<partial name="_ValidationScriptsPartial" />
 }

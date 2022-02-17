@@ -10,7 +10,7 @@ namespace SobotySTechnikou.Models
         public string FirstName { get; set; } = "";
         [Required]
         public string LastName { get; set; } = "";
-        public string BirthDate { get; set; }
+        public string BirthDate { get; set; } = "";
         [Required]
         public Gender Gender { get; set; }
         [Required]

@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using SobotySTechnikou.Data;
 using SobotySTechnikou.Models;
 
 namespace SobotySTechnikou.Areas.Identity.Pages.Account
@@ -30,13 +31,15 @@ namespace SobotySTechnikou.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationDbContext _context;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -44,6 +47,7 @@ namespace SobotySTechnikou.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         /// <summary>
@@ -52,6 +56,9 @@ namespace SobotySTechnikou.Areas.Identity.Pages.Account
         /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
+
+        [BindProperty]
+        public bool SameEmail { get; set; }
 
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -85,9 +92,9 @@ namespace SobotySTechnikou.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [StringLength(100, ErrorMessage = "Heslo musí mít minimálně {2} a maximálně {1} znaků.", MinimumLength = 6)]
             [DataType(DataType.Password)]
-            [Display(Name = "Password")]
+            [Display(Name = "Heslo")]
             public string Password { get; set; }
 
             /// <summary>
@@ -95,9 +102,35 @@ namespace SobotySTechnikou.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [DataType(DataType.Password)]
-            [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Display(Name = "Potvrzení hesla")]
+            [Compare("Password", ErrorMessage = "Hesla se neshodují.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [Display(Name = "Jméno")]
+            public string FirstName { get; set; }
+
+            [Required, Display(Name = "Příjmení")]
+            public string LastName { get; set; }
+
+            [Required, Display(Name = "Datum narození"), DataType(DataType.Date)]
+            public DateTime BirthDate { get; set; }
+
+            [Required, Display(Name = "Pohlaví")]
+            public Gender Gender { get; set; }
+
+            [Required, Display(Name = "Škola")]
+            public string School { get; set; }
+
+            [Required, Display(Name = "Ročník")]
+            public Year Year { get; set; }
+
+            [Display(Name = "Chci být studentem SPŠSE")]
+            public bool PotentionStudent { get; set; }
+
+            [Display(Name = "Chci být informován o Sobotách s technikou")]
+            public bool BeInformed { get; set; }
+
         }
 
 
@@ -109,19 +142,35 @@ namespace SobotySTechnikou.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            SameEmail = false;
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
+                var emailInDb = _context.Users.Where(x => x.Email == Input.Email).FirstOrDefault();
+                if (emailInDb != null)
+                {
+                    SameEmail = true;
+                    return Page();
+                }
                 var user = CreateUser();
+                
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
+                user.BirthDate = Input.BirthDate.ToShortDateString();
+                user.Gender = Input.Gender;
+                user.School = Input.School;
+                user.Year = Input.Year;
+                user.PotentionalStudent = Input.PotentionStudent;
+                user.BeInformed = Input.BeInformed;
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                await _userStore.SetUserNameAsync(user, $"{Input.FirstName} {Input.LastName}", CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User created a new account with password.");
+                    _logger.LogInformation("Uživatel si vytvořil nový účet s heslem.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

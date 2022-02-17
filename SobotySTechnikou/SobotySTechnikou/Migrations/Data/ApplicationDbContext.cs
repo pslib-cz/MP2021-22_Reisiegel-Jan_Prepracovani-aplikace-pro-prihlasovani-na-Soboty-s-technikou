@@ -49,7 +49,7 @@ namespace SobotySTechnikou.Data
                 EmailConfirmed = true,
                 LockoutEnabled = false,
                 UserName = "sobota@pslib.cz",
-                NormalizedUserName = "INFO@MY-GALLERY.EU",
+                NormalizedUserName = "SOBOTA@PSLIB.CZ",
                 PasswordHash = hasher.HashPassword(null, "Admin_1234"),
                 SecurityStamp = string.Empty,
                 FirstName = "Admin",

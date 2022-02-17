@@ -104,21 +104,6 @@ const Profile = props => {
                                     }
                                 </Col>
                             </Row>
-                            {
-                                userData.phoneNumber ?
-                                    <Row>
-                                        <Col lg={17} style={{ textAlign: "right", fontSize: "1.5em" }}>
-                                            Telefonní číslo:
-                                        </Col>
-                                        <Col lg={17} style={{ fontSize: "1.5em" }}>
-                                            {userData.phoneNumber}
-                                        </Col>
-                                    </Row>
-                                    : null
-                            }
-
-
-
                         </Panel>
                     </Col>
                 </Row>

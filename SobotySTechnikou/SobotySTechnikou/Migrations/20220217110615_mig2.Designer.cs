@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SobotySTechnikou.Data;
 
@@ -11,9 +12,10 @@ using SobotySTechnikou.Data;
 namespace SobotySTechnikou.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220217110615_mig2")]
+    partial class mig2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -193,14 +195,14 @@ namespace SobotySTechnikou.Migrations
                         new
                         {
                             Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1",
-                            ConcurrencyStamp = "3c80e263-7f46-42d0-a26c-0df0864fd7f8",
+                            ConcurrencyStamp = "be22da1b-0f9c-47c6-9251-e7105b6cb978",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2",
-                            ConcurrencyStamp = "04bb29a9-a82a-4e86-96e1-9b3e30fb6dc3",
+                            ConcurrencyStamp = "4c271216-1c75-45c7-a6ea-fd09400a48d9",
                             Name = "Lector",
                             NormalizedName = "LECTOR"
                         });
@@ -473,7 +475,7 @@ namespace SobotySTechnikou.Migrations
                             AccessFailedCount = 0,
                             BeInformed = false,
                             BirthDate = "17.02.2022 0:00:00",
-                            ConcurrencyStamp = "6ec7f5f7-26fe-4ad6-818f-5f5d7a23bd2e",
+                            ConcurrencyStamp = "a5772053-ebb1-4117-824c-bc3a3764fcdb",
                             Condition = 0,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "sobota@pslib.cz",
@@ -484,7 +486,7 @@ namespace SobotySTechnikou.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "SOBOTA@PSLIB.CZ",
                             NormalizedUserName = "INFO@MY-GALLERY.EU",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAa2C+lDulUBi8CEL/l0wHgTrf+CoapO3tw1lRREyV4+ipL1UFtqmJGFCWCt2AYvXQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJusdsrqhmxjjZA6PjHV6A/9y9J/5Nz6lK4CI6FGYfOFywBKTr6updqney7L18ZSzg==",
                             PhoneNumberConfirmed = false,
                             PotentionalStudent = false,
                             School = "Střední průmyslová škola strojní a elektrotechnická Liberec",
