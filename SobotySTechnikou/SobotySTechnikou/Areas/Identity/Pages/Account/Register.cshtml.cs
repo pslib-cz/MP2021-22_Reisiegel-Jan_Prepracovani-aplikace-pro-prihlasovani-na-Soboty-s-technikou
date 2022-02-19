@@ -164,7 +164,9 @@ namespace SobotySTechnikou.Areas.Identity.Pages.Account
                 user.PotentionalStudent = Input.PotentionStudent;
                 user.BeInformed = Input.BeInformed;
 
-                await _userStore.SetUserNameAsync(user, $"{Input.FirstName} {Input.LastName}", CancellationToken.None);
+                await _userStore.UpdateAsync(user, CancellationToken.None);
+
+                await _userStore.SetUserNameAsync(user, $"{Input.FirstName}_{Input.LastName}", CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
