@@ -135,6 +135,20 @@ namespace SobotySTechnikou.Controllers
             return Ok(groups);
         }
 
+        [Authorize]
+        [HttpGet("Selector")]
+        public async Task<ActionResult<ICollection<ActionsSelector>>> GetActionsSelector()
+        {
+            var actions = await _context.Actions.Select(x => new ActionsSelector
+            {
+                Label = x.Name,
+                Value = x.Id
+            }).ToListAsync();
+            if (actions == null)
+                return NoContent();
+            return Ok(actions);
+        }
+
         private bool ActionExists(string id)
         {
             return _context.Actions.Any(e => e.Id == id);

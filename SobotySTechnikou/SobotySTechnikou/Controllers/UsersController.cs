@@ -179,6 +179,7 @@ namespace SobotySTechnikou.Controllers
             thisUser.BeInformed = user.BeInformed;
             thisUser.EmailConfirmed = user.EmailConfirmed;
             thisUser.Email = user.Email;
+            thisUser.UpdatedAt = DateTime.Now;
 
             _context.Entry(thisUser).State = EntityState.Modified;
             try

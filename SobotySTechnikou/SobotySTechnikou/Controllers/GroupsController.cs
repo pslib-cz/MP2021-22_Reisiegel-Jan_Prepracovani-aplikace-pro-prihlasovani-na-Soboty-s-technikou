@@ -69,9 +69,20 @@ namespace SobotySTechnikou.Controllers
 
         [Authorize] //(Roles = "Administrator, Lector")
         [HttpPut]
-        public async Task<ActionResult> Put(Group inputGroup)
+        public async Task<ActionResult> Put(GroupIM inputGroup)
         {
-            _context.Entry(inputGroup).State = EntityState.Modified;
+            var group = _context.Groups.Find(inputGroup.Id);
+            group.Name = inputGroup.Name;
+            group.Description = inputGroup.Description;
+            group.Capacity = inputGroup.Capacity;
+            group.Open = inputGroup.Open;
+            group.HeadLectorId = inputGroup.HeadLectorId;
+            group.HeadLector = await _context.Users.FindAsync(inputGroup.HeadLectorId);
+            group.ActionId = inputGroup.ActionId;
+            group.Action = _context.Actions.Find(inputGroup.ActionId);
+            group.UpdatedTime = DateTime.Now;
+
+            _context.Entry(group).State = EntityState.Modified;
             try
             {
                 await _context.SaveChangesAsync();

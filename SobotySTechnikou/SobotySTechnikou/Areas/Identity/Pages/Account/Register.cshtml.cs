@@ -214,9 +214,9 @@ namespace SobotySTechnikou.Areas.Identity.Pages.Account
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(ApplicationUser)}'. " +
-                    $"Ensure that '{nameof(ApplicationUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
-                    $"override the register page in /Areas/Identity/Pages/Account/Register.cshtml");
+                throw new InvalidOperationException($"Nelze vytvořit instanci '{nameof(ApplicationUser)}'. " +
+                    $"Ujistěte se, že '{nameof(ApplicationUser)}' není abstraktní třída a má konstruktor bez parametrů nebo alternativně " +
+                    $"přepište stránku pro registraci v /Areas/Identity/Pages/Account/Register.cshtml");
             }
         }
 

@@ -51,6 +51,7 @@ namespace SobotySTechnikou.Areas.Identity.Pages.Account
             /// </summary>
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
+            [Display(Name = "Heslo")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
@@ -60,7 +61,7 @@ namespace SobotySTechnikou.Areas.Identity.Pages.Account
             /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
-            [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+            [Compare("Password", ErrorMessage = "Heslo a potvrzovací heslo se neshodují.")]
             public string ConfirmPassword { get; set; }
 
             /// <summary>
