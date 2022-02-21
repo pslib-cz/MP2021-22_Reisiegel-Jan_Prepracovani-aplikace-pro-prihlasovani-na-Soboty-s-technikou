@@ -21,7 +21,7 @@ namespace SobotySTechnikou.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Group>>> Get(string name, string actionName, bool? open)
+        public async Task<ActionResult<IEnumerable<GroupVM>>> Get(string name, string actionName, bool? open)
         {
             IQueryable<Group> groups = _context.Groups
                 .Include(x => x.Action);
@@ -37,14 +37,34 @@ namespace SobotySTechnikou.Controllers
             {
                 groups.Where(x=>x.Open == open);
             }
-            return await groups.ToListAsync();
+            return await groups.Select(x=>new GroupVM
+            {
+                Name = x.Name,
+                Capacity = x.Capacity,
+                Open = x.Open,
+                ActionName = x.Action.Name,
+            }).ToListAsync();
         }
 
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Group>> GetGroup(string id)
+        public async Task<ActionResult<GroupVM>> GetGroup(string id)
         {
-            var group = await _context.Groups.FindAsync(id);
+            var group = await _context.Groups
+                .Where(x => x.Id==id)
+                .Select(x => new GroupVM
+                {
+                    Name=x.Name,
+                    Description=x.Description,
+                    Capacity=x.Capacity,
+                    Open=x.Open,
+                    HeadLectorId=x.HeadLectorId,
+                    Action=  _context.Actions.Find(x.ActionId),
+                    NumberOfLectors=x.NumberOfLectors,
+                    CountOfUsers=  _context.UsersInGroups.Where(x => x.GroupId == id).Count(),
+                    //Users = await _context.UsersInGroups.Include(x=>x.User).Where(x => x.GroupId == id).Select(x=> new ApplicationUser).ToListAsync(),
+
+                }).FirstOrDefaultAsync();
 
             if (group == null)
             {
