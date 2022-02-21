@@ -1,8 +1,19 @@
 import axios from "axios";
 import React from "react";
 import { useState } from "react";
-import { Button, Checkbox, Col, DatePicker, Form, Input, Row } from "rsuite";
+import { Button, Checkbox, Col, DatePicker, Form, Input, InputNumber, Row, SelectPicker } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
+
+const actionType = [
+    {
+        "label": "Online",
+        "value": 0,
+    },
+    {
+        "label": "Prezenčně",
+        "value": 1,
+    }
+]
 
 const NewAction = () => {
     const [{accessToken}] = useAuthContext();
@@ -29,6 +40,7 @@ const NewAction = () => {
                 start: startDate,
                 end: endDate,
                 active: active,
+                formOfAction: type,
                 availability: availability
             }
         ,
@@ -56,10 +68,10 @@ const NewAction = () => {
                 <Row>
                     <Col lg={20} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={10}>
+                            <Col lg={6}>
                                 <Form.ControlLabel >Název Akce</Form.ControlLabel>
                             </Col>
-                            <Col lg={10}>
+                            <Col lg={16}>
                                 <Input value={name} onChange={e => setName(e)} />
                             </Col>
                         </Form.Group>
@@ -69,11 +81,11 @@ const NewAction = () => {
                 <Row>
                     <Col lg={20} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={10}>
+                            <Col lg={6}>
                                 <Form.ControlLabel >školní rok</Form.ControlLabel>
                             </Col>
-                            <Col lg={10}>
-                                <Input value={year} onChange={e => setYear(e)} />
+                            <Col lg={16}>
+                                <InputNumber style={{ width: "100%" }} value={year} onChange={e => setYear(e)} />
                             </Col>
                         </Form.Group>
                     </Col>
@@ -82,10 +94,10 @@ const NewAction = () => {
                 <Row>
                     <Col lg={20} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={10}>
+                            <Col lg={6}>
                                 <Form.ControlLabel >Začátek</Form.ControlLabel>
                             </Col>
-                            <Col lg={10}>
+                            <Col lg={16}>
                                 <Input type="datetime-local" value={startDate} onChange={e=>setStartDate(e)} />
                             </Col>
                         </Form.Group>
@@ -95,10 +107,10 @@ const NewAction = () => {
                 <Row>
                     <Col lg={20} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={10}>
+                            <Col lg={6}>
                                 <Form.ControlLabel >Konec</Form.ControlLabel>
                             </Col>
-                            <Col lg={10}>
+                            <Col lg={16}>
                                 <Input type="datetime-local" />
                             </Col>
                         </Form.Group>
@@ -108,11 +120,11 @@ const NewAction = () => {
                 <Row>
                     <Col lg={20} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={10}>
-                                <Form.ControlLabel>Popis Akce</Form.ControlLabel>
+                            <Col lg={6}>
+                                <Form.ControlLabel>Forma Akce</Form.ControlLabel>
                             </Col>
-                            <Col lg={10}>
-                                <Input as="textarea" rows={5} value={description} onChange={e => setDescription(e)} />
+                            <Col lg={16}>
+                                <SelectPicker block searchable="false" data={actionType} value={type} onChange={e => setType(e)} />
                             </Col>
                         </Form.Group>
                     </Col>
@@ -121,7 +133,19 @@ const NewAction = () => {
                 <Row>
                     <Col lg={20} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={10} lgOffset={10}>
+                            <Col lg={6}>
+                                <Form.ControlLabel>Popis Akce</Form.ControlLabel>
+                            </Col>
+                            <Col lg={16}>
+                                <Input as="textarea" rows={5} value={description} onChange={e => setDescription(e)} />
+                            </Col>
+                        </Form.Group>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col lg={20} lgOffset={2}>
+                        <Form.Group>
+                            <Col lg={16} lgOffset={6}>
                                 <Checkbox value={active} onChange={e => setActive(!active)}>Aktivní</Checkbox>
                             </Col>
                         </Form.Group>
@@ -130,7 +154,7 @@ const NewAction = () => {
                 <Row>
                     <Col lg={20} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={10} lgOffset={10}>
+                            <Col lg={16} lgOffset={6}>
                                 <Checkbox value={availability} onChange={e => setAvailability(!availability)}>Na titulní stránce</Checkbox>
                             </Col>
                         </Form.Group>

@@ -8,7 +8,6 @@
         public bool Open { get; set; }
         public string HeadLectorId { get; set; }
         public string ActionId { get; set; }
-
         public string Id { get; set; }
     }
 }

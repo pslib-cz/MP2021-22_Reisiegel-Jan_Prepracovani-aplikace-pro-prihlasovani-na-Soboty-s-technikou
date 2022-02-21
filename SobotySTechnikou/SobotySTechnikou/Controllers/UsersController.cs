@@ -199,6 +199,25 @@ namespace SobotySTechnikou.Controllers
             }
             return Ok();
         }
+        
+        [Authorize]
+        [HttpGet("LectorSelector")]
+        public async Task<ActionResult<ICollection<MySelector>>> GetUsersSelector()
+        {
+            var lectorsIds = await _context.UserRoles.Where(x => x.RoleId == "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2").ToListAsync();
+            List<MySelector> mySelectors = new List<MySelector>();
+            foreach(var a in lectorsIds)
+            {
+                var user = await _context.Users.FindAsync(a);
+                mySelectors.Add(new MySelector
+                {
+                    Value = user.Id,
+                    Label = $"{user.FirstName} {user.LastName}"
+                });
+            }
+            return Ok(mySelectors);
+        }
+
         private bool UserExist(string id)
         {
             return _context.Users.Any(e => e.Id == id);

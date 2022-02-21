@@ -2,6 +2,7 @@ import axios from "axios";
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import { Col, Form, Panel, Row, Table } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
 
 const AllGroups = () => {
@@ -43,9 +44,9 @@ const AllGroups = () => {
     const getGroups = () => {
         setIsLoading(true);
         setError(false);
-        axios.get("/api/Groups" + getConditions(), {
+        axios.get("/api/Groups", {
             headers: {
-                "Content-Type": "application/json",
+                //"Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`
             }
         })
@@ -67,7 +68,25 @@ const AllGroups = () => {
 
     return (
         <div>
+            <Col lg={24}>
+            <Row>
+                <Col lg={21}>
+                    <Panel  bordered>
+                        <Form fluid>
+                            
+                        </Form>
+                    </Panel>
+                </Col>
+                <Col lg={3}>
 
+                </Col>
+            </Row>
+            <Row>
+                <Col lg={24}>
+                    
+                </Col>
+            </Row>
+        </Col>
         </div>
     )
 }

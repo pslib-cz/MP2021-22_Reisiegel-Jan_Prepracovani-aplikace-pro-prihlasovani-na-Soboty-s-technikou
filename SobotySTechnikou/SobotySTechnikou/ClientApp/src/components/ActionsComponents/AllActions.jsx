@@ -177,8 +177,6 @@ const AllActions = () => {
                 </Col>
             </Row>
         </Col>
-
-
     )
 }
 

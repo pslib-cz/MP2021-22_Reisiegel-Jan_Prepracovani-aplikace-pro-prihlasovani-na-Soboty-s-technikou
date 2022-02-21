@@ -24,6 +24,11 @@ namespace SobotySTechnikou.Models
         public DateTime CreateTime { get; set; }
         public DateTime UpdatedTime { get; set; }
 
+        public int NumberOfLectors { get; set; }
+        public Year MinimalYear { get; set; }
+        public string NoteForLectors { get; set; }
+        public string Note { get; set; }
+
         public ICollection<UserInGroup>? UsersInGroup { get; set; }
     }
 }

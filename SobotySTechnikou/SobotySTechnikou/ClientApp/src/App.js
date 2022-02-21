@@ -4,7 +4,6 @@ import { Layout } from './components/Layout';
 import { Home } from './components/Home';
 import { FetchData } from './components/FetchData';
 import { Counter } from './components/Counter';
-
 import './custom.css'
 import { AuthProvider } from './providers/AuthProvider';
 import { Paths } from './configuration/main';
@@ -18,6 +17,7 @@ import AllActions from './components/ActionsComponents/AllActions';
 import AllGroups from './components/GroupsComponents/AllGroups';
 import NewAction from './components/ActionsComponents/NewAction';
 import EditUser from './components/UsersComponents/EditUser';
+import NewGroup from './components/GroupsComponents/NewGroup';
 
 
 export default class App extends Component {
@@ -41,6 +41,8 @@ export default class App extends Component {
               <Route path="/AllGroups" element={<AllGroups />} />
               <Route path="/EditUser/{mail}" element={<EditUser /> } />
               <Route path="/EditUser" element={<EditUser /> } />
+              <Route path="/NewGroup" element={<NewGroup />} />
+              <Route path="/AllGroups" element={<AllGroups />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>

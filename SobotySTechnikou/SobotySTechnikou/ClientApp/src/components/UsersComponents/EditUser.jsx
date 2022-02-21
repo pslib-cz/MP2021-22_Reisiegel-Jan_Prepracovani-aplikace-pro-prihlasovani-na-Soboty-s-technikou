@@ -303,7 +303,7 @@ const EditUser = () => {
                         <Col lg={20} lgOffset={2}>
                             <Form.Group>
                                 <Col lg={10} lgOffset={10}>
-                                    <Checkbox checked={emailConfirmed} onChange={e => setEmailConfirmed(!emailConfirmed)} defaultChecked={userData.emailConfirmed} >Potvrzený email</Checkbox>
+                                    <Checkbox checked={emailConfirmed} onChange={e => setEmailConfirmed(!emailConfirmed)} defaultChecked={userData.emailConfirmed} disabled>Potvrzený email</Checkbox>
                                 </Col>
                             </Form.Group>
                         </Col>

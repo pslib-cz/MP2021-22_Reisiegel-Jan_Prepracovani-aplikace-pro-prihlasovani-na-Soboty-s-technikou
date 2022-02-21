@@ -1,6 +1,6 @@
 ﻿namespace SobotySTechnikou.ViewModels
 {
-    public class ActionsSelector
+    public class MySelector
     {
         /// <summary>
         /// Jméno/název akce

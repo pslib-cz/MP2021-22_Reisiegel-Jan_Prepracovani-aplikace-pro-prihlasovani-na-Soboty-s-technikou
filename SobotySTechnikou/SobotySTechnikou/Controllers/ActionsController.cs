@@ -84,7 +84,7 @@ namespace SobotySTechnikou.Controllers
         {
             if (actionInput == null)
                 return BadRequest();
-            var existAction = await _context.Actions.Where(x=>x.Name == actionInput.Name).ToListAsync();
+            var existAction = await _context.Actions.Where(x=>x.Name == actionInput.Name && x.Year == actionInput.Year).ToListAsync();
             if (existAction != null)
                 return StatusCode(418);
             Models.Action action = new Models.Action
@@ -137,11 +137,11 @@ namespace SobotySTechnikou.Controllers
 
         [Authorize]
         [HttpGet("Selector")]
-        public async Task<ActionResult<ICollection<ActionsSelector>>> GetActionsSelector()
+        public async Task<ActionResult<ICollection<MySelector>>> GetActionsSelector()
         {
-            var actions = await _context.Actions.Select(x => new ActionsSelector
+            var actions = await _context.Actions.Select(x => new MySelector
             {
-                Label = x.Name,
+                Label = $"{x.Year}/{x.Name}",
                 Value = x.Id
             }).ToListAsync();
             if (actions == null)

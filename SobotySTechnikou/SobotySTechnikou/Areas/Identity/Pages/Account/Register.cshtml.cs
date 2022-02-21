@@ -119,10 +119,10 @@ namespace SobotySTechnikou.Areas.Identity.Pages.Account
             [Required, Display(Name = "Pohlaví")]
             public Gender Gender { get; set; }
 
-            [Required, Display(Name = "Škola")]
+            [Display(Name = "Škola")]
             public string School { get; set; }
 
-            [Required, Display(Name = "Ročník")]
+            [Display(Name = "Ročník")]
             public Year Year { get; set; }
 
             [Display(Name = "Chci být studentem SPŠSE")]
@@ -166,7 +166,7 @@ namespace SobotySTechnikou.Areas.Identity.Pages.Account
 
                 await _userStore.UpdateAsync(user, CancellationToken.None);
 
-                await _userStore.SetUserNameAsync(user, $"{Input.FirstName}_{Input.LastName}", CancellationToken.None);
+                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 

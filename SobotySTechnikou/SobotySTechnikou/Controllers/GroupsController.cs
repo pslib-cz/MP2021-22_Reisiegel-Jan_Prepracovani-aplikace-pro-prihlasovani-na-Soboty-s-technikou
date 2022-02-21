@@ -21,10 +21,22 @@ namespace SobotySTechnikou.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Group>>> Get(string name, SobotySTechnikou.Models.Action action, bool open)
+        public async Task<ActionResult<IEnumerable<Group>>> Get(string name, string actionName, bool? open)
         {
             IQueryable<Group> groups = _context.Groups
                 .Include(x => x.Action);
+            if (!String.IsNullOrEmpty(name))
+            {
+                groups = groups.Where(x=>x.Name == name);
+            }
+            if (!String.IsNullOrEmpty(actionName))
+            {
+                groups = groups.Where(x => x.Action.Name == actionName);
+            }
+            if(open != null)
+            {
+                groups.Where(x=>x.Open == open);
+            }
             return await groups.ToListAsync();
         }
 
