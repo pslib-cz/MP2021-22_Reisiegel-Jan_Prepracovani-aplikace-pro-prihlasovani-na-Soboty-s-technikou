@@ -12,8 +12,8 @@ using SobotySTechnikou.Data;
 namespace SobotySTechnikou.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220217112335_mig3")]
-    partial class mig3
+    [Migration("20220223090625_mig1")]
+    partial class mig1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -195,14 +195,14 @@ namespace SobotySTechnikou.Migrations
                         new
                         {
                             Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1",
-                            ConcurrencyStamp = "3c80e263-7f46-42d0-a26c-0df0864fd7f8",
+                            ConcurrencyStamp = "41e74547-03e2-4c63-963c-25d0bd1eaf02",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2",
-                            ConcurrencyStamp = "04bb29a9-a82a-4e86-96e1-9b3e30fb6dc3",
+                            ConcurrencyStamp = "d8d2d791-c11e-484d-9a51-884dd2b3f0c1",
                             Name = "Lector",
                             NormalizedName = "LECTOR"
                         });
@@ -339,6 +339,10 @@ namespace SobotySTechnikou.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("CreatorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -353,6 +357,10 @@ namespace SobotySTechnikou.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("NameId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("Start")
                         .HasColumnType("datetime2");
 
@@ -363,6 +371,8 @@ namespace SobotySTechnikou.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("Actions");
                 });
@@ -474,8 +484,8 @@ namespace SobotySTechnikou.Migrations
                             Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
                             AccessFailedCount = 0,
                             BeInformed = false,
-                            BirthDate = "17.02.2022 0:00:00",
-                            ConcurrencyStamp = "6ec7f5f7-26fe-4ad6-818f-5f5d7a23bd2e",
+                            BirthDate = "23.02.2022 0:00:00",
+                            ConcurrencyStamp = "0acfee24-a068-40e5-8a1a-4f3f027ff403",
                             Condition = 0,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "sobota@pslib.cz",
@@ -485,8 +495,8 @@ namespace SobotySTechnikou.Migrations
                             LastName = "PSLIB",
                             LockoutEnabled = false,
                             NormalizedEmail = "SOBOTA@PSLIB.CZ",
-                            NormalizedUserName = "INFO@MY-GALLERY.EU",
-                            PasswordHash = "AQAAAAEAACcQAAAAEAa2C+lDulUBi8CEL/l0wHgTrf+CoapO3tw1lRREyV4+ipL1UFtqmJGFCWCt2AYvXQ==",
+                            NormalizedUserName = "SOBOTA@PSLIB.CZ",
+                            PasswordHash = "AQAAAAEAACcQAAAAEK3ivH8u3RWGECY04SKHiiFLtbNU8HmAeq9vz10bXTEk7VbGTqVCYLie+cuPBOiwPQ==",
                             PhoneNumberConfirmed = false,
                             PotentionalStudent = false,
                             School = "Střední průmyslová škola strojní a elektrotechnická Liberec",
@@ -520,9 +530,27 @@ namespace SobotySTechnikou.Migrations
                     b.Property<string>("HeadLectorId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("MinimalYear")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NoteForLectors")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NumberOfLectors")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Open")
                         .HasColumnType("bit");
@@ -616,6 +644,17 @@ namespace SobotySTechnikou.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SobotySTechnikou.Models.Action", b =>
+                {
+                    b.HasOne("SobotySTechnikou.Models.ApplicationUser", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Creator");
                 });
 
             modelBuilder.Entity("SobotySTechnikou.Models.Group", b =>

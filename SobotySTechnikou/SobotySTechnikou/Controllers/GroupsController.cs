@@ -21,10 +21,16 @@ namespace SobotySTechnikou.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<GroupVM>>> Get(string name, string actionName, bool? open)
+        public async Task<ActionResult<IEnumerable<GroupVM>>> Get(string? name, string? actionName, bool? open)
         {
-            IQueryable<Group> groups = _context.Groups
-                .Include(x => x.Action);
+            IQueryable<GroupVM> groups = _context.Groups
+                .Select(x => new GroupVM
+                {
+                    Name = x.Name,
+                    Capacity = x.Capacity,
+                    Open = x.Open,
+                    ActionName = x.Action.Name,
+                });
             if (!String.IsNullOrEmpty(name))
             {
                 groups = groups.Where(x=>x.Name == name);
@@ -37,13 +43,7 @@ namespace SobotySTechnikou.Controllers
             {
                 groups.Where(x=>x.Open == open);
             }
-            return await groups.Select(x=>new GroupVM
-            {
-                Name = x.Name,
-                Capacity = x.Capacity,
-                Open = x.Open,
-                ActionName = x.Action.Name,
-            }).ToListAsync();
+            return await groups.ToListAsync();
         }
 
         [Authorize]
@@ -54,16 +54,16 @@ namespace SobotySTechnikou.Controllers
                 .Where(x => x.Id==id)
                 .Select(x => new GroupVM
                 {
-                    Name=x.Name,
-                    Description=x.Description,
-                    Capacity=x.Capacity,
-                    Open=x.Open,
-                    HeadLectorId=x.HeadLectorId,
-                    Action=  _context.Actions.Find(x.ActionId),
-                    NumberOfLectors=x.NumberOfLectors,
-                    CountOfUsers=  _context.UsersInGroups.Where(x => x.GroupId == id).Count(),
-                    //Users = await _context.UsersInGroups.Include(x=>x.User).Where(x => x.GroupId == id).Select(x=> new ApplicationUser).ToListAsync(),
-
+                    Name = x.Name,
+                    HeadLectorId = x.HeadLectorId,
+                    NoteForLectors = x.NoteForLectors,
+                    NumberOfLectors = x.NumberOfLectors,
+                    Capacity = x.Capacity,
+                    MinYearToEnter = x.MinimalYear,
+                    Open = x.Open,
+                    Description = x.Description,
+                    Note = x.Note,
+                    ActionId = x.ActionId
                 }).FirstOrDefaultAsync();
 
             if (group == null)
@@ -71,6 +71,28 @@ namespace SobotySTechnikou.Controllers
                 return NotFound();
             }
 
+            group.Action = _context.Actions.Where(x => x.Id == group.ActionId)
+                .Select(x => new ActionVM
+                {
+                    Name = x.Name,
+                    Year = x.Year,
+                    Start = x.Start.ToString(),
+                    End = x.End.ToString(),
+                    Active = x.Active,
+                    Description = x.Description,
+                }).FirstOrDefault();
+
+            group.Users = _context.UsersInGroups.Include(x => x.Group).Where(x => x.GroupId == id)
+                .Select(x => new UserVM
+                {
+                    FirstName = x.User.FirstName,
+                    LastName = x.User.LastName,
+                    Email = x.User.Email,
+                    Gender = x.User.Gender,
+                    BirthDate = DateTime.Parse(x.User.BirthDate),
+                    Year = x.User.Year,
+                    UserSetInGroup = x.CreatedAt
+                }).ToList();
             return Ok(group);
         }
 
@@ -84,6 +106,7 @@ namespace SobotySTechnikou.Controllers
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = group.Name,
+                NameId = group.Name.Replace(" ", "_"),
                 Description = group.Description,
                 Capacity = group.Capacity,
                 Open = group.Open,

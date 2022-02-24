@@ -172,6 +172,9 @@ const AllActions = () => {
                         <Table.Column resizable fixed width={200} >
                             <Table.HeaderCell align="center" >Typ akce</Table.HeaderCell>
                             <TypeCell dataKey="formOfAction" />
+                        </Table.Column><Table.Column resizable fixed width={200} >
+                            <Table.HeaderCell align="center" >Akce</Table.HeaderCell>
+                            <ActionCell />
                         </Table.Column>
                     </Table>
                 </Col>
@@ -200,6 +203,14 @@ const AvailabilityCell = ({ rowData, dataKey, ...props }) => {
     return (
         <Table.Cell {...props}>
             {rowData[dataKey] ? "Ano" : "Ne"}
+        </Table.Cell>
+    )
+}
+
+const ActionCell = ({ rowData, dataKey, ...props }) => {
+    return (
+        <Table.Cell {...props}>
+            <Button color="blue" appearance="primary" as={Link} to={"/Action/" + rowData["year"] + "/"+ rowData["nameId"]}>Detail</Button>
         </Table.Cell>
     )
 }

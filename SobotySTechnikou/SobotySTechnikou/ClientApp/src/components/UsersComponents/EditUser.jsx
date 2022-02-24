@@ -73,6 +73,7 @@ const EditUser = () => {
     const [condition, setCondition] = useState();
     const [informed, setInformed] = useState();
     const [emailConfirmed, setEmailConfirmed] = useState();
+    const [date, setDate] = useState(Date.now);
 
 
     const getUserData = () => {
@@ -87,7 +88,19 @@ const EditUser = () => {
             })
                 .then(response => {
                     setUserData(response.data);
-
+                    setName(response.data.firstName);
+                    setSurname(response.data.lastName);
+                    setBirthDate(response.data.birthDate);
+                    setGender(response.data.gender);
+                    setSchool(response.data.school);
+                    setPotStudent(response.data.potentionalStudent);
+                    setYear(response.data.year);
+                    setRole(response.data.roleString);
+                    setCondition(response.data.condition);
+                    setInformed(response.data.beInformed);
+                    setEmail(response.data.email);
+                    setEmailConfirmed(response.data.emailConfirmed);
+                    
                 })
                 .catch(error => {
                     setError(true);
@@ -116,9 +129,10 @@ const EditUser = () => {
     }
 
     const saveUserData = () => {
+        console.log(birthDate);
         setIsLoading(true);
         setError(false);
-        axios.put("/api/Users/" + userData.id, {
+        axios.put("/api/Users/"+ userData.id, {
             firstName: name,
             lastName: surname,
             birthDate: birthDate,
@@ -129,7 +143,10 @@ const EditUser = () => {
             condition: condition,
             beInformed: informed,
             emailConfirmed: emailConfirmed,
-            email: email
+            email: email,
+            id: userData.id,
+            roleString: role
+
         }, {
             headers: {
                 //"Content-Type": "application/json",
@@ -147,6 +164,30 @@ const EditUser = () => {
             })
     }
 
+    const addRole = () => {
+        setIsLoading(true);
+        setError(false);
+        console.log("userId: " + userData.id + " | funkce: " + role);
+        axios.post("/api/Users/ChangeAuthorization/", {
+            userId: userData.id,
+            function: role
+        }, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}`
+            }
+        })
+        .then(response=>{
+            console.log(response);
+        })
+        .catch(error=>{
+            setError(true);
+        })
+        .finally(()=>{
+            setIsLoading(false)
+        })
+    }
+
     useEffect(() => {
         getUserData();
     }, [accessToken || profile]);
@@ -162,7 +203,7 @@ const EditUser = () => {
                                     <Form.ControlLabel >Jméno</Form.ControlLabel>
                                 </Col>
                                 <Col lg={10}>
-                                    <Input value={name} onChange={e => setName(e)} defaultValue={userData.firstName}></Input>
+                                    <Input value={name} onChange={e => setName(e)} ></Input>
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -175,7 +216,7 @@ const EditUser = () => {
                                     <Form.ControlLabel >Příjmení</Form.ControlLabel>
                                 </Col>
                                 <Col lg={10}>
-                                    <Input value={surname} onChange={e => setSurname(e)} defaultValue={userData.lastName}></Input>
+                                    <Input value={surname} onChange={e => setSurname(e)} ></Input>
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -188,7 +229,7 @@ const EditUser = () => {
                                     <Form.ControlLabel >Datum narození</Form.ControlLabel>
                                 </Col>
                                 <Col lg={10}>
-                                    <DatePicker block type="datetime" value={birthDate} onChange={e => setBirthDate(e)} defaultValue={Date.parse(userData.birthDate)}></DatePicker>
+                                    <Input block value={birthDate} onChange={e => setBirthDate(e)} ></Input>
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -203,8 +244,8 @@ const EditUser = () => {
                                         value={gender}
                                         defaultValue={userData.gender}
                                         onChange={value => setGender(value)}>
-                                        <Radio value={0}>Muž</Radio>
-                                        <Radio value={1}>Žena</Radio>
+                                        <Radio value={1}>Muž</Radio>
+                                        <Radio value={2}>Žena</Radio>
                                     </RadioGroup>
                                 </Col>
                             </Form.Group>
@@ -218,7 +259,7 @@ const EditUser = () => {
                                     <Form.ControlLabel>Škola</Form.ControlLabel>
                                 </Col>
                                 <Col lg={10}>
-                                    <Input value={school} onChange={e => setSchool(e)} defaultValue={userData.school}></Input>
+                                    <Input value={school} onChange={e => setSchool(e)} ></Input>
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -231,7 +272,7 @@ const EditUser = () => {
                                     <Form.ControlLabel>Ročník</Form.ControlLabel>
                                 </Col>
                                 <Col lg={10}>
-                                    <SelectPicker block searchable={false} data={yearData} defaultValue={userData.year} value={year} onChange={e => setYear(e)} />
+                                    <SelectPicker block searchable={false} data={yearData} value={year} onChange={e => setYear(e)} />
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -241,7 +282,7 @@ const EditUser = () => {
                         <Col lg={20} lgOffset={2}>
                             <Form.Group>
                                 <Col lg={10} lgOffset={10}>
-                                    <Checkbox checked={potStudent} onChange={e => setPotStudent(!potStudent)} defaultChecked={userData.potentionalStudent} >Chce být studentem SPŠSE</Checkbox>
+                                    <Checkbox checked={potStudent} onChange={e => setPotStudent(!potStudent)} >Chce být studentem SPŠSE</Checkbox>
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -254,7 +295,7 @@ const EditUser = () => {
                                     <Form.ControlLabel>E-mailová adresa</Form.ControlLabel>
                                 </Col>
                                 <Col lg={10}>
-                                    <Input value={email} onChange={e => setEmail(e)} defaultValue={userData.email}></Input>
+                                    <Input value={email} onChange={e => setEmail(e)} ></Input>
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -266,11 +307,11 @@ const EditUser = () => {
                                 <Col lg={10}>
                                     <Form.ControlLabel>Role</Form.ControlLabel>
                                 </Col>
-                                <Col lg={10}>
-                                    <SelectPicker block searchable={false} data={userRoles} defaultValue={userData.roleString} value={role} onChange={e => setRole(e)} />
+                                <Col lg={5}>
+                                    <SelectPicker block searchable={false} data={userRoles} value={role} onChange={e => setRole(e)} />
                                 </Col>
-                                <Col>
-
+                                <Col lg={5}>
+                                    <Button color="cyan" appearance="primary" onClick={() => addRole()} as={Link} to="/Users">Změnit roli</Button>
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -283,7 +324,7 @@ const EditUser = () => {
                                     <Form.ControlLabel>Stav</Form.ControlLabel>
                                 </Col>
                                 <Col lg={10}>
-                                    <SelectPicker block searchable={false} data={conditionData} defaultValue={userData.condition} value={condition} onChange={e => setCondition(e)} />
+                                    <SelectPicker block searchable={false} data={conditionData} value={condition} onChange={e => setCondition(e)} />
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -293,7 +334,7 @@ const EditUser = () => {
                         <Col lg={20} lgOffset={2}>
                             <Form.Group>
                                 <Col lg={10} lgOffset={10}>
-                                    <Checkbox checked={informed} onChange={e => setInformed(!informed)} defaultChecked={userData.potentionalStudent} >Chce být informován</Checkbox>
+                                    <Checkbox checked={informed} onChange={e => setInformed(!informed)}  >Chce být informován</Checkbox>
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -303,12 +344,13 @@ const EditUser = () => {
                         <Col lg={20} lgOffset={2}>
                             <Form.Group>
                                 <Col lg={10} lgOffset={10}>
-                                    <Checkbox checked={emailConfirmed} onChange={e => setEmailConfirmed(!emailConfirmed)} defaultChecked={userData.emailConfirmed} disabled>Potvrzený email</Checkbox>
+                                    <Checkbox checked={emailConfirmed} onChange={e => setEmailConfirmed(!emailConfirmed)} disabled>Potvrzený email</Checkbox>
                                 </Col>
                             </Form.Group>
                         </Col>
                     </Row>
                     <Button color="cyan" appearance="primary" onClick={() => saveUserData()} as={Link} to="/Users" >Uložit</Button>
+                    <Button color="cyan" appearance="primary" onClick={() => console.log(typeof(date))} >Datum</Button>
                 </Form>
             </div>
         )

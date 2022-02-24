@@ -1,6 +1,7 @@
 import axios from "axios";
 import React from "react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button, Checkbox, Col, DatePicker, Form, Input, InputNumber, Row, SelectPicker } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
 
@@ -111,7 +112,7 @@ const NewAction = () => {
                                 <Form.ControlLabel >Konec</Form.ControlLabel>
                             </Col>
                             <Col lg={16}>
-                                <Input type="datetime-local" />
+                                <Input type="datetime-local" value={endDate} onChange={e=>setEndDate(e)} />
                             </Col>
                         </Form.Group>
                     </Col>
@@ -124,7 +125,7 @@ const NewAction = () => {
                                 <Form.ControlLabel>Forma Akce</Form.ControlLabel>
                             </Col>
                             <Col lg={16}>
-                                <SelectPicker block searchable="false" data={actionType} value={type} onChange={e => setType(e)} />
+                                <SelectPicker block searchable={false} data={actionType} value={type} onChange={e => setType(e)} />
                             </Col>
                         </Form.Group>
                     </Col>
@@ -161,7 +162,7 @@ const NewAction = () => {
                     </Col>
                 </Row>
                 <br />
-                <Button color="cyan" appearance="primary" onClick={()=>{createAction()}}>Uložit</Button>
+                <Button as={Link} to="/AllActions" color="cyan" appearance="primary" onClick={()=>{createAction()}}>Uložit</Button>
             </Form>
         </div>
     )

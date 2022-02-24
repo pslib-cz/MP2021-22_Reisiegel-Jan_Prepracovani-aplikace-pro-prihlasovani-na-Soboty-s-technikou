@@ -193,14 +193,14 @@ namespace SobotySTechnikou.Migrations
                         new
                         {
                             Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1",
-                            ConcurrencyStamp = "b3afd876-80e9-4e9e-af06-4d973479e95f",
+                            ConcurrencyStamp = "41e74547-03e2-4c63-963c-25d0bd1eaf02",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2",
-                            ConcurrencyStamp = "3f764a10-1be6-4195-9f3d-c8dec53a2bd2",
+                            ConcurrencyStamp = "d8d2d791-c11e-484d-9a51-884dd2b3f0c1",
                             Name = "Lector",
                             NormalizedName = "LECTOR"
                         });
@@ -337,6 +337,10 @@ namespace SobotySTechnikou.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("CreatorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -351,6 +355,10 @@ namespace SobotySTechnikou.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("NameId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("Start")
                         .HasColumnType("datetime2");
 
@@ -361,6 +369,8 @@ namespace SobotySTechnikou.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("Actions");
                 });
@@ -472,8 +482,8 @@ namespace SobotySTechnikou.Migrations
                             Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
                             AccessFailedCount = 0,
                             BeInformed = false,
-                            BirthDate = "21.02.2022 0:00:00",
-                            ConcurrencyStamp = "b6dd7077-fdd9-47dc-bc2d-78b8d2eba1f6",
+                            BirthDate = "23.02.2022 0:00:00",
+                            ConcurrencyStamp = "0acfee24-a068-40e5-8a1a-4f3f027ff403",
                             Condition = 0,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "sobota@pslib.cz",
@@ -484,7 +494,7 @@ namespace SobotySTechnikou.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "SOBOTA@PSLIB.CZ",
                             NormalizedUserName = "SOBOTA@PSLIB.CZ",
-                            PasswordHash = "AQAAAAEAACcQAAAAEB2IXVLSmtQIdcQItLa2KvbIvkRvn8BaPfoZIKDSrQ2PANtnWElfqcVf21F0yLk4pQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEK3ivH8u3RWGECY04SKHiiFLtbNU8HmAeq9vz10bXTEk7VbGTqVCYLie+cuPBOiwPQ==",
                             PhoneNumberConfirmed = false,
                             PotentionalStudent = false,
                             School = "Střední průmyslová škola strojní a elektrotechnická Liberec",
@@ -522,6 +532,10 @@ namespace SobotySTechnikou.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NameId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -628,6 +642,17 @@ namespace SobotySTechnikou.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SobotySTechnikou.Models.Action", b =>
+                {
+                    b.HasOne("SobotySTechnikou.Models.ApplicationUser", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Creator");
                 });
 
             modelBuilder.Entity("SobotySTechnikou.Models.Group", b =>

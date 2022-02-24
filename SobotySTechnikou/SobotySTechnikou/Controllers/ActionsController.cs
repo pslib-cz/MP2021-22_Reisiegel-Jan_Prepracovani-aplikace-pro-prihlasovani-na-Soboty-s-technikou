@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using SobotySTechnikou.Data;
 using SobotySTechnikou.Models;
 using SobotySTechnikou.ViewModels;
+using System.Security.Claims;
 
 namespace SobotySTechnikou.Controllers
 {
@@ -21,7 +22,7 @@ namespace SobotySTechnikou.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Models.Action>>> Get(string name, int? year, bool? isActive, bool? availability)
+        public async Task<ActionResult<IEnumerable<Models.Action>>> Get(string? name, int? year, bool? isActive, bool? availability)
         {
             IQueryable<SobotySTechnikou.Models.Action> actions = _context.Actions;
             if (!String.IsNullOrEmpty(name))
@@ -44,10 +45,35 @@ namespace SobotySTechnikou.Controllers
         }
 
         [Authorize]
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Models.Action>> GetAction(string id)
+        [HttpGet("{year}/{nameId}")]
+        public async Task<ActionResult<ActionVM>> GetAction(string nameId, int year)
         {
-            var action = await _context.Actions.FindAsync(id);
+            var action = await _context.Actions.Where(x => x.NameId == nameId && year == year)
+                .Include(x=>x.Creator)
+                .Select(x => new ActionVM
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Year = x.Year,
+                    Start = x.Start.ToString(),
+                    End = x.End.ToString(),
+                    Active = x.Active,
+                    Availability = x.Availability,
+                    Description = x.Description,
+                    CreateTime=x.CreatedAt.ToString(),
+                    UpdateTime = x.UpdatedAt.ToString(),
+                    CreatorName = $"{x.Creator.FirstName} {x.Creator.LastName}"
+                }).FirstOrDefaultAsync();
+            action.Groups = _context.Groups.Where(x => x.ActionId == action.Id)
+                .Select(x => new GroupVM
+                {
+                    Name = x.Name,
+                    NameId = x.NameId,
+                    Capacity = x.Capacity,
+                    Open = x.Open,
+                    NumberOfLectors = x.NumberOfLectors,
+                    CountOfUsers = _context.UsersInGroups.Where(c=>c.GroupId == x.Id).Count()
+                }).ToList();
             if(action is null)
                 return NotFound();
             return Ok(action);
@@ -84,12 +110,14 @@ namespace SobotySTechnikou.Controllers
         {
             if (actionInput == null)
                 return BadRequest();
-            var existAction = await _context.Actions.Where(x=>x.Name == actionInput.Name && x.Year == actionInput.Year).ToListAsync();
-            if (existAction != null)
+            var existAction = await _context.Actions.Where(x=>x.NameId == actionInput.Name && x.Year == actionInput.Year).ToListAsync();
+            if (existAction.Count > 0)
                 return StatusCode(418);
+            var userId = User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value;
             Models.Action action = new Models.Action
             {
                 Id = Guid.NewGuid().ToString(),
+                NameId = actionInput.Name.Replace(" ", "_"),
                 Name = actionInput.Name,
                 Description = actionInput.Description,
                 Year = actionInput.Year,
@@ -100,7 +128,9 @@ namespace SobotySTechnikou.Controllers
                 UpdatedAt = DateTime.Now,
                 Active = actionInput.Active,
                 Availability = actionInput.Availability,
+                CreatorId = userId,
             };
+            action.Creator = _context.Users.Where(x => x.Id==userId).FirstOrDefault();
             _context.Actions.Add(action);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetAction", new { id = action.Id }, action);

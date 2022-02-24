@@ -10,27 +10,6 @@ namespace SobotySTechnikou.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Actions",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Year = table.Column<int>(type: "int", nullable: false),
-                    Start = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    End = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FormOfAction = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Active = table.Column<bool>(type: "bit", nullable: false),
-                    Availability = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Actions", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
                 {
@@ -159,6 +138,35 @@ namespace SobotySTechnikou.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Actions",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NameId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Year = table.Column<int>(type: "int", nullable: false),
+                    Start = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    End = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FormOfAction = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false),
+                    Availability = table.Column<bool>(type: "bit", nullable: false),
+                    CreatorId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Actions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Actions_AspNetUsers_CreatorId",
+                        column: x => x.CreatorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
@@ -248,6 +256,7 @@ namespace SobotySTechnikou.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    NameId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Capacity = table.Column<int>(type: "int", nullable: false),
@@ -255,7 +264,11 @@ namespace SobotySTechnikou.Migrations
                     HeadLectorId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ActionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    UpdatedTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NumberOfLectors = table.Column<int>(type: "int", nullable: false),
+                    MinimalYear = table.Column<int>(type: "int", nullable: false),
+                    NoteForLectors = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -316,22 +329,27 @@ namespace SobotySTechnikou.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1", "ec36a620-dd89-4cf9-8370-b2d155775019", "Administrator", "ADMINISTRATOR" });
+                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1", "41e74547-03e2-4c63-963c-25d0bd1eaf02", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2", "f9ec8bd6-f3fc-4a94-9b90-5322bc157738", "Lector", "LECTOR" });
+                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2", "d8d2d791-c11e-484d-9a51-884dd2b3f0c1", "Lector", "LECTOR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "BeInformed", "BirthDate", "ConcurrencyStamp", "Condition", "CreatedAt", "Email", "EmailConfirmed", "FirstName", "Gender", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PotentionalStudent", "School", "SecurityStamp", "TwoFactorEnabled", "UpdatedAt", "UserName", "Year" },
-                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX", 0, false, "15.02.2022 0:00:00", "b05bd792-2475-4ff3-9ffb-b1818ff7c6a8", 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "sobota@pslib.cz", true, "Admin", 2, "PSLIB", false, null, "SOBOTA@PSLIB.CZ", "INFO@MY-GALLERY.EU", "AQAAAAEAACcQAAAAEJBoC95wP/0KnV4bs3tZQANqb5XFfbMAfHlG2jciDheaXf4eXAtgN5Hg/IAx/cEcGQ==", null, false, false, "Střední průmyslová škola strojní a elektrotechnická Liberec", "", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "sobota@pslib.cz", 3 });
+                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX", 0, false, "23.02.2022 0:00:00", "0acfee24-a068-40e5-8a1a-4f3f027ff403", 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "sobota@pslib.cz", true, "Admin", 0, "PSLIB", false, null, "SOBOTA@PSLIB.CZ", "SOBOTA@PSLIB.CZ", "AQAAAAEAACcQAAAAEK3ivH8u3RWGECY04SKHiiFLtbNU8HmAeq9vz10bXTEk7VbGTqVCYLie+cuPBOiwPQ==", null, false, false, "Střední průmyslová škola strojní a elektrotechnická Liberec", "", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "sobota@pslib.cz", 4 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1", "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Actions_CreatorId",
+                table: "Actions",
+                column: "CreatorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

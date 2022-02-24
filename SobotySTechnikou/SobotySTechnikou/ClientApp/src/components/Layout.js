@@ -7,7 +7,8 @@ export class Layout extends Component {
   static displayName = Layout.name;
 
   render() {
-    return (
+    if (true) {
+      return (
         <Container>
           <Header><NavMenu /></Header>
           <Content>
@@ -16,10 +17,33 @@ export class Layout extends Component {
                 <Row>
                   <Col lg={2}>
                   </Col>
-                  <Col lg={16}>
+                  <Col lg={20} >
                     {this.props.children}
                   </Col>
-                  <Col lg={4}>
+                  <Col lg={2}>
+                  </Col>
+                </Row>
+              </Content>
+            </Container>
+          </Content>
+          <Footer></Footer>
+        </Container>
+      );
+    }
+    else {
+      return (
+        <Container>
+          <Header><NavMenu /></Header>
+          <Content>
+            <Container>
+              <Content>
+                <Row>
+                  <Col lg={2}>
+                  </Col>
+                  <Col lg={16} xs={20} >
+                    {this.props.children}
+                  </Col>
+                  <Col lg={4} xsHidden mdHidden>
                     <SideMenu />
                   </Col>
                   <Col lg={2}>
@@ -30,6 +54,7 @@ export class Layout extends Component {
           </Content>
           <Footer></Footer>
         </Container>
-    );
+      );
+    }
   }
 }

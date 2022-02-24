@@ -70,11 +70,9 @@ namespace SobotySTechnikou.Controllers
         }
 
         [Authorize] //(Roles = "Administrator")
-        [HttpPost("{userId}/ChangeAuthorization/{function}")]
+        [HttpPost("ChangeAuthorization")]
         public async Task<ActionResult> UserAddPolicy(string userId, string function)
         {
-            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(function))
-                return BadRequest();
             var policy2 = _context.UserRoles.Where(x => x.UserId == userId).FirstOrDefault();
             if (policy2 != null && !String.IsNullOrEmpty(function))
                 _context.UserRoles.Remove(policy2);
@@ -151,31 +149,51 @@ namespace SobotySTechnikou.Controllers
                     BeInformed=x.BeInformed,
                     EmailConfirmed=x.EmailConfirmed,
                 }).FirstOrDefaultAsync();
+
             if (user == null)
                 return NotFound();
             user.RoleString = await _context.UserRoles.Where(x => x.UserId == user.Id).Select(x => x.RoleId).FirstOrDefaultAsync();
-            if (user == null)
-                return NotFound();
+            if (user.RoleString == null)
+                user.RoleString = "";
             return Ok(user);
         }
 
         [Authorize]
         [HttpPut("{userId}")]
-        public async Task<ActionResult> PutUser(string userId, UserVM user)
+        public async Task<ActionResult> PutUser(string userId, UserIM user)
         {
-            if(userId == null)
-                return BadRequest();
             var thisUser = _context.Users.Find(userId);
             if (thisUser == null)
                 return NotFound();
+            var roleOfUser = _context.UserRoles.Where(x => x.UserId == user.Id).Select(x => x.RoleId).FirstOrDefault();
+
             thisUser.FirstName = user.FirstName;
             thisUser.LastName = user.LastName;
-            thisUser.BirthDate = user.BirthDate.ToString();
-            thisUser.Gender = user.Gender;
+            thisUser.BirthDate = DateTime.Parse(user.BirthDate).ToShortDateString();
+            thisUser.Gender = user.Gender switch
+            {
+                0 => Gender.Other,
+                1 => Gender.Male,
+                2 => Gender.Female,
+                _ => Gender.Other
+            };
             thisUser.School = user.School;
-            thisUser.Year = user.Year;
+            thisUser.Year = user.Year switch
+            {
+                0 => Year.none,
+                1 => Year.Class7,
+                2 => Year.Class8,
+                3 => Year.Class9,
+                4 => Year.Class10,
+                _ => Year.none
+            };
             thisUser.PotentionalStudent = user.PotentionalStudent;
-            thisUser.Condition = user.Condition;
+            thisUser.Condition = user.Condition switch
+            {
+                0 => Condition.Active,
+                1 => Condition.Banned,
+                _ => Condition.Active
+            };
             thisUser.BeInformed = user.BeInformed;
             thisUser.EmailConfirmed = user.EmailConfirmed;
             thisUser.Email = user.Email;

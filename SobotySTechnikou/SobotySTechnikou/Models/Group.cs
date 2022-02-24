@@ -7,6 +7,7 @@ namespace SobotySTechnikou.Models
     {
         [Key]
         public string Id { get; set; } = "Nevyplněno";
+        public string NameId { get; set; }
         [Required]
         public string Name { get; set; } = "Nevyplněno";
         [Required]

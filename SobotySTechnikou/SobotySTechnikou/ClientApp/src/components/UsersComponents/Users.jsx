@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Pagination, Table } from "rsuite";
+import { Link } from "react-router-dom";
+import { Button, Pagination, Table } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
 
 const Users = props => {
@@ -121,8 +122,20 @@ const Users = props => {
                     <Table.HeaderCell align="center">Ročník</Table.HeaderCell>
                     <YearCell dataKey={"year"} />
                 </Table.Column>
+                <Table.Column sortable resizable width={80} autoHeight >
+                    <Table.HeaderCell align="center">Akce</Table.HeaderCell>
+                    <ActionCell />
+                </Table.Column>
             </Table>
         </div>
+    )
+}
+
+const ActionCell = ({ rowData, dataKey, ...props }) => {
+    return (
+        <Table.Cell {...props}>
+            <Button color="blue" appearance="primary" as={Link} to={"/EditUser/" + rowData["email"]}>Detail</Button>
+        </Table.Cell>
     )
 }
 
@@ -136,7 +149,7 @@ const YesNoCell = ({rowData, dataKey, ...props}) => {
 const GenderCell = ({rowData, dataKey, ...props}) => {
     return(
         <Table.Cell {...props}>
-            {rowData[dataKey] === 0 ? "Muž" : rowData[dataKey] === 1 ? "Žena" : "Jiné" }
+            {rowData[dataKey] === 1 ? "Muž" : rowData[dataKey] === 2 ? "Žena" : "Jiné" }
         </Table.Cell>
     )
 }

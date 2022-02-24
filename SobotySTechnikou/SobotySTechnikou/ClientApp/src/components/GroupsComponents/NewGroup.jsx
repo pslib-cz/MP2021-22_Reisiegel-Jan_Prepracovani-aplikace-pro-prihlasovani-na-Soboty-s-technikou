@@ -109,6 +109,7 @@ const NewGroup = () => {
         })
             .then(response => {
                 setLectors(response.data);
+                console.log(response.data);
             })
             .catch(error => {
                 setError(true);
@@ -120,6 +121,7 @@ const NewGroup = () => {
 
     useEffect(()=>{
         getActionsSelector();
+        getLectorsSelector();
     }, [accessToken]);
 
     return (

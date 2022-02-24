@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SobotySTechnikou.Models
 {
@@ -8,6 +9,7 @@ namespace SobotySTechnikou.Models
         public string Id { get; set; } = "Nevyplněno";
         [Required]
         public string Name { get; set; } = "Nevyplněno";
+        public string NameId { get; set; }
         [Required]
         public string Description { get; set; } = "Nevyplněno";
         [Required]
@@ -22,6 +24,9 @@ namespace SobotySTechnikou.Models
         public DateTime UpdatedAt { get; set; }
         public bool Active { get; set; }
         public bool Availability { get; set; }
+        [ForeignKey("CreatorId")]
+        public ApplicationUser Creator { get; set; }
+        public string CreatorId { get; set; }
 
 
         public ICollection<Group>? Groups { get; set; }
