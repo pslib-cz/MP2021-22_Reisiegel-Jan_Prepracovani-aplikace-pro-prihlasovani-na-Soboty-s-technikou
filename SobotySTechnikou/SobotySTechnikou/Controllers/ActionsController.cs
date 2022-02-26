@@ -62,18 +62,9 @@ namespace SobotySTechnikou.Controllers
                     Description = x.Description,
                     CreateTime=x.CreatedAt.ToString(),
                     UpdateTime = x.UpdatedAt.ToString(),
-                    CreatorName = $"{x.Creator.FirstName} {x.Creator.LastName}"
+                    CreatorName = $"{x.Creator.FirstName} {x.Creator.LastName}",
+                    Type = x.FormOfAction
                 }).FirstOrDefaultAsync();
-            action.Groups = _context.Groups.Where(x => x.ActionId == action.Id)
-                .Select(x => new GroupVM
-                {
-                    Name = x.Name,
-                    NameId = x.NameId,
-                    Capacity = x.Capacity,
-                    Open = x.Open,
-                    NumberOfLectors = x.NumberOfLectors,
-                    CountOfUsers = _context.UsersInGroups.Where(c=>c.GroupId == x.Id).Count()
-                }).ToList();
             if(action is null)
                 return NotFound();
             return Ok(action);

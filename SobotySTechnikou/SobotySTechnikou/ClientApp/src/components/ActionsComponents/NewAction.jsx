@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Checkbox, Col, DatePicker, Form, Input, InputNumber, Row, SelectPicker } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const actionType = [
     {
@@ -17,7 +19,7 @@ const actionType = [
 ]
 
 const NewAction = () => {
-    const [{accessToken}] = useAuthContext();
+    const [{ accessToken }] = useAuthContext();
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [startDate, setStartDate] = useState();
@@ -30,7 +32,7 @@ const NewAction = () => {
     const [error, setError] = useState();
     const [isLoading, setIsLoading] = useState();
 
-    const createAction = async() => {
+    const createAction = async () => {
         setIsLoading(true);
         setError(false);
         await axios.post("/api/Actions",
@@ -44,22 +46,22 @@ const NewAction = () => {
                 formOfAction: type,
                 availability: availability
             }
-        ,
-        {
-            headers: {
-                //"Content-Type": "application/json",
-                "Authorization": `Bearer ${accessToken}`
-            }
-        })
-        .then(response=>{
-            setNeco(response);
-        })
-        .catch(error=>{
-            setError(true);
-        })
-        .finally(()=>{
-            setIsLoading(false);
-        })
+            ,
+            {
+                headers: {
+                    //"Content-Type": "application/json",
+                    "Authorization": `Bearer ${accessToken}`
+                }
+            })
+            .then(response => {
+                setNeco(response);
+            })
+            .catch(error => {
+                setError(true);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            })
     }
 
     return (
@@ -99,7 +101,7 @@ const NewAction = () => {
                                 <Form.ControlLabel >Začátek</Form.ControlLabel>
                             </Col>
                             <Col lg={16}>
-                                <Input type="datetime-local" value={startDate} onChange={e=>setStartDate(e)} />
+                                <Input type="datetime-local" value={startDate} onChange={e => setStartDate(e)} />
                             </Col>
                         </Form.Group>
                     </Col>
@@ -112,7 +114,7 @@ const NewAction = () => {
                                 <Form.ControlLabel >Konec</Form.ControlLabel>
                             </Col>
                             <Col lg={16}>
-                                <Input type="datetime-local" value={endDate} onChange={e=>setEndDate(e)} />
+                                <Input type="datetime-local" value={endDate} onChange={e => setEndDate(e)} />
                             </Col>
                         </Form.Group>
                     </Col>
@@ -138,7 +140,28 @@ const NewAction = () => {
                                 <Form.ControlLabel>Popis Akce</Form.ControlLabel>
                             </Col>
                             <Col lg={16}>
-                                <Input as="textarea" rows={5} value={description} onChange={e => setDescription(e)} />
+                                <CKEditor
+                                    config={{
+                                        language: 'cs',
+                                    }}
+                                    editor={ClassicEditor}
+                                    data={description}
+                                    onReady={editor => {
+                                        // You can store the "editor" and use when it is needed.
+                                        console.log('Editor is ready to use!', editor);
+                                    }}
+                                    onChange={(event, editor) => {
+                                        //const data = editor.getData();
+                                        setDescription(editor.getData());
+                                        console.log(description);
+                                    }}
+                                    onBlur={(event, editor) => {
+                                        console.log('Blur.', editor);
+                                    }}
+                                    onFocus={(event, editor) => {
+                                        console.log('Focus.', editor);
+                                    }}
+                                />
                             </Col>
                         </Form.Group>
                     </Col>
@@ -162,10 +185,13 @@ const NewAction = () => {
                     </Col>
                 </Row>
                 <br />
-                <Button as={Link} to="/AllActions" color="cyan" appearance="primary" onClick={()=>{createAction()}}>Uložit</Button>
+                <Button as={Link} to="/AllActions" color="cyan" appearance="primary" onClick={() => { createAction() }}>Uložit</Button>
             </Form>
         </div>
     )
 }
+
+
+
 
 export default NewAction;

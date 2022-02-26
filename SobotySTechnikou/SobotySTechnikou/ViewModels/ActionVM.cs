@@ -1,4 +1,6 @@
-﻿namespace SobotySTechnikou.ViewModels
+﻿using SobotySTechnikou.Models;
+
+namespace SobotySTechnikou.ViewModels
 {
     public class ActionVM
     {
@@ -13,6 +15,7 @@
         public string CreateTime { get; set; }
         public string UpdateTime { get; set; }
         public string CreatorName { get; set; }
+        public ActionType Type { get; set; }
         public List<GroupVM> Groups { get; set; }
 
     }

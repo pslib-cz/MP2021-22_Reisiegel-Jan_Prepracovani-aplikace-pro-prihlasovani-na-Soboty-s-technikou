@@ -109,16 +109,16 @@ const AllGroups = () => {
                     <Col lg={21}>
                         <Panel header={<FilterHeader />} bordered>
                             <Form fluid>
-                            <Col lg={6}>
-                                <Form.Control placeholder="Název akce" value={groupName} onChange={e => setGroupName(e)} />
-                            </Col>
-                            <Col lg={6}>
-                                <Form.Control placeholder="Rok akce" value={groupAction} onChange={e => setGroupAction(e)} />
-                            </Col>
-                            <Col lg={6}>
-                                <Form.Control placeholder="Stav akce" value={groupOpen} onChange={e => setGroupOpen(e)} />
-                            </Col>
-                            <br />
+                                <Col lg={6}>
+                                    <Form.Control placeholder="Název akce" value={groupName} onChange={e => setGroupName(e)} />
+                                </Col>
+                                <Col lg={6}>
+                                    <Form.Control placeholder="Rok akce" value={groupAction} onChange={e => setGroupAction(e)} />
+                                </Col>
+                                <Col lg={6}>
+                                    <Form.Control placeholder="Stav akce" value={groupOpen} onChange={e => setGroupOpen(e)} />
+                                </Col>
+                                <br />
                             </Form>
                         </Panel>
                     </Col>
@@ -138,27 +138,47 @@ const AllGroups = () => {
                             bordered
                             cellBordered
                             wordWrap >
-                            <Table.Column sortable resizable fixed width={400} >
+                            <Table.Column sortable resizable  width={400} >
                                 <Table.HeaderCell align="center" >Název</Table.HeaderCell>
                                 <Table.Cell dataKey="name" />
                             </Table.Column>
-                            <Table.Column sortable resizable fixed width={600} >
+                            <Table.Column sortable resizable  width={600} >
                                 <Table.HeaderCell align="center" >Akce</Table.HeaderCell>
                                 <Table.Cell dataKey="actionName" />
                             </Table.Column>
-                            <Table.Column sortable resizable fixed width={90} >
+                            <Table.Column sortable resizable  width={90} >
                                 <Table.HeaderCell align="center" >Kapacita</Table.HeaderCell>
                                 <Table.Cell dataKey="capacity" />
                             </Table.Column>
-                            <Table.Column sortable resizable fixed width={90} >
+                            <Table.Column sortable resizable fied width={90} >
                                 <Table.HeaderCell align="center" >Otevřená</Table.HeaderCell>
-                                <Table.Cell dataKey="open" />
+                                <ActiveCell dataKey="open" />
+                            </Table.Column>
+                            <Table.Column resizable  width={200} >
+                                <Table.HeaderCell align="center" >Akce</Table.HeaderCell>
+                                <ActionCell />
                             </Table.Column>
                         </Table>
                     </Col>
                 </Row>
             </Col>
         </div>
+    )
+}
+
+const ActiveCell = ({ rowData, dataKey, ...props }) => {
+    return (
+        <Table.Cell {...props}>
+            {rowData[dataKey] ? "Ano" : "Ne"}
+        </Table.Cell>
+    )
+}
+
+const ActionCell = ({ rowData, dataKey, ...props }) => {
+    return (
+        <Table.Cell {...props}>
+            <Button color="blue" appearance="primary" as={Link} to={`/Group/${rowData["year"]}/${rowData["actionNameId"]}/${rowData["nameId"]}`}>Detail</Button>
+        </Table.Cell>
     )
 }
 
@@ -172,7 +192,7 @@ const FilterHeader = () => {
                 <ButtonGroup>
                     <Button color="blue" appearance="primary" >Filtrovat</Button>
                     <Button color="cyan" appearance="primary" >Reset filtru</Button>
-                    <Button appearance="primary" color="green" as={Link} to="/NewGroup" >Nová akce</Button>
+                    <Button appearance="primary" color="green" as={Link} to="/NewGroup" >Nová skupina</Button>
                 </ButtonGroup>
             </Col>
         </Row>

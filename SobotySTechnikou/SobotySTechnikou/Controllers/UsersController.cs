@@ -43,7 +43,7 @@ namespace SobotySTechnikou.Controllers
                 {
                     FirstName = x.FirstName,
                     LastName = x.LastName,
-                    BirthDate = DateTime.Parse(x.BirthDate),
+                    BirthDate = DateTime.Parse(x.BirthDate).ToShortDateString(),
                     Gender = x.Gender,
                     School = x.School,
                     Year = x.Year,
@@ -70,7 +70,7 @@ namespace SobotySTechnikou.Controllers
         }
 
         [Authorize] //(Roles = "Administrator")
-        [HttpPost("ChangeAuthorization")]
+        [HttpGet("{userId}/ChangeAuthorization/{function}")]
         public async Task<ActionResult> UserAddPolicy(string userId, string function)
         {
             var policy2 = _context.UserRoles.Where(x => x.UserId == userId).FirstOrDefault();
@@ -140,7 +140,7 @@ namespace SobotySTechnikou.Controllers
                     Email = x.Email,
                     FirstName = x.FirstName,
                     LastName = x.LastName,
-                    BirthDate = DateTime.Parse(x.BirthDate),
+                    BirthDate = DateTime.Parse(x.BirthDate).ToShortDateString(),
                     Gender = x.Gender,
                     School=x.School,
                     Year=x.Year,
@@ -222,11 +222,11 @@ namespace SobotySTechnikou.Controllers
         [HttpGet("LectorSelector")]
         public async Task<ActionResult<ICollection<MySelector>>> GetUsersSelector()
         {
-            var lectorsIds = await _context.UserRoles.Where(x => x.RoleId == "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2").ToListAsync();
+            var lectorsIds = await _context.UserRoles.Where(x => x.RoleId == "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2").Select(x=>x.UserId).ToListAsync();
             List<MySelector> mySelectors = new List<MySelector>();
             foreach(var a in lectorsIds)
             {
-                var user = await _context.Users.FindAsync(a);
+                var user = _context.Users.Where(x=>x.Id == a).FirstOrDefault();
                 mySelectors.Add(new MySelector
                 {
                     Value = user.Id,

@@ -24,12 +24,16 @@ namespace SobotySTechnikou.Controllers
         public async Task<ActionResult<IEnumerable<GroupVM>>> Get(string? name, string? actionName, bool? open)
         {
             IQueryable<GroupVM> groups = _context.Groups
+                .Include(x=>x.Action)
                 .Select(x => new GroupVM
                 {
                     Name = x.Name,
                     Capacity = x.Capacity,
                     Open = x.Open,
                     ActionName = x.Action.Name,
+                    Year = x.Action.Year,
+                    ActionNameId = x.Action.NameId,
+                    NameId = x.NameId
                 });
             if (!String.IsNullOrEmpty(name))
             {
@@ -47,15 +51,18 @@ namespace SobotySTechnikou.Controllers
         }
 
         [Authorize]
-        [HttpGet("{id}")]
-        public async Task<ActionResult<GroupVM>> GetGroup(string id)
+        [HttpGet("{year}/{actionNameId}/{groupNameId}")]
+        public async Task<ActionResult<GroupVM>> GetGroup(string actionNameId, string groupNameId, int year )
         {
             var group = await _context.Groups
-                .Where(x => x.Id==id)
+                .Include(x=>x.Action)
+                .Include(x=>x.HeadLector)
+                .Where(x => x.Action.NameId == actionNameId && x.Action.Year == year && x.NameId == groupNameId)
                 .Select(x => new GroupVM
                 {
                     Name = x.Name,
                     HeadLectorId = x.HeadLectorId,
+                    HeadLectorName = $"{x.HeadLector.FirstName} {x.HeadLector.LastName}",
                     NoteForLectors = x.NoteForLectors,
                     NumberOfLectors = x.NumberOfLectors,
                     Capacity = x.Capacity,
@@ -63,8 +70,29 @@ namespace SobotySTechnikou.Controllers
                     Open = x.Open,
                     Description = x.Description,
                     Note = x.Note,
-                    ActionId = x.ActionId
+                    ActionId = x.ActionId,
+                    Id = x.Id,
+                    Action = new ActionVM
+                    {
+                        Name = x.Action.Name,
+                        Year = x.Action.Year,
+                        Start = x.Action.Start.ToString(),
+                        End = x.Action.End.ToString(),
+                        Active = x.Action.Active,
+                        Description = x.Description
+                    }
                 }).FirstOrDefaultAsync();
+            group.Users = _context.UsersInGroups.Include(x => x.User).Where(x => x.GroupId==group.Id)
+                .Select(x => new UserVM
+                {
+                    FirstName = x.User.FirstName,
+                    LastName = x.User.LastName,
+                    BirthDate = x.User.BirthDate.ToString(),
+                    Gender = x.User.Gender,
+                    Year = x.User.Year,
+                    Email = x.User.Email,
+                    UserSetInGroup = x.CreatedAt.ToString()
+                }).ToList();
 
             if (group == null)
             {
@@ -82,16 +110,16 @@ namespace SobotySTechnikou.Controllers
                     Description = x.Description,
                 }).FirstOrDefault();
 
-            group.Users = _context.UsersInGroups.Include(x => x.Group).Where(x => x.GroupId == id)
+            group.Users = _context.UsersInGroups.Include(x => x.Group).Where(x => x.GroupId == group.Id)
                 .Select(x => new UserVM
                 {
                     FirstName = x.User.FirstName,
                     LastName = x.User.LastName,
                     Email = x.User.Email,
                     Gender = x.User.Gender,
-                    BirthDate = DateTime.Parse(x.User.BirthDate),
+                    BirthDate = DateTime.Parse(x.User.BirthDate).ToShortDateString(),
                     Year = x.User.Year,
-                    UserSetInGroup = x.CreatedAt
+                    UserSetInGroup = x.CreatedAt.ToString()
                 }).ToList();
             return Ok(group);
         }
@@ -116,10 +144,25 @@ namespace SobotySTechnikou.Controllers
                 Action = _context.Actions.Find(group.ActionId),
                 CreateTime = DateTime.Now,
                 UpdatedTime = DateTime.Now,
+                NumberOfLectors = group.NumberOfLectors,
+                NoteForLectors = group.NoteForLectors,
+                Note = group.Note
             };
+            newGroup.MinimalYear = group.MinYear switch
+            {
+                0 => Year.none,
+                1 => Year.Class7,
+                2 => Year.Class8,
+                3 => Year.Class9,
+                4 => Year.Class10,
+                _ => Year.none
+            };
+            var actionGroups = _context.Groups.Where(x => x.ActionId == newGroup.ActionId && x.Name == newGroup.Name).ToList();
+            if (actionGroups != null)
+                return BadRequest();
             _context.Groups.Add(newGroup);
             await _context.SaveChangesAsync();
-            return CreatedAtAction("GetGroup", new { id = newGroup.Id }, newGroup);
+            return StatusCode(201);//CreatedAtAction("GetGroup", new { id = newGroup.Id }, newGroup);
         }
 
         [Authorize] //(Roles = "Administrator, Lector")
@@ -136,6 +179,8 @@ namespace SobotySTechnikou.Controllers
             group.ActionId = inputGroup.ActionId;
             group.Action = _context.Actions.Find(inputGroup.ActionId);
             group.UpdatedTime = DateTime.Now;
+            group.NoteForLectors = inputGroup.NoteForLectors;
+            group.Note = inputGroup.Note;
 
             _context.Entry(group).State = EntityState.Modified;
             try

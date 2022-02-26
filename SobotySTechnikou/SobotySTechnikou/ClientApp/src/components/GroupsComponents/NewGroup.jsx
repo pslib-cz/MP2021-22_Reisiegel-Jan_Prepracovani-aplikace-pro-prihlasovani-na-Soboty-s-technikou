@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useAuthContext } from "../../providers/AuthProvider";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const yearData = [
     {
@@ -34,7 +36,7 @@ const NewGroup = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [groupData, setGroupData] = useState();
 
-    const [name, setName] = useState();
+    const [groupName, setGroupName] = useState();
     const [desc, setDesc] = useState();
     const [capacity, setCapacity] = useState();
     const [open, setOpen] = useState();
@@ -54,12 +56,16 @@ const NewGroup = () => {
         setIsLoading(true);
         setError(false);
         axios.post("/api/Groups/", {
-            name: name,
+            name: groupName,
             description: desc,
             capacity: capacity,
             open: open,
             headLectorId: headLector,
             actionId: action,
+            numberOfLectors: numberOfLectors,
+            minYear: minYear,
+            noteForLectors: lectorNote,
+            note: note
         },{
             headers: {
                 //"Content-Type": "application/json",
@@ -135,7 +141,7 @@ const NewGroup = () => {
                                 <Form.ControlLabel >Název skupiny</Form.ControlLabel>
                             </Col>
                             <Col lg={16}>
-                                <Input value={name} onChange={e => setName(e)} placeholder="Vývoj webové stránky ve Wordpressu"></Input>
+                                <Input value={groupName} onChange={e => setGroupName(e)} placeholder="Vývoj webové stránky ve Wordpressu"></Input>
                             </Col>
                         </Form.Group>
                     </Col>
@@ -187,7 +193,17 @@ const NewGroup = () => {
                                 <Form.ControlLabel >Poznámka k Lektorům</Form.ControlLabel>
                             </Col>
                             <Col lg={16}>
-                                <Input as="textarea" rows={5} value={lectorNote} onChange={e => setLectorNote(e)}></Input>
+                            <CKEditor
+                                    config={{
+                                        language: 'cs'
+                                    }}
+                                    editor={ClassicEditor}
+                                    data={lectorNote}
+                                    onChange={(event, editor) => {
+                                        //const data = editor.getData();
+                                        setLectorNote(editor.getData());
+                                    }}
+                                />
                             </Col>
                         </Form.Group>
                     </Col>
@@ -226,7 +242,17 @@ const NewGroup = () => {
                                 <Form.ControlLabel >Popis</Form.ControlLabel>
                             </Col>
                             <Col lg={16}>
-                                <Input as="textarea" rows={5} value={desc} onChange={e => setDesc(e)}></Input>
+                            <CKEditor
+                                    config={{
+                                        language: 'cs'
+                                    }}
+                                    editor={ClassicEditor}
+                                    data={desc}
+                                    onChange={(event, editor) => {
+                                        //const data = editor.getData();
+                                        setDesc(editor.getData());
+                                    }}
+                                />
                             </Col>
                         </Form.Group>
                     </Col>
@@ -252,12 +278,22 @@ const NewGroup = () => {
                                 <Form.ControlLabel >Poznámka</Form.ControlLabel>
                             </Col>
                             <Col lg={16}>
-                                <Input as="textarea" rows={5} value={note} onChange={e => setNote(e)}></Input>
+                            <CKEditor
+                                    config={{
+                                        language: 'cs'
+                                    }}
+                                    editor={ClassicEditor}
+                                    data={note}
+                                    onChange={(event, editor) => {
+                                        //const data = editor.getData();
+                                        setNote(editor.getData());
+                                    }}
+                                />
                             </Col>
                         </Form.Group>
                     </Col>
                 </Row>
-                <Button color="cyan" appearance="primary" onClick={() => createGroup()} as={Link} to="/Users" >Vytvořit</Button>
+                <Button color="cyan" appearance="primary" onClick={() => createGroup()} as={Link} to="/AllGroups" >Vytvořit</Button>
             </Form>
         </div>
     )

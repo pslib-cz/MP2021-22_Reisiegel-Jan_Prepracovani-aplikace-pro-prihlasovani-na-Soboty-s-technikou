@@ -1,168 +1,60 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React from "react";
 import { useEffect } from "react";
+import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button, Checkbox, Col, Form, Input, InputNumber, Row, SelectPicker } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { Link } from "react-router-dom";
 
-const yearData = [
-    {
-        "label": "Nevybráno",
-        "value": 0,
-    },
-    {
-        "label": "7. a nižší třída",
-        "value": 1,
-    },
-    {
-        "label": "8. třída ZŠ",
-        "value": 2,
-    },
-    {
-        "label": "9. třída ZŠ",
-        "value": 3,
-    },
-    {
-        "label": "Vyšší třída (SŠ)",
-        "value": 4,
-    }
-];
+const EditAction = () => {
+    const {year, actionId} = useParams();
+    const [{accessToken}] = useAuthContext();
+    const [isLoading, setIsLoading] = useState();
+    const [error, setError] = useState();
 
-const EditGroup = () => {
-    const { year, actionId, groupId } = useParams();
-    const [{ accessToken }] = useAuthContext();
-    const [error, setError] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [groupData, setGroupData] = useState();
+    const [actionData, setActionData] = useState();
+    const [name, setName] = useState("");
+    const [description, setDescription] = useState("");
+    const [startDate, setStartDate] = useState();
+    const [endDate, setEndDate] = useState();
+    const [year, setYear] = useState(Number);
+    const [type, setType] = useState();
+    const [active, setActive] = useState(false);
+    const [availability, setAvailability] = useState(false);
 
-    const [groupName, setGroupName] = useState();
-    const [desc, setDesc] = useState();
-    const [capacity, setCapacity] = useState();
-    const [open, setOpen] = useState();
-    const [numberOfLectors, setNumberOfLectors] = useState();
-    const [headLector, setHeadLector] = useState();
-    const [action, setAction] = useState();
-    const [minYear, setMinYear] = useState();
-    const [lectorNote, setLectorNote] = useState();
-    const [note, setNote] = useState();
-
-    const [actionsSelector, setActionsSelector] = useState();
-    const [lectorsSelector, setLectorsSelector] = useState();
-
-    const getActionsSelector = () => {
+    const getActionData = () => {
         setIsLoading(true);
         setError(false);
-        axios.get("/api/Actions/Selector", {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${accessToken}`
-            }
-        })
-            .then(response => {
-                setActionsSelector(response.data);
-            })
-            .catch(error => {
-                setError(true);
-            })
-            .finally(()=>{
-                setIsLoading(false);
-            });
-    }
-
-    const getLectorsSelector = () => {
-        setIsLoading(true);
-        setError(false);
-        axios.get("/api/Users/LectorSelector", {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${accessToken}`
-            }
-        })
-            .then(response => {
-                setLectorsSelector(response.data);
-                console.log(response.data);
-            })
-            .catch(error => {
-                setError(true);
-            })
-            .finally(()=>{
-                setIsLoading(false);
-            });
-    }
-
-    const getGroupData = () => {
-        setIsLoading(true);
-        setError(false);
-        axios.get(`/api/Groups/${year}/${actionId}/${groupId}`, {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${accessToken}`
-            }
-        })
-            .then(response => {
-                setGroupData(response.data);
-                console.log(response.data);
-                setGroupName(response.data.name);
-                setDesc(response.data.description);
-                setCapacity(response.data.capacity);
-                setOpen(response.data.open);
-                setNumberOfLectors(response.data.numberOfLectors);
-                setHeadLector(response.data.headLectorId);
-                setAction(response.data.actionId);
-                setMinYear(response.data.minYearToEnter);
-                setLectorNote(response.data.noteForLectors);
-                setNote(response.data.note);
-            })
-            .catch(error => {
-                setError(true);
-            })
-            .finally(() => {
-                setIsLoading(false);
-            })
-    }
-
-    const saveGroupData = () => {
-        setIsLoading(true);
-        setError(false);
-        axios.put("/api/Groups/", {
-            id: groupData.id,
-            name: groupName,
-            description: desc,
-            capacity: capacity,
-            open: open,
-            headLectorId: headLector,
-            actionId: action,
-            numberOfLectors: numberOfLectors,
-            minYear: minYear,
-            noteForLectors: lectorNote,
-            note: note
-        }, {
+        axios.get(`/api/Actions/${year}/${actionId}`, {
             headers: {
                 //"Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`
             }
         })
-            .then(response => {
-                console.log(response);
-            })
-            .catch(error => {
-                setError(true);
-            })
-            .finally(() => {
-                setIsLoading(false);
-            })
+        .then(response=>{
+            setActionData(response.data);
+            console.log(response.data);
+            setName(response.data.name);
+            setDescription(response.data.description);
+            setStartDate(response.data.start);
+            setEndDate(response.data.end);
+            setYear(response.data.year);
+            setType(response.data.type);
+            setActive(response.data.active);
+            setAvailability(response.data.availability);
+        })
+        .catch(error => {
+            setError(true);
+        })
+        .finally(()=>{
+            setIsLoading(false);
+        });
     }
 
-    useEffect(() => {
-        getGroupData();
-        getLectorsSelector();
-        getActionsSelector();
+    useEffect(()=>{
+        getActionData();
     }, [accessToken]);
 
-    if (groupData) {
+    if (actionData) {
         return (
             <div>
                 <h2>{groupName}</h2>
@@ -361,4 +253,4 @@ const EditGroup = () => {
     }
 }
 
-export default EditGroup;
+export default EditAction;

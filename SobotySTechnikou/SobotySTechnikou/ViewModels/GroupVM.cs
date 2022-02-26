@@ -4,6 +4,7 @@ namespace SobotySTechnikou.ViewModels
 {
     public class GroupVM
     {
+        public string Id { get; set; }
         public string NameId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -12,10 +13,14 @@ namespace SobotySTechnikou.ViewModels
         public string HeadLectorId { get; set; }
         public string ActionId { get; set; }
         public string ActionName { get; set; }
+        public string ActionNameId { get; set; }
         public int NumberOfLectors { get; set; }
         public string NoteForLectors { get; set; }
         public string Note { get; set; }
         public Year MinYearToEnter { get; set; }
+        public int Year { get; set; }
+
+        public string HeadLectorName { get; set; }
 
         public ActionVM Action { get; set; }
         public List<UserVM> Users { get; set; }

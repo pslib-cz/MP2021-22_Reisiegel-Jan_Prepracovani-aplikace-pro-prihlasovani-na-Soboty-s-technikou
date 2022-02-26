@@ -19,6 +19,9 @@ import NewAction from './components/ActionsComponents/NewAction';
 import EditUser from './components/UsersComponents/EditUser';
 import NewGroup from './components/GroupsComponents/NewGroup';
 import Action from './components/ActionsComponents/OneAction';
+import EditGroup from './components/GroupsComponents/EditGroup';
+import GroupDetail from './components/GroupsComponents/GroupDetail';
+import EditAction from './components/ActionsComponents/EditAction';
 
 
 export default class App extends Component {
@@ -35,16 +38,23 @@ export default class App extends Component {
               <Route index path='/' element={<Home />} />
               <Route path='/counter' element={<Counter />} />
               <Route path='/fetch-data' element={<FetchData />} />
+              
               <Route path="/Profile" element={<Profile />} />
               <Route path="/Users" element={<Users />} />
-              <Route path="/AllActions" element={<AllActions />} />
-              <Route path="/NewAction" element={<NewAction />} />
-              <Route path="/AllGroups" element={<AllGroups />} />
               <Route path="/EditUser/:mail" element={<EditUser /> } />
               <Route path="/EditUser" element={<EditUser /> } />
+              
+              <Route path="/AllActions" element={<AllActions />} />
+              <Route path="/NewAction" element={<NewAction />} />
+              <Route path="/EditAction/:year/:actionId" element={<EditAction />} />
+              <Route path="/Action/:year/:nameId" element={<Action />} />
+
+              <Route path="/AllGroups" element={<AllGroups />} />
               <Route path="/NewGroup" element={<NewGroup />} />
               <Route path="/AllGroups" element={<AllGroups />} />
-              <Route path="/Action/:year/:nameId" element={<Action />} />
+              <Route path="/EditGroup/:year/:actionId/:groupId" element={<EditGroup />} />
+              <Route path="/Group/:year/:actionId/:groupId" element={<GroupDetail />} />
+              
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Layout>

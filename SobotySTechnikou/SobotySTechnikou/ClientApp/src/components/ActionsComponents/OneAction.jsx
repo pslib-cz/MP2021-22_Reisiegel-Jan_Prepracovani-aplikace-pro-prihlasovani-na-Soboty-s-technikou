@@ -1,9 +1,11 @@
 import axios from "axios";
 import React, { useEffect } from "react";
+import ReactDOM from 'react-dom';
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button, ButtonGroup, Col, Panel, Row, Table } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
+import parse from 'html-react-parser';
 
 const Action = () => {
     const { nameId, year } = useParams();
@@ -125,7 +127,9 @@ const Action = () => {
                                     Popis
                                 </Col>
                                 <Col lg={17} style={{ fontSize: "1.25em" }}>
-                                    {actionData.description}
+                                    {
+                                        parse(actionData.description)
+                                    }
                                 </Col>
                             </Row>
                             <hr />
@@ -229,6 +233,10 @@ const ClickCell = ({ rowData, dataKey, ...props }) => {
             {rowData.dataKey}
         </Table.Cell>
     )
+}
+
+const Descrtiption = (data) => {
+    ReactDOM.render(data, document.getElementById('root'))
 }
 
 export default Action;

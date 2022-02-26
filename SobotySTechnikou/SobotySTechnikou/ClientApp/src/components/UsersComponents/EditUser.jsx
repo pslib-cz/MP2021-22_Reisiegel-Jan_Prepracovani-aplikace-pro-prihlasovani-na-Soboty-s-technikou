@@ -118,6 +118,18 @@ const EditUser = () => {
             })
                 .then(response => {
                     setUserData(response.data);
+                    setName(response.data.firstName);
+                    setSurname(response.data.lastName);
+                    setBirthDate(response.data.birthDate);
+                    setGender(response.data.gender);
+                    setSchool(response.data.school);
+                    setPotStudent(response.data.potentionalStudent);
+                    setYear(response.data.year);
+                    setRole(response.data.roleString);
+                    setCondition(response.data.condition);
+                    setInformed(response.data.beInformed);
+                    setEmail(response.data.email);
+                    setEmailConfirmed(response.data.emailConfirmed);
                 })
                 .catch(error => {
                     setError(true);
@@ -168,12 +180,9 @@ const EditUser = () => {
         setIsLoading(true);
         setError(false);
         console.log("userId: " + userData.id + " | funkce: " + role);
-        axios.post("/api/Users/ChangeAuthorization/", {
-            userId: userData.id,
-            function: role
-        }, {
+        axios.get("/api/Users/"+userData.id+"/ChangeAuthorization/" + (role ? role : ""), {
             headers: {
-                "Content-Type": "application/json",
+                //"Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`
             }
         })

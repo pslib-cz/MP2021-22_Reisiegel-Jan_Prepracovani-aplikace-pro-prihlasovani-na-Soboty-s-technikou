@@ -7,6 +7,7 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 //import 'rsuite/styles/index.less';
 import 'rsuite/dist/rsuite.min.css';
+import '@ckeditor/ckeditor5-build-classic/build/translations/cs'
 
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
