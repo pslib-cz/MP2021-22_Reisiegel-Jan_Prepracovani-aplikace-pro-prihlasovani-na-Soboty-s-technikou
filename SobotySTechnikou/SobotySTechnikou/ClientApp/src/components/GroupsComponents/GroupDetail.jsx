@@ -51,7 +51,7 @@ const GroupDetail = () => {
             <div>
                 <Row>
                     <Col lg={20} lgOffset={2}>
-                        <Panel shaded bordered header={<PanelHeader year={year} actionNameId={actionId} groupNameId={groupId} />} >
+                        <Panel shaded bordered header={<PanelHeader year={year} actionNameId={actionId} groupNameId={groupId} groupId={groupData.id} />} >
                             <Row>
                                 <h5>Skupina</h5>
                             </Row>
@@ -216,7 +216,19 @@ const GroupDetail = () => {
     }
 }
 
-const PanelHeader = ({year, actionNameId, groupNameId}) => {
+const PanelHeader = ({year, actionNameId, groupNameId, groupId}) => {
+    const [{accessToken}] = useAuthContext();
+    const deleteGroup = () => {
+        axios.delete("/api/Groups/" + groupId, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}`
+            }
+        })
+            .then(response => {
+                console.log(Response);
+            })
+    }
     return (
         <>
             <Row>
@@ -228,7 +240,7 @@ const PanelHeader = ({year, actionNameId, groupNameId}) => {
                         <Button color="blue" appearance="primary" as={Link} to={`/EditGroup/${year}/${actionNameId}/${groupNameId} `} >Upravit</Button>
                         <Button >Aktivovat</Button>
                         <Button >Zveřejnit</Button>
-                        <Button appearance="primary" color="red">Odstranit</Button>
+                        <Button appearance="primary" color="red" as={Link} to="/AllGroups" onClick={()=>{deleteGroup()}}>Odstranit</Button>
                     </ButtonGroup>
                 </Col>
             </Row>

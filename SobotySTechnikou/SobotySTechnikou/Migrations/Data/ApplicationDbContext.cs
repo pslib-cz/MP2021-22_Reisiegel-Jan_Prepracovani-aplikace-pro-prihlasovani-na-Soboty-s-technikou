@@ -65,6 +65,22 @@ namespace SobotySTechnikou.Data
                 RoleId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1",
                 UserId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
             });
+            modelBuilder.Entity<SobotySTechnikou.Models.Action>().HasData(new SobotySTechnikou.Models.Action
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = "Defaultní akce",
+                NameId = "Defaultní_akce",
+                Description = "",
+                Year=0,
+                Start = DateTime.Now,
+                End = DateTime.Now.AddDays(1),
+                FormOfAction = ActionType.Online,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = DateTime.Now,
+                Active=false,
+                Availability = false,
+                CreatorId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+            });
             modelBuilder.Entity<UserInGroup>(entity =>
             {
                 entity.HasOne(x => x.Group).WithMany(x => x.UsersInGroup).HasForeignKey(x => x.GroupId).OnDelete(DeleteBehavior.Restrict);

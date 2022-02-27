@@ -18,10 +18,10 @@ import AllGroups from './components/GroupsComponents/AllGroups';
 import NewAction from './components/ActionsComponents/NewAction';
 import EditUser from './components/UsersComponents/EditUser';
 import NewGroup from './components/GroupsComponents/NewGroup';
-import Action from './components/ActionsComponents/OneAction';
 import EditGroup from './components/GroupsComponents/EditGroup';
 import GroupDetail from './components/GroupsComponents/GroupDetail';
 import EditAction from './components/ActionsComponents/EditAction';
+import ActionDetail from './components/ActionsComponents/ActionDetail';
 
 
 export default class App extends Component {
@@ -47,9 +47,8 @@ export default class App extends Component {
               <Route path="/AllActions" element={<AllActions />} />
               <Route path="/NewAction" element={<NewAction />} />
               <Route path="/EditAction/:year/:actionId" element={<EditAction />} />
-              <Route path="/Action/:year/:nameId" element={<Action />} />
+              <Route path="/Action/:year/:nameId" element={<ActionDetail />} />
 
-              <Route path="/AllGroups" element={<AllGroups />} />
               <Route path="/NewGroup" element={<NewGroup />} />
               <Route path="/AllGroups" element={<AllGroups />} />
               <Route path="/EditGroup/:year/:actionId/:groupId" element={<EditGroup />} />

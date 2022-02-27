@@ -72,11 +72,24 @@ namespace SobotySTechnikou.Controllers
 
         [Authorize] //(Roles = "Administrator, Lector")
         [HttpPut]
-        public async Task<ActionResult> PutAction(Models.Action actionInput)
+        public async Task<ActionResult> PutAction(ActionIM actionInput)
         {
             if (actionInput == null)
                 return BadRequest();
-            _context.Entry(actionInput).State = EntityState.Modified;
+            var action = await _context.Actions.Where(x => x.Id == actionInput.Id).FirstOrDefaultAsync();
+
+            action.Name = actionInput.Name;
+            action.NameId = actionInput.Name.Replace(" ", "_");
+            action.Description = actionInput.Description;
+            action.Year = actionInput.Year;
+            action.Start = DateTime.Parse(actionInput.Start);
+            action.End = DateTime.Parse(actionInput.End);
+            action.Active = actionInput.Active;
+            action.Availability = actionInput.Availability;
+            action.UpdatedAt = DateTime.Now;
+            action.FormOfAction = actionInput.FormOfAction;
+
+            _context.Entry(action).State = EntityState.Modified;
             try
             {
                 await _context.SaveChangesAsync();
@@ -112,8 +125,8 @@ namespace SobotySTechnikou.Controllers
                 Name = actionInput.Name,
                 Description = actionInput.Description,
                 Year = actionInput.Year,
-                Start = actionInput.Start,
-                End = actionInput.End,
+                Start = DateTime.Parse(actionInput.Start),
+                End = DateTime.Parse(actionInput.End),
                 FormOfAction = actionInput.FormOfAction,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now,
@@ -128,7 +141,7 @@ namespace SobotySTechnikou.Controllers
         }
 
         [Authorize]//(Roles = "Administrator, Lector")
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAction(string id)
         {
             if (String.IsNullOrEmpty(id))
@@ -136,6 +149,9 @@ namespace SobotySTechnikou.Controllers
             var action = await _context.Actions.FindAsync(id);
             if (action is null)
                 return NotFound();
+            var groups = _context.Groups.Where(x => x.ActionId == action.Id).ToList();
+            foreach (var group in groups)
+                group.ActionId = "";
             _context.Actions.Remove(action);
             await _context.SaveChangesAsync();
             return Ok();

@@ -1,8 +1,12 @@
+import { ClassicEditor } from "@ckeditor/ckeditor5-build-classic";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
 import axios from "axios";
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { Button, Checkbox, Col, Form, Input, InputNumber, Row } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
 
 const EditAction = () => {
@@ -12,14 +16,14 @@ const EditAction = () => {
     const [error, setError] = useState();
 
     const [actionData, setActionData] = useState();
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
+    const [name, setName] = useState();
+    const [description, setDescription] = useState();
     const [startDate, setStartDate] = useState();
     const [endDate, setEndDate] = useState();
-    const [year, setYear] = useState(Number);
+    const [schoolYear, setSchoolYear] = useState();
     const [type, setType] = useState();
-    const [active, setActive] = useState(false);
-    const [availability, setAvailability] = useState(false);
+    const [active, setActive] = useState();
+    const [availability, setAvailability] = useState();
 
     const getActionData = () => {
         setIsLoading(true);
@@ -37,7 +41,7 @@ const EditAction = () => {
             setDescription(response.data.description);
             setStartDate(response.data.start);
             setEndDate(response.data.end);
-            setYear(response.data.year);
+            setSchoolYear(response.data.year);
             setType(response.data.type);
             setActive(response.data.active);
             setAvailability(response.data.availability);
@@ -50,6 +54,36 @@ const EditAction = () => {
         });
     }
 
+    const saveActionData  = () => {
+        setIsLoading(true);
+        setError(false);
+        axios.put(`api/Actions`, {
+            id: actionData.id,
+            name: name,
+            description: description,
+            year: year,
+            start: startDate,
+            end: endDate,
+            formOfAction: type,
+            active: active,
+            availability: availability
+        }, {
+            headers: {
+                //"Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}`
+            }
+        })
+        .then(response=>{
+            console.log(response);
+        })
+        .catch(error => {
+            setError(true);
+        })
+        .finally(()=>{
+            setIsLoading(false);
+        })
+    }
+
     useEffect(()=>{
         getActionData();
     }, [accessToken]);
@@ -57,7 +91,7 @@ const EditAction = () => {
     if (actionData) {
         return (
             <div>
-                <h2>{groupName}</h2>
+                <h2>{actionData.name}</h2>
                 <Form fluid>
                     <Row>
                         <Col lg={20} lgOffset={2}>
@@ -66,7 +100,7 @@ const EditAction = () => {
                                     <Form.ControlLabel >Název</Form.ControlLabel>
                                 </Col>
                                 <Col lg={10}>
-                                    <Input value={groupName} onChange={e => setGroupName(e)} ></Input>
+                                    <Input value={name} onChange={e => setName(e)} ></Input>
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -76,23 +110,10 @@ const EditAction = () => {
                         <Col lg={20} lgOffset={2}>
                             <Form.Group>
                                 <Col lg={10}>
-                                    <Form.ControlLabel >Akce</Form.ControlLabel>
+                                    <Form.ControlLabel >Školní rok</Form.ControlLabel>
                                 </Col>
                                 <Col lg={10}>
-                                    <SelectPicker block searchable={false} data={actionsSelector} value={action} onChange={e => setAction(e)} />
-                                </Col>
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <br />
-                    <Row>
-                        <Col lg={20} lgOffset={2}>
-                            <Form.Group>
-                                <Col lg={10}>
-                                    <Form.ControlLabel >Lektor</Form.ControlLabel>
-                                </Col>
-                                <Col lg={10}>
-                                    <SelectPicker block searchable={false} data={lectorsSelector} value={headLector} onChange={e => setHeadLector(e)} />
+                                    <InputNumber block value={schoolYear} onChange={e => setSchoolYear(e)} ></InputNumber>
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -102,38 +123,10 @@ const EditAction = () => {
                         <Col lg={20} lgOffset={2}>
                             <Form.Group>
                                 <Col lg={10}>
-                                    <Form.ControlLabel >Počet lektorů</Form.ControlLabel>
+                                    <Form.ControlLabel >Začátek</Form.ControlLabel>
                                 </Col>
                                 <Col lg={10}>
-                                    <InputNumber block value={numberOfLectors} onChange={e => numberOfLectors(e)} ></InputNumber>
-                                </Col>
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <br />
-                    <Row>
-                        <Col lg={20} lgOffset={2}>
-                            <Form.Group>
-                                <Col lg={10}>
-                                    <Form.ControlLabel>Poznámka k lektorům</Form.ControlLabel>
-                                </Col>
-                                <Col lg={10}>
-                                <CKEditor
-                                    config={{
-                                        language: 'cs'
-                                    }}
                                     
-                                    editor={ClassicEditor}
-                                    data={lectorNote}
-                                    onReady={ editor => {
-                                        console.log(lectorNote);
-                                        lectorNote ? editor.setData(lectorNote) : editor.setData("");
-                                    } }
-                                    onChange={(event, editor) => {
-                                        //const data = editor.getData();
-                                        setLectorNote(editor.getData());
-                                    }}
-                                />
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -143,23 +136,10 @@ const EditAction = () => {
                         <Col lg={20} lgOffset={2}>
                             <Form.Group>
                                 <Col lg={10}>
-                                    <Form.ControlLabel>Kapacita</Form.ControlLabel>
+                                    <Form.ControlLabel >Konec</Form.ControlLabel>
                                 </Col>
                                 <Col lg={10}>
-                                <InputNumber block value={capacity} onChange={e => setCapacity(e)} ></InputNumber>
-                                </Col>
-                            </Form.Group>
-                        </Col>
-                    </Row>
-                    <br />
-                    <Row>
-                        <Col lg={20} lgOffset={2}>
-                            <Form.Group>
-                                <Col lg={10}>
-                                    <Form.ControlLabel>Minimální ročník</Form.ControlLabel>
-                                </Col>
-                                <Col lg={10}>
-                                    <SelectPicker block searchable={false} data={yearData} value={minYear} onChange={e => setMinYear(e)} />
+                                    
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -176,14 +156,15 @@ const EditAction = () => {
                                     config={{
                                         language: 'cs'
                                     }}
-                                    onReady={ editor => {
-                                        desc ? editor.setData(desc) : editor.setData("");
-                                    } }
+                                    
                                     editor={ClassicEditor}
-                                    data={desc}
+                                    data={description}
+                                    onReady={ editor => {
+                                        description ? editor.setData(description) : editor.setData("");
+                                    } }
                                     onChange={(event, editor) => {
                                         //const data = editor.getData();
-                                        setDesc(editor.getData());
+                                        setDescription(editor.getData());
                                     }}
                                 />
                                 </Col>
@@ -194,11 +175,9 @@ const EditAction = () => {
                     <Row>
                         <Col lg={20} lgOffset={2}>
                             <Form.Group>
-                                <Form.Group>
-                                    <Col lg={10} lgOffset={10}>
-                                        <Checkbox checked={open} onChange={e => setOpen(!open)}  >Otevřená pro zápis</Checkbox>
+                            <Col lg={10} lgOffset={10}>
+                                        <Checkbox checked={active} onChange={e => setActive(!active)}  >Aktivní akce</Checkbox>
                                     </Col>
-                                </Form.Group>
                             </Form.Group>
                         </Col>
                     </Row>
@@ -206,31 +185,14 @@ const EditAction = () => {
                     <Row>
                         <Col lg={20} lgOffset={2}>
                             <Form.Group>
-                                <Col lg={10}>
-                                    <Form.ControlLabel>Poznámka</Form.ControlLabel>
-                                </Col>
-                                <Col lg={10}>
-                                <CKEditor
-                                    config={{
-                                        language: 'cs'
-                                    }}
-                                    editor={ClassicEditor}
-                                    data={note}
-                                    onReady={ editor => {
-                                        note ? editor.setData(note) : editor.setData("");
-                                    } }
-                                    onChange={(event, editor) => {
-                                        //const data = editor.getData();
-                                        setNote(editor.getData());
-                                    }}
-                                />
-                                </Col>
+                            <Col lg={10} lgOffset={10}>
+                                        <Checkbox checked={availability} onChange={e => setAvailability(!availability)}  >Zveřejněná na titulní stránce</Checkbox>
+                                    </Col>
                             </Form.Group>
                         </Col>
                     </Row>
                     <br />
-                    
-                    <Button color="cyan" appearance="primary" onClick={() => saveGroupData()} as={Link} to="/AllGroups" >Uložit</Button>
+                    <Button color="cyan" appearance="primary" onClick={() => saveActionData()} as={Link} to="/AllActions" >Uložit</Button>
                     <Button color="cyan" appearance="primary" onClick={() => console.log(typeof (date))} >Datum</Button>
                 </Form>
             </div>

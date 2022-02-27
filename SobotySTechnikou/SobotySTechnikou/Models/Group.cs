@@ -14,6 +14,7 @@ namespace SobotySTechnikou.Models
         public string Description { get; set; } = "Nevyplněno";
         [Required]
         public int Capacity { get; set; }
+        [Required]
         public bool Open { get; set; }
         [ForeignKey("HeadLectorId")]
         public ApplicationUser? HeadLector { get; set; }

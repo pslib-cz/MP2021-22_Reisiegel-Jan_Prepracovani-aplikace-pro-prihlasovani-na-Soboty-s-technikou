@@ -6,8 +6,9 @@ import { useParams } from "react-router-dom";
 import { Button, ButtonGroup, Col, Panel, Row, Table } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
 import parse from 'html-react-parser';
+import { Link } from "react-router-dom";
 
-const Action = () => {
+const ActionDetail = () => {
     const { nameId, year } = useParams();
     const [{ accessToken }] = useAuthContext();
     const [isLoading, setIsLoading] = useState();
@@ -35,26 +36,6 @@ const Action = () => {
             });
     }
 
-    const deleteAction = () => {
-        setIsLoading(true);
-        setError(false);
-        axios.delete("/api/Actions" + actionData.id, {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${accessToken}`
-            }
-        })
-            .then(response => {
-                console.log(Response);
-            })
-            .catch(error => {
-                setError(true);
-            })
-            .finally(() => {
-                setIsLoading(true);
-            })
-    }
-
     useEffect(() => {
         getData();
     }, [accessToken])
@@ -70,7 +51,7 @@ const Action = () => {
             <div>
                 <Row>
                     <Col lg={20} lgOffset={2}>
-                        <Panel shaded bordered header={<PanelHeader />} >
+                        <Panel shaded bordered header={<PanelHeader year={year} nameId={nameId} actionId={actionData.id} />} >
                             <Row>
                                 <h5>Obecné</h5>
                             </Row>
@@ -161,31 +142,43 @@ const Action = () => {
                                 </Col>
                             </Row>
                             <hr />
-                            <h5>Skupiny</h5>
-                            <Table
-                                data={actionData.groups}
-                                autoHeight={true} >
-                                <Table.Column resizable fixed width={400} >
-                                    <Table.HeaderCell align="center" >Název akce</Table.HeaderCell>
-                                    <Table.Cell dataKey="name" />
-                                </Table.Column>
-                                <Table.Column resizable fixed width={100} >
-                                    <Table.HeaderCell align="center" >Kapacita</Table.HeaderCell>
-                                    <Table.Cell dataKey="name" />
-                                </Table.Column>
-                                <Table.Column resizable fixed width={100} >
-                                    <Table.HeaderCell align="center" >Přihlášení</Table.HeaderCell>
-                                    <Table.Cell dataKey="name" />
-                                </Table.Column>
-                                <Table.Column resizable fixed width={100} >
-                                    <Table.HeaderCell align="center" >Počet lektorů</Table.HeaderCell>
-                                    <Table.Cell dataKey="name" />
-                                </Table.Column>
-                                <Table.Column resizable fixed width={100} >
-                                    <Table.HeaderCell align="center" >Otevřené</Table.HeaderCell>
-                                    <AvailabilityCell dataKey="name" />
-                                </Table.Column>
-                            </Table>
+
+                            {
+                                actionData.groups ?
+                                    <>
+                                        <h5>Skupiny</h5>
+                                        <Table
+                                            data={actionData.groups}
+                                            bordered
+                                            cellBordere
+                                        >
+                                            <Table.Column resizable fixed width={400} >
+                                                <Table.HeaderCell align="center" >Název akce</Table.HeaderCell>
+                                                <Table.Cell dataKey="name" />
+                                            </Table.Column>
+                                            <Table.Column resizable fixed width={100} >
+                                                <Table.HeaderCell align="center" >Kapacita</Table.HeaderCell>
+                                                <Table.Cell dataKey="name" />
+                                            </Table.Column>
+                                            <Table.Column resizable fixed width={100} >
+                                                <Table.HeaderCell align="center" >Přihlášení</Table.HeaderCell>
+                                                <Table.Cell dataKey="name" />
+                                            </Table.Column>
+                                            <Table.Column resizable fixed width={100} >
+                                                <Table.HeaderCell align="center" >Počet lektorů</Table.HeaderCell>
+                                                <Table.Cell dataKey="name" />
+                                            </Table.Column>
+                                            <Table.Column resizable fixed width={100} >
+                                                <Table.HeaderCell align="center" >Otevřené</Table.HeaderCell>
+                                                <AvailabilityCell dataKey="name" />
+                                            </Table.Column>
+                                        </Table>
+                                    </>
+
+                                    :
+                                    null
+                            }
+
                         </Panel>
                     </Col>
                 </Row>
@@ -197,7 +190,18 @@ const Action = () => {
     }
 }
 
-const PanelHeader = () => {
+const PanelHeader = ({nameId, year, actionId}) => {
+    const [{accessToken}] = useAuthContext();
+    const deleteAction = () => {
+        axios.delete("/api/Actions/" + actionId, {
+            headers: {
+                "Authorization": `Bearer ${accessToken}`
+            }
+        })
+            .then(response => {
+                console.log(Response);
+            })
+    }
     return (
         <>
             <Row>
@@ -206,10 +210,10 @@ const PanelHeader = () => {
                 </Col>
                 <Col lg={12} style={{ textAlign: "right" }}>
                     <ButtonGroup>
-                        <Button color="blue" appearance="primary" >Upravit</Button>
-                        <Button >Aktivovat</Button>
-                        <Button >Zveřejnit</Button>
-                        <Button appearance="primary" color="red">Odstranit</Button>
+                        <Button color="blue" appearance="primary" as={Link} to={`/EditAction/${year}/${nameId}`} >Upravit</Button>
+                        <Button appearance="ghost" >Aktivovat</Button>
+                        <Button appearance="ghost" >Zveřejnit na titulní stránku</Button>
+                        <Button appearance="primary" onClick={() => {deleteAction()}} as={Link} to="/AllActions" color="red">Smazat</Button>
                     </ButtonGroup>
                 </Col>
             </Row>
@@ -235,8 +239,5 @@ const ClickCell = ({ rowData, dataKey, ...props }) => {
     )
 }
 
-const Descrtiption = (data) => {
-    ReactDOM.render(data, document.getElementById('root'))
-}
 
-export default Action;
+export default ActionDetail;
