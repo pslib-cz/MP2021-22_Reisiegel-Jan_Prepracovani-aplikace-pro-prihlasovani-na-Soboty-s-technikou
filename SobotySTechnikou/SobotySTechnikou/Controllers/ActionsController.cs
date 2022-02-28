@@ -144,14 +144,19 @@ namespace SobotySTechnikou.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAction(string id)
         {
-            if (String.IsNullOrEmpty(id))
+            if (String.IsNullOrEmpty(id) || id == "XXXXXXXX-XXXX-AKCE-XXXX-XXXXXXXXXXXX")
                 return BadRequest();
             var action = await _context.Actions.FindAsync(id);
             if (action is null)
                 return NotFound();
+            var defAction = _context.Actions.Where(x => x.Id=="XXXXXXXX-XXXX-AKCE-XXXX-XXXXXXXXXXXX").FirstOrDefault();
             var groups = _context.Groups.Where(x => x.ActionId == action.Id).ToList();
             foreach (var group in groups)
-                group.ActionId = "";
+            {
+                group.ActionId = defAction.Id;
+                group.Open = false;
+                _context.Entry(group).State = EntityState.Modified;
+            }
             _context.Actions.Remove(action);
             await _context.SaveChangesAsync();
             return Ok();

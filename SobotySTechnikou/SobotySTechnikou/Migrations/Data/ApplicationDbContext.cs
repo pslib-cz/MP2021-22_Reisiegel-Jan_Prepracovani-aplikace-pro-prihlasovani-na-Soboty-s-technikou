@@ -67,7 +67,7 @@ namespace SobotySTechnikou.Data
             });
             modelBuilder.Entity<SobotySTechnikou.Models.Action>().HasData(new SobotySTechnikou.Models.Action
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = "XXXXXXXX-XXXX-AKCE-XXXX-XXXXXXXXXXXX",
                 Name = "Defaultní akce",
                 NameId = "Defaultní_akce",
                 Description = "",

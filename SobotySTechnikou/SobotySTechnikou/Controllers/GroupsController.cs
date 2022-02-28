@@ -208,8 +208,14 @@ namespace SobotySTechnikou.Controllers
             if (String.IsNullOrEmpty(id))
                 return BadRequest();
             var group = await _context.Groups.FindAsync(id);
+            
             if (group is null)
                 return NotFound();
+            var usersInGroup = _context.UsersInGroups.Where(x => x.GroupId == group.Id).ToList();
+            foreach (var user in usersInGroup)
+            {
+                _context.UsersInGroups.Remove(user);
+            }
             _context.Groups.Remove(group);
             await _context.SaveChangesAsync();
             return Ok();

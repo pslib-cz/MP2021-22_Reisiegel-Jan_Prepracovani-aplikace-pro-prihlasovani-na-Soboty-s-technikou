@@ -236,6 +236,42 @@ namespace SobotySTechnikou.Controllers
             return Ok(mySelectors);
         }
 
+        /// <summary>
+        /// Neozkoušené, asi nubude potřebné
+        /// </summary>
+        /// <returns></returns>
+        [Authorize]
+        [HttpGet("MyAccount/Delete")]
+        public async Task<ActionResult> DeleteMyAccount()
+        {
+            return RedirectToPage("Areas/Identity/Pages/Account/Manage/DeletePersonalData");  
+        }
+
+        /// <summary>
+        /// Neozkoušené, asi nubude potřebné
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [Authorize]
+        [HttpDelete("{userId}")]
+        public async Task<ActionResult> DeleteMyAccount(string userId)
+        {
+            var user = _context.Users.Where(x => x.Id == userId).FirstOrDefault();
+            if (user == null)
+                return NotFound();
+            var userInGroups = _context.UsersInGroups.Where(x => x.UserId==userId).ToList();
+            foreach (var group in userInGroups)
+                _context.UsersInGroups.Remove(group);
+            var Groups = _context.Groups.Where(x => x.HeadLectorId == userId).ToList();
+            foreach(var group in Groups)
+            {
+                group.HeadLectorId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
+                _context.Entry(group).State = EntityState.Modified;
+            }
+            _context.Users.Remove(user);
+            return Ok();
+        }
+
         private bool UserExist(string id)
         {
             return _context.Users.Any(e => e.Id == id);
