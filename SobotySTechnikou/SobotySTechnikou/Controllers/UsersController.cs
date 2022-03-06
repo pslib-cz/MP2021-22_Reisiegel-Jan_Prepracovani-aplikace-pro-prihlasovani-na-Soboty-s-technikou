@@ -63,7 +63,6 @@ namespace SobotySTechnikou.Controllers
         public async Task<ActionResult<ICollection<ApplicationUser>>> GetAll()
         {
             var allUsers = await _context.Users.ToListAsync();
-            var not = User;
             if (allUsers == null)
                 return StatusCode(418);
             return allUsers;

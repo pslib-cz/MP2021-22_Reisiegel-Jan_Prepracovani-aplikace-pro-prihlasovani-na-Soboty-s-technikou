@@ -8,10 +8,10 @@ const Profile = props => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(false);
     const [userData, setUserData] = useState();
-    console.log(profile);
+    //console.log(profile);
     const getUserData = () => {
         setIsLoading(true);
-        console.log(accessToken);
+        //console.log(accessToken);
         setError(false);
         //if ((accessToken == null)) {
         axios.get("/api/Users/UserInfo", {
@@ -23,11 +23,11 @@ const Profile = props => {
             .then(response => {
                 setError(false);
                 setUserData(response.data);
-                console.log(userData);
+                //console.log(userData);
             })
             .catch(error => {
                 setError(true);
-                console.log(error);
+                //console.log(error);
             })
             .finally(() => {
                 setIsLoading(false);
@@ -37,7 +37,7 @@ const Profile = props => {
     }
     useEffect(() => {
         getUserData();
-        console.log("změna");
+        //console.log("změna");
     }, [accessToken]);
     if (userData) {
         return (

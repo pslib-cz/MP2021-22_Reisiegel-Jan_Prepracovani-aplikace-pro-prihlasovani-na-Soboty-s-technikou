@@ -24,6 +24,8 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.Password.RequireDigit = false;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequiredLength = 8;
+    options.ClaimsIdentity.UserIdClaimType = "role";
+    options.User.RequireUniqueEmail = true;
 })
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -34,8 +36,14 @@ builder.Services.AddAuthentication("Bearer").AddIdentityServerJwt();
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("Administrator", policy => policy.RequireRole("XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1"));
-    options.AddPolicy("Lector", policy => policy.RequireRole("Lector"));
+    options.AddPolicy("Administrator", policy =>
+    {
+        policy.RequireClaim(RolesDefinition.ADMINISTRATOR_CLAIM, "1");
+    });
+    options.AddPolicy("Lector", policy =>
+    {
+        policy.RequireClaim(RolesDefinition.LECTOR_CLAIM, "1");
+    });
 });
 
 builder.Services.AddControllersWithViews();

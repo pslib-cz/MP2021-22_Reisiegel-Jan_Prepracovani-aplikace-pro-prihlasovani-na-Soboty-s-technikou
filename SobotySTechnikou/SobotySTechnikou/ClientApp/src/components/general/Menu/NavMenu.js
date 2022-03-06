@@ -48,8 +48,8 @@ export const NavMenu = props => {
                         {
                             userManager ?
                                 accessToken ?
-                                    <Nav.Item as={Link} to="/home" onClick={() => { userManager.signoutRedirect() }}>Odhlásit</Nav.Item> :
-                                    <Nav.Item as={Link} to="/home" onClick={() => { userManager.signinRedirect({ redirectUrl: "/" }) }}>Přihlásit se</Nav.Item> :
+                                    <Nav.Item as={Link} to="/log-out" onClick={() => { userManager.signoutRedirect() }}>Odhlásit</Nav.Item> :
+                                    <Nav.Item as={Link} to="/log-in" onClick={() => { userManager.signinRedirect({ redirectUrl: "/" }) }}>Přihlásit se</Nav.Item> :
                                 null
 
                         }

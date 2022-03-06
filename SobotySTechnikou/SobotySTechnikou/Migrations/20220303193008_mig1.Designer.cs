@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SobotySTechnikou.Data;
 
@@ -11,9 +12,10 @@ using SobotySTechnikou.Data;
 namespace SobotySTechnikou.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220303193008_mig1")]
+    partial class mig1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -193,14 +195,14 @@ namespace SobotySTechnikou.Migrations
                         new
                         {
                             Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1",
-                            ConcurrencyStamp = "bdfe687d-8c90-44aa-9960-fb6daf686160",
+                            ConcurrencyStamp = "068e1b23-e027-43a5-afa1-314dbf9093d2",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2",
-                            ConcurrencyStamp = "609d3a5d-bbd0-48aa-b810-4d10867cd228",
+                            ConcurrencyStamp = "0679668c-4799-4b36-a446-73e70cb54813",
                             Name = "Lector",
                             NormalizedName = "LECTOR"
                         });
@@ -389,15 +391,15 @@ namespace SobotySTechnikou.Migrations
                             Id = "XXXXXXXX-XXXX-AKCE-XXXX-XXXXXXXXXXXX",
                             Active = false,
                             Availability = false,
-                            CreatedAt = new DateTime(2022, 3, 3, 23, 37, 0, 13, DateTimeKind.Local).AddTicks(770),
+                            CreatedAt = new DateTime(2022, 3, 3, 20, 30, 8, 116, DateTimeKind.Local).AddTicks(1667),
                             CreatorId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
                             Description = "",
-                            End = new DateTime(2022, 3, 4, 23, 37, 0, 13, DateTimeKind.Local).AddTicks(766),
+                            End = new DateTime(2022, 3, 4, 20, 30, 8, 116, DateTimeKind.Local).AddTicks(1663),
                             FormOfAction = 0,
                             Name = "Defaultní akce",
                             NameId = "Defaultní_akce",
-                            Start = new DateTime(2022, 3, 3, 23, 37, 0, 13, DateTimeKind.Local).AddTicks(753),
-                            UpdatedAt = new DateTime(2022, 3, 3, 23, 37, 0, 13, DateTimeKind.Local).AddTicks(772),
+                            Start = new DateTime(2022, 3, 3, 20, 30, 8, 116, DateTimeKind.Local).AddTicks(1656),
+                            UpdatedAt = new DateTime(2022, 3, 3, 20, 30, 8, 116, DateTimeKind.Local).AddTicks(1669),
                             Year = 0
                         });
                 });
@@ -510,7 +512,7 @@ namespace SobotySTechnikou.Migrations
                             AccessFailedCount = 0,
                             BeInformed = false,
                             BirthDate = "03.03.2022 0:00:00",
-                            ConcurrencyStamp = "ac131dd7-4308-4d65-b9e5-2bdcbcfcadea",
+                            ConcurrencyStamp = "7b0dbeed-c7e6-4678-b5b5-8eeed029a58d",
                             Condition = 0,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "sobota@pslib.cz",
@@ -521,7 +523,7 @@ namespace SobotySTechnikou.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "SOBOTA@PSLIB.CZ",
                             NormalizedUserName = "SOBOTA@PSLIB.CZ",
-                            PasswordHash = "AQAAAAEAACcQAAAAEM0VBC6dAZIgU3yLlmXcUQ8MWbXamVvD2ixVZFTadgdN8yjkq3GKII3Ji1DFgbFoVA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDgKbLS0Iys5MfiZPFoRPng4PzRD0fc0iifStLgiBEOAMZGj2Yp8Bp84K+WFBWOqAg==",
                             PhoneNumberConfirmed = false,
                             PotentionalStudent = false,
                             School = "Střední průmyslová škola strojní a elektrotechnická Liberec",

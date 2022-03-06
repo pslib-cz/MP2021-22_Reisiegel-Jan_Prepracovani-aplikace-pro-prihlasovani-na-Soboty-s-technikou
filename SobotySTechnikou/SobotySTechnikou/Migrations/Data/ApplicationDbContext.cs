@@ -81,6 +81,13 @@ namespace SobotySTechnikou.Data
                 Availability = false,
                 CreatorId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
             });
+            modelBuilder.Entity<IdentityUserClaim<string>>().HasData(new IdentityUserClaim<string>
+            {
+                Id = 1,
+                UserId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+                ClaimValue = "1",
+                ClaimType = RolesDefinition.ADMINISTRATOR_CLAIM
+            });
             modelBuilder.Entity<UserInGroup>(entity =>
             {
                 entity.HasOne(x => x.Group).WithMany(x => x.UsersInGroup).HasForeignKey(x => x.GroupId).OnDelete(DeleteBehavior.Restrict);

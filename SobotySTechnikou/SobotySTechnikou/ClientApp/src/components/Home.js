@@ -4,6 +4,7 @@ import { IconButton, Message } from 'rsuite';
 import { Link } from 'react-router-dom';
 import { Edit } from '@rsuite/icons/lib/icons';
 import axios from 'axios';
+import ActionOnHome from './ActionsComponents/ActionOnHome';
 
 export const Home = () => {
   const [{ userManager, accessToken }] = useAuthContext();
@@ -47,6 +48,7 @@ export const Home = () => {
             </Message>
             : null
         }
+        <ActionOnHome />
       </div>
     )
   }

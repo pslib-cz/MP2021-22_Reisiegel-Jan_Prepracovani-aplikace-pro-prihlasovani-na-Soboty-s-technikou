@@ -158,7 +158,7 @@ namespace SobotySTechnikou.Controllers
                 _ => Year.none
             };
             var actionGroups = _context.Groups.Where(x => x.ActionId == newGroup.ActionId && x.Name == newGroup.Name).ToList();
-            if (actionGroups != null)
+            if (actionGroups.Count > 0)
                 return BadRequest();
             _context.Groups.Add(newGroup);
             await _context.SaveChangesAsync();

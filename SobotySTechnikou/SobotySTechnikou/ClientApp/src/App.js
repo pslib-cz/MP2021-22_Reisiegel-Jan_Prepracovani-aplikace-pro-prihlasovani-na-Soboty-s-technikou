@@ -36,8 +36,8 @@ export default class App extends Component {
               <Route path={Paths.LogoutCallback} element={<SignOutCallback />} />
               <Route path={Paths.RenewCallback} element={<SilentRenewCallback />} />
               <Route index path='/' element={<Home />} />
-              <Route path='/counter' element={<Counter />} />
-              <Route path='/fetch-data' element={<FetchData />} />
+              <Route path='/log-in' element={<Home />} />
+              <Route path='/log-out' element={<Home />} />
               
               <Route path="/Profile" element={<Profile />} />
               <Route path="/Users" element={<Users />} />

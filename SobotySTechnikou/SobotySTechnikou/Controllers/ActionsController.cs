@@ -24,6 +24,9 @@ namespace SobotySTechnikou.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Models.Action>>> Get(string? name, int? year, bool? isActive, bool? availability)
         {
+            var userId = User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
+            var not = User.Claims.ToList();
+
             IQueryable<SobotySTechnikou.Models.Action> actions = _context.Actions;
             if (!String.IsNullOrEmpty(name))
             {
@@ -39,6 +42,10 @@ namespace SobotySTechnikou.Controllers
             }
             if (availability != null)
             {
+                if(availability == true)
+                {
+                    var action = actions.Where(x => x.Availability == availability).OrderBy(x => x.Start).FirstOrDefault(); //to do                     
+                }
                 actions = actions.Where(x=>x.Availability == availability);
             }
             return await actions.ToListAsync();
@@ -175,6 +182,64 @@ namespace SobotySTechnikou.Controllers
                 .Where(x => x.ActionId == id)
                 .ToListAsync();
             return Ok(groups);
+        }
+
+        [HttpGet("MainAction")]
+        public async Task<ActionResult<ActionVM>> GetMainAction()
+        {
+            var action = _context.Actions.Include(x=>x.Creator).Where(x => x.Availability == true).OrderBy(x => x.Start).Select(x=>new ActionVM
+            {
+                Id = x.Id,
+                Name = x.Name,
+                Year = x.Year,
+                Start = x.Start.ToString(),
+                End = x.End.ToString(),
+                Active = x.Active,
+                Availability = x.Availability,
+                Description = x.Description,
+                CreateTime = x.CreatedAt.ToString(),
+                UpdateTime = x.UpdatedAt.ToString(),
+                CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
+                Type = x.FormOfAction
+            }).FirstOrDefault();
+
+            if (action is null)
+                return NoContent();
+
+            action.Groups = _context.Groups.Include(x => x.HeadLector).Where(x => x.ActionId==action.Id).Select(x => new GroupVM
+            {
+                Id=x.Id,
+                NameId = x.NameId,
+                Name = x.Name,
+                Description = x.Description,
+                Capacity = x.Capacity,
+                Open = x.Open,
+                HeadLectorName = x.HeadLector.FirstName +" "+x.HeadLector.LastName,
+                NumberOfLectors = x.NumberOfLectors,
+                Note = x.Note,
+                MinYearToEnter = x.MinimalYear,
+                CountOfUsers = _context.UsersInGroups.Where(c=>c.GroupId == x.Id).Count(),
+            }).ToList();
+
+            return Ok(action);
+        }
+
+        [Authorize]
+        [HttpPost("{groupId}")]
+        public async Task<IActionResult> AddUserToGroup(string groupId, string userId = "")
+        {
+            if (String.IsNullOrEmpty(userId))
+                userId = User.Claims.Where(x => x.Type==ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
+            var userInGroup = new UserInGroup
+            {
+                UserId=userId,
+                GroupId=groupId,
+                CreatedAt=DateTime.Now,
+                CancelledById = User.Claims.Where(x => x.Type==ClaimTypes.NameIdentifier).FirstOrDefault()?.Value
+            };
+            _context.UsersInGroups.Add(userInGroup);
+            await _context.SaveChangesAsync();
+            return Ok();
         }
 
         [Authorize]
