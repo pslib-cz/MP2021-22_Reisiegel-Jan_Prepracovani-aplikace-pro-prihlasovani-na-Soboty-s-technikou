@@ -48,14 +48,14 @@ export const Home = () => {
             </Message>
             : null
         }
-        <ActionOnHome />
+        
       </div>
     )
   }
   else {
     return (
       <div className='text-center'>
-
+        <ActionOnHome />
       </div>
     )
   }

@@ -230,6 +230,10 @@ namespace SobotySTechnikou.Controllers
         {
             if (String.IsNullOrEmpty(userId))
                 userId = User.Claims.Where(x => x.Type==ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
+            var group = _context.Groups.Find(groupId);
+            var exist = _context.UsersInGroups.Include(x => x.Group).Where(x => x.UserId==userId && x.Group.ActionId == group.ActionId).ToList();
+            if (exist.Count > 0)
+                return BadRequest();
             var userInGroup = new UserInGroup
             {
                 UserId=userId,
