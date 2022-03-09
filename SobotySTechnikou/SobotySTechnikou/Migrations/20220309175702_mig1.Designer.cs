@@ -12,8 +12,8 @@ using SobotySTechnikou.Data;
 namespace SobotySTechnikou.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220303223700_mig2")]
-    partial class mig2
+    [Migration("20220309175702_mig1")]
+    partial class mig1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -195,14 +195,14 @@ namespace SobotySTechnikou.Migrations
                         new
                         {
                             Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1",
-                            ConcurrencyStamp = "bdfe687d-8c90-44aa-9960-fb6daf686160",
+                            ConcurrencyStamp = "7cbf1509-7f46-41d0-92d4-57b888be08fe",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2",
-                            ConcurrencyStamp = "609d3a5d-bbd0-48aa-b810-4d10867cd228",
+                            ConcurrencyStamp = "d8b608a2-a2fb-4a3e-81fb-dd8ab274d692",
                             Name = "Lector",
                             NormalizedName = "LECTOR"
                         });
@@ -391,15 +391,15 @@ namespace SobotySTechnikou.Migrations
                             Id = "XXXXXXXX-XXXX-AKCE-XXXX-XXXXXXXXXXXX",
                             Active = false,
                             Availability = false,
-                            CreatedAt = new DateTime(2022, 3, 3, 23, 37, 0, 13, DateTimeKind.Local).AddTicks(770),
+                            CreatedAt = new DateTime(2022, 3, 9, 18, 57, 1, 817, DateTimeKind.Local).AddTicks(2080),
                             CreatorId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
                             Description = "",
-                            End = new DateTime(2022, 3, 4, 23, 37, 0, 13, DateTimeKind.Local).AddTicks(766),
+                            End = new DateTime(2022, 3, 10, 18, 57, 1, 817, DateTimeKind.Local).AddTicks(2077),
                             FormOfAction = 0,
                             Name = "Defaultní akce",
                             NameId = "Defaultní_akce",
-                            Start = new DateTime(2022, 3, 3, 23, 37, 0, 13, DateTimeKind.Local).AddTicks(753),
-                            UpdatedAt = new DateTime(2022, 3, 3, 23, 37, 0, 13, DateTimeKind.Local).AddTicks(772),
+                            Start = new DateTime(2022, 3, 9, 18, 57, 1, 817, DateTimeKind.Local).AddTicks(2073),
+                            UpdatedAt = new DateTime(2022, 3, 9, 18, 57, 1, 817, DateTimeKind.Local).AddTicks(2082),
                             Year = 0
                         });
                 });
@@ -511,8 +511,8 @@ namespace SobotySTechnikou.Migrations
                             Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
                             AccessFailedCount = 0,
                             BeInformed = false,
-                            BirthDate = "03.03.2022 0:00:00",
-                            ConcurrencyStamp = "ac131dd7-4308-4d65-b9e5-2bdcbcfcadea",
+                            BirthDate = "09.03.2022 0:00:00",
+                            ConcurrencyStamp = "7d11c4b2-a79e-4ec3-9b62-e0895840498d",
                             Condition = 0,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "sobota@pslib.cz",
@@ -523,7 +523,7 @@ namespace SobotySTechnikou.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "SOBOTA@PSLIB.CZ",
                             NormalizedUserName = "SOBOTA@PSLIB.CZ",
-                            PasswordHash = "AQAAAAEAACcQAAAAEM0VBC6dAZIgU3yLlmXcUQ8MWbXamVvD2ixVZFTadgdN8yjkq3GKII3Ji1DFgbFoVA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOmSKt6eUp2Nr9+DkgKNfQj5vq5v6e0h3E/PaYvvT68XMiB0wInDG/eDst82++GmMw==",
                             PhoneNumberConfirmed = false,
                             PotentionalStudent = false,
                             School = "Střední průmyslová škola strojní a elektrotechnická Liberec",
@@ -596,11 +596,11 @@ namespace SobotySTechnikou.Migrations
 
             modelBuilder.Entity("SobotySTechnikou.Models.UserInGroup", b =>
                 {
-                    b.Property<string>("UserId")
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("GroupId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<DateTime?>("CancelledAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("CancelledById")
                         .HasColumnType("nvarchar(450)");
@@ -611,13 +611,23 @@ namespace SobotySTechnikou.Migrations
                     b.Property<string>("CreatedById")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("UserId", "GroupId");
+                    b.Property<string>("GroupId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("CancelledById");
 
                     b.HasIndex("CreatedById");
 
                     b.HasIndex("GroupId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UsersInGroups");
                 });

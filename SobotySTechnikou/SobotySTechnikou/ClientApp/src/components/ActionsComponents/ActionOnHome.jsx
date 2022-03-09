@@ -5,17 +5,24 @@ import { useState } from "react";
 import { Col, Row, Panel, Button, ButtonGroup, Progress } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
 import parse from 'html-react-parser';
+import { Link } from "react-router-dom";
 
 const ActionOnHome = () => {
-    const [{ accessToken }] = useAuthContext();
+    const [{ accessToken, userManager, profile }] = useAuthContext();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(false);
     const [action, setAction] = useState();
+    const [reload, setReload] = useState(false);
 
     const loadAction = () => {
         setIsLoading(true);
         setError(false);
-        axios.get("/api/Actions/MainAction")
+        axios.get("/api/Actions/MainAction", {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}`
+            }
+        })
             .then(response => {
                 setAction(response.data);
                 console.log(response.data);
@@ -34,14 +41,44 @@ const ActionOnHome = () => {
     }
 
     const GroupCard = ({ group }) => {
+        const enroll = () => {
+            axios.post(`/api/Applications/${group.id}/Enroll`, {
+                userId: ""
+            }, {
+                headers: {
+                    "Authorization": `Bearer ${accessToken}`
+                }
+            })
+                .then(response => {
+                    console.log(response.data);
+                })
+                .finally(() => {
+                    setReload(!reload);
+                })
+        }
+        const unenroll = () => {
+            console.log(profile);
+            axios.put(`/api/Applications/${group.id}/Unenrol`, {
+                userId: ""
+            } , {
+                headers: {
+                    "Authorization": `Bearer ${accessToken}`
+                }
+            })
+            .then(response=>{
+                console.log(response);
+            })
+            .finally(()=>{
+                setReload(!reload);
+            })
+        }
         return (
-            <Col lg={6} Style={{ position: "relative" }} >
+            <Col lg={6} md={8} Style={{ position: "relative" }} >
                 <Panel bordered shaded style={{ height: "100%", textAlign: "left" }}
                     header={<h5>{group.name}</h5>}>
 
                     <Row>
                         <Col >
-
                             {
                                 parse(group.description)
                             }
@@ -55,11 +92,24 @@ const ActionOnHome = () => {
 
                 </Panel>
                 <Col lg={24} style={{ position: "relative", bottom: "6em" }} >
-                    
+
                     <Row style={{ marginBottom: "0.5em" }}>
 
                         <ButtonGroup style={{ width: "87%" }}>
-                            <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle">Zapsat se</Button>
+                            {
+                                accessToken ? (
+                                    action.userIsInAction ? (
+                                        group.isUserAdded ?
+                                            <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { unenroll() }} disabled={false} >Odzapsat se</Button>
+                                            : <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { enroll() }} disabled={true} >Zapsat se</Button>
+                                    )
+                                        : <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { enroll() }} disabled={false} >Zapsat se</Button>
+                                )
+                                    : <Button
+                                        style={{ width: "50%", border: "0.1em solid #2196f3" }}
+                                        color="blue" appearance="subtle" onClick={() => { userManager.signinRedirect({ redirectUrl: "/" }) }}
+                                    >Zapsat se</Button>
+                            }
                             <Button style={{ width: "50%", border: "0.1em solid #2196f3", borderLeft: "none" }} color="blue" appearance="subtle">Detail</Button>
                         </ButtonGroup>
 
@@ -75,14 +125,15 @@ const ActionOnHome = () => {
                     </Row>
 
                 </Col>
+                <br />
+
             </Col>
         )
     }
 
     useEffect(() => {
         loadAction();
-        percentageProgress(12, 6);
-    }, [])
+    }, [accessToken, reload])
 
     return (
         <>
@@ -92,6 +143,9 @@ const ActionOnHome = () => {
                         <Row>
                             <Col style={{ textAlign: "left" }}>
                                 <h3>{action.name}</h3>
+                                <br />
+                                <p>{action.start}</p>
+                                <br />
                                 {parse(action.description)}
                             </Col>
                         </Row>
@@ -101,6 +155,7 @@ const ActionOnHome = () => {
                                 action.groups.map((item, index) => (<GroupCard group={item} />))
                             }
                         </Row>
+                        <br />
                     </>
                 ) : (<p>nic nedorazilo</p>)
             }

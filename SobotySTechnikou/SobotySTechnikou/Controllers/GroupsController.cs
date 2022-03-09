@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using SobotySTechnikou.Data;
 using SobotySTechnikou.Models;
 using SobotySTechnikou.ViewModels;
+using System.Security.Claims;
 
 namespace SobotySTechnikou.Controllers
 {
@@ -202,7 +203,7 @@ namespace SobotySTechnikou.Controllers
         }
 
         [Authorize] //(Roles = "Administrator, Lector")
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(string id)
         {
             if (String.IsNullOrEmpty(id))

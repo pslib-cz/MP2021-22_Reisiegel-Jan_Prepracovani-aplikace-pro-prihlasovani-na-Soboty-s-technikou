@@ -291,15 +291,17 @@ namespace SobotySTechnikou.Migrations
                 name: "UsersInGroups",
                 columns: table => new
                 {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     GroupId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CancelledAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedById = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CancelledById = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UsersInGroups", x => new { x.UserId, x.GroupId });
+                    table.PrimaryKey("PK_UsersInGroups", x => x.Id);
                     table.ForeignKey(
                         name: "FK_UsersInGroups_AspNetUsers_CancelledById",
                         column: x => x.CancelledById,
@@ -329,22 +331,22 @@ namespace SobotySTechnikou.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1", "068e1b23-e027-43a5-afa1-314dbf9093d2", "Administrator", "ADMINISTRATOR" });
+                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1", "7cbf1509-7f46-41d0-92d4-57b888be08fe", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2", "0679668c-4799-4b36-a446-73e70cb54813", "Lector", "LECTOR" });
+                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2", "d8b608a2-a2fb-4a3e-81fb-dd8ab274d692", "Lector", "LECTOR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "BeInformed", "BirthDate", "ConcurrencyStamp", "Condition", "CreatedAt", "Email", "EmailConfirmed", "FirstName", "Gender", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PotentionalStudent", "School", "SecurityStamp", "TwoFactorEnabled", "UpdatedAt", "UserName", "Year" },
-                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX", 0, false, "03.03.2022 0:00:00", "7b0dbeed-c7e6-4678-b5b5-8eeed029a58d", 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "sobota@pslib.cz", true, "Admin", 0, "PSLIB", false, null, "SOBOTA@PSLIB.CZ", "SOBOTA@PSLIB.CZ", "AQAAAAEAACcQAAAAEDgKbLS0Iys5MfiZPFoRPng4PzRD0fc0iifStLgiBEOAMZGj2Yp8Bp84K+WFBWOqAg==", null, false, false, "Střední průmyslová škola strojní a elektrotechnická Liberec", "", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "sobota@pslib.cz", 4 });
+                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX", 0, false, "09.03.2022 0:00:00", "7d11c4b2-a79e-4ec3-9b62-e0895840498d", 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "sobota@pslib.cz", true, "Admin", 0, "PSLIB", false, null, "SOBOTA@PSLIB.CZ", "SOBOTA@PSLIB.CZ", "AQAAAAEAACcQAAAAEOmSKt6eUp2Nr9+DkgKNfQj5vq5v6e0h3E/PaYvvT68XMiB0wInDG/eDst82++GmMw==", null, false, false, "Střední průmyslová škola strojní a elektrotechnická Liberec", "", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "sobota@pslib.cz", 4 });
 
             migrationBuilder.InsertData(
                 table: "Actions",
                 columns: new[] { "Id", "Active", "Availability", "CreatedAt", "CreatorId", "Description", "End", "FormOfAction", "Name", "NameId", "Start", "UpdatedAt", "Year" },
-                values: new object[] { "XXXXXXXX-XXXX-AKCE-XXXX-XXXXXXXXXXXX", false, false, new DateTime(2022, 3, 3, 20, 30, 8, 116, DateTimeKind.Local).AddTicks(1667), "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX", "", new DateTime(2022, 3, 4, 20, 30, 8, 116, DateTimeKind.Local).AddTicks(1663), 0, "Defaultní akce", "Defaultní_akce", new DateTime(2022, 3, 3, 20, 30, 8, 116, DateTimeKind.Local).AddTicks(1656), new DateTime(2022, 3, 3, 20, 30, 8, 116, DateTimeKind.Local).AddTicks(1669), 0 });
+                values: new object[] { "XXXXXXXX-XXXX-AKCE-XXXX-XXXXXXXXXXXX", false, false, new DateTime(2022, 3, 9, 18, 57, 1, 817, DateTimeKind.Local).AddTicks(2080), "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX", "", new DateTime(2022, 3, 10, 18, 57, 1, 817, DateTimeKind.Local).AddTicks(2077), 0, "Defaultní akce", "Defaultní_akce", new DateTime(2022, 3, 9, 18, 57, 1, 817, DateTimeKind.Local).AddTicks(2073), new DateTime(2022, 3, 9, 18, 57, 1, 817, DateTimeKind.Local).AddTicks(2082), 0 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserClaims",
@@ -460,6 +462,11 @@ namespace SobotySTechnikou.Migrations
                 name: "IX_UsersInGroups_GroupId",
                 table: "UsersInGroups",
                 column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UsersInGroups_UserId",
+                table: "UsersInGroups",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -36,6 +36,71 @@ const GroupDetail = () => {
             });
     }
 
+    const groupIsOpen = () => {
+        setIsLoading(true);
+        setError(false);
+        axios.put("/api/Groups/", {
+            id: groupData.id,
+            name: groupData.name,
+            description: groupData.description,
+            capacity: groupData.capacity,
+            open: !groupData.open,
+            headLectorId: groupData.headLectorId,
+            actionId: groupData.actionId,
+            numberOfLectors: groupData.numberOfLectors,
+            minYear: groupData.minYearToEnter,
+            noteForLectors: groupData.noteForLectors,
+            note: groupData.note
+        }, {
+            headers: {
+                //"Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}`
+            }
+        })
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                setError(true);
+            })
+            .finally(() => {
+                setIsLoading(false);
+                getGroupData();
+            })
+    }
+
+    const PanelHeader = () => {
+        const deleteGroup = () => {
+            axios.delete("/api/Groups/" + groupData.id, {
+                headers: {
+                    "Authorization": `Bearer ${accessToken}`
+                }
+            })
+                .then(response => {
+                    console.log(Response);
+                })
+        }
+        return (
+            <>
+                <Row>
+                    <Col lg={12}>
+                        <h2>Informace o Skupině</h2>
+                    </Col>
+                    <Col lg={12} style={{ textAlign: "right" }}>
+                        <ButtonGroup>
+                            <Button color="blue" appearance="primary" as={Link} to={`/EditGroup/${year}/${actionId}/${groupId} `} >Upravit</Button>
+                            <Button appearance="ghost" onClick={()=>{groupIsOpen()}} >{groupData.open ? "Zavřít" : "Otevřít"}</Button>
+                            <Button appearance="ghost" >Zveřejnit</Button>
+                            <Button appearance="primary" color="red" as={Link} to="/AllGroups" onClick={()=>{deleteGroup()}}>Odstranit</Button>
+                        </ButtonGroup>
+                    </Col>
+                </Row>
+            </>
+    
+    
+        )
+    }
+
     useEffect(() => {
         getGroupData();
     }, [accessToken])
@@ -51,7 +116,7 @@ const GroupDetail = () => {
             <div>
                 <Row>
                     <Col lg={20} lgOffset={2}>
-                        <Panel shaded bordered header={<PanelHeader year={year} actionNameId={actionId} groupNameId={groupId} groupId={groupData.id} />} >
+                        <Panel shaded bordered header={<PanelHeader year={year} actionNameId={actionId} groupNameId={groupId} groupData={groupData} />} >
                             <Row>
                                 <h5>Skupina</h5>
                             </Row>
@@ -216,38 +281,6 @@ const GroupDetail = () => {
     }
 }
 
-const PanelHeader = ({year, actionNameId, groupNameId, groupId}) => {
-    const [{accessToken}] = useAuthContext();
-    const deleteGroup = () => {
-        axios.delete("/api/Groups/" + groupId, {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${accessToken}`
-            }
-        })
-            .then(response => {
-                console.log(Response);
-            })
-    }
-    return (
-        <>
-            <Row>
-                <Col lg={12}>
-                    <h2>Informace o Skupině</h2>
-                </Col>
-                <Col lg={12} style={{ textAlign: "right" }}>
-                    <ButtonGroup>
-                        <Button color="blue" appearance="primary" as={Link} to={`/EditGroup/${year}/${actionNameId}/${groupNameId} `} >Upravit</Button>
-                        <Button >Aktivovat</Button>
-                        <Button >Zveřejnit</Button>
-                        <Button appearance="primary" color="red" as={Link} to="/AllGroups" onClick={()=>{deleteGroup()}}>Odstranit</Button>
-                    </ButtonGroup>
-                </Col>
-            </Row>
-        </>
 
-
-    )
-}
 
 export default GroupDetail;

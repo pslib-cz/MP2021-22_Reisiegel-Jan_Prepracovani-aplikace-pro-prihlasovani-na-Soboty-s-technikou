@@ -22,9 +22,8 @@ namespace SobotySTechnikou.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
-            modelBuilder.Entity<UserInGroup>().HasKey(t => new { t.UserId, t.GroupId });
-            //modelBuilder.Entity<ApplicationUser>().HasKey(t => t.Id);
+
+            modelBuilder.Entity<UserInGroup>().HasKey(x => x.Id);
             
             modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole
             {

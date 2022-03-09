@@ -37,28 +37,21 @@ export const Home = () => {
   useEffect(() => {
     getInfo();
   }, [accessToken])
-  if (accessToken) {
+  
     return (
       <div className='text-center'>
         {
-          !isCompleted ?
+          accessToken ?
+          isCompleted ?
             <Message type="error" header="Nevyplněné informace" >
               <p>Nemůžete se přihlásit na jakoukoli akci, protože nemáte vyplněné nějaké důležité informace</p>
               <IconButton color='red' as={Link} to={"/EditUser"} icon={<Edit />} appearance='ghost' >Doplnit informace</IconButton>
             </Message>
-            : null
+            : null : null
         }
-        
-      </div>
-    )
-  }
-  else {
-    return (
-      <div className='text-center'>
         <ActionOnHome />
       </div>
     )
-  }
 
 }
 

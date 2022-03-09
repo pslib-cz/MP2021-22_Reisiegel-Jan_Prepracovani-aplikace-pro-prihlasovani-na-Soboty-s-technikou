@@ -36,6 +36,100 @@ const ActionDetail = () => {
             });
     }
 
+    const PanelHeader = ({nameId, year, actionData}) => {
+        const [{accessToken}] = useAuthContext();
+        const deleteAction = () => {
+            axios.delete("/api/Actions/" + actionData.id, {
+                headers: {
+                    "Authorization": `Bearer ${accessToken}`
+                }
+            })
+                .then(response => {
+                    console.log(Response);
+                })
+        }
+        const changeActionActive = () => {
+            setIsLoading(true);
+            setError(false);
+            axios.put(`api/Actions`, {
+                id: actionData.id,
+                name: actionData.name,
+                description: actionData.description,
+                year: actionData.year,
+                start: actionData.start,
+                end: actionData.end,
+                formOfAction: actionData.type,
+                active: !actionData.active,
+                availability: actionData.availability
+            }, {
+                headers: {
+                    //"Content-Type": "application/json",
+                    "Authorization": `Bearer ${accessToken}`
+                }
+            })
+            .then(response=>{
+                console.log(response);
+            })
+            .catch(error => {
+                setError(true);
+            })
+            .finally(()=>{
+                setIsLoading(false);
+                getData();
+            })
+        }
+    
+        const changeAvailabilityAction = () => {
+            setIsLoading(true);
+            setError(false);
+            axios.put(`api/Actions`, {
+                id: actionData.id,
+                name: actionData.name,
+                description: actionData.description,
+                year: actionData.year,
+                start: actionData.start,
+                end: actionData.end,
+                formOfAction: actionData.type,
+                active: actionData.active,
+                availability: !actionData.availability
+            }, {
+                headers: {
+                    //"Content-Type": "application/json",
+                    "Authorization": `Bearer ${accessToken}`
+                }
+            })
+            .then(response=>{
+                console.log(response);
+            })
+            .catch(error => {
+                setError(true);
+            })
+            .finally(()=>{
+                setIsLoading(false);
+                getData();
+            })
+        }
+        return (
+            <>
+                <Row>
+                    <Col lg={12}>
+                        <h2>Informace o akci</h2>
+                    </Col>
+                    <Col lg={12} style={{ textAlign: "right" }}>
+                        <ButtonGroup>
+                            <Button color="blue" appearance="primary" as={Link} to={`/EditAction/${year}/${nameId}`} >Upravit</Button>
+                            <Button appearance="ghost" onClick={() => {changeActionActive()}} >{actionData.active ? "Deaktivovat" : "Aktivovat"}</Button>
+                            <Button appearance="ghost" onClick={() => {changeAvailabilityAction()}} >{actionData.availability ? "Skrýt z Titulní stránky" : "Zveřejnit na titulní stránku"}</Button>
+                            <Button appearance="primary" onClick={() => {deleteAction()}} as={Link} to="/AllActions" color="red">Smazat</Button>
+                        </ButtonGroup>
+                    </Col>
+                </Row>
+            </>
+    
+    
+        )
+    }
+
     useEffect(() => {
         getData();
     }, [accessToken])
@@ -51,7 +145,7 @@ const ActionDetail = () => {
             <div>
                 <Row>
                     <Col lg={20} lgOffset={2}>
-                        <Panel shaded bordered header={<PanelHeader year={year} nameId={nameId} actionId={actionData.id} />} >
+                        <Panel shaded bordered header={<PanelHeader year={year} nameId={nameId} actionData={actionData} />} >
                             <Row>
                                 <h5>Obecné</h5>
                             </Row>
@@ -190,38 +284,7 @@ const ActionDetail = () => {
     }
 }
 
-const PanelHeader = ({nameId, year, actionId}) => {
-    const [{accessToken}] = useAuthContext();
-    const deleteAction = () => {
-        axios.delete("/api/Actions/" + actionId, {
-            headers: {
-                "Authorization": `Bearer ${accessToken}`
-            }
-        })
-            .then(response => {
-                console.log(Response);
-            })
-    }
-    return (
-        <>
-            <Row>
-                <Col lg={12}>
-                    <h2>Informace o akci</h2>
-                </Col>
-                <Col lg={12} style={{ textAlign: "right" }}>
-                    <ButtonGroup>
-                        <Button color="blue" appearance="primary" as={Link} to={`/EditAction/${year}/${nameId}`} >Upravit</Button>
-                        <Button appearance="ghost" >Aktivovat</Button>
-                        <Button appearance="ghost" >Zveřejnit na titulní stránku</Button>
-                        <Button appearance="primary" onClick={() => {deleteAction()}} as={Link} to="/AllActions" color="red">Smazat</Button>
-                    </ButtonGroup>
-                </Col>
-            </Row>
-        </>
 
-
-    )
-}
 
 const AvailabilityCell = ({ rowData, dataKey, ...props }) => {
     return (

@@ -1,9 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Col, Container, Grid, Panel, Row } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
 
 const Profile = props => {
+    const { mail } = useParams();
     const [{ accessToken, userManager, profile }] = useAuthContext();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(false);
@@ -14,30 +16,52 @@ const Profile = props => {
         //console.log(accessToken);
         setError(false);
         //if ((accessToken == null)) {
-        axios.get("/api/Users/UserInfo", {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${accessToken}`
-            }
-        })
-            .then(response => {
-                setError(false);
-                setUserData(response.data);
-                //console.log(userData);
+        if(mail){
+            axios.get("/api/Users/UserInfo?mail=" + mail, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${accessToken}`
+                }
             })
-            .catch(error => {
-                setError(true);
-                //console.log(error);
+                .then(response => {
+                    setError(false);
+                    setUserData(response.data);
+                    //console.log(userData);
+                })
+                .catch(error => {
+                    setError(true);
+                    //console.log(error);
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                })
+        }
+        else{
+            axios.get("/api/Users/UserInfo", {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${accessToken}`
+                }
             })
-            .finally(() => {
-                setIsLoading(false);
-            })
+                .then(response => {
+                    setError(false);
+                    setUserData(response.data);
+                    //console.log(userData);
+                })
+                .catch(error => {
+                    setError(true);
+                    //console.log(error);
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                })
+        }
         //}
 
     }
     useEffect(() => {
         getUserData();
-        //console.log("změna");
+        //console.log(mail);
     }, [accessToken]);
     if (userData) {
         return (

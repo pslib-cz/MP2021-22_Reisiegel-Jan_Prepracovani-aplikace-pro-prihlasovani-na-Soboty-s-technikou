@@ -12,12 +12,12 @@ namespace SobotySTechnikou.Models
         public string LastName { get; set; } = "";
         public string BirthDate { get; set; } = "";
         [Required]
-        public Gender Gender { get; set; }
+        public Gender Gender { get; set; } = Gender.Other;
         [Required]
         public string School { get; set; } = "";
         [Required]
-        public Year Year { get; set; }
-        public bool PotentionalStudent { get; set; }
+        public Year Year { get; set; } = Year.none;
+        public bool PotentionalStudent { get; set; } = false;
         public bool BeInformed { get; set; }
         public Condition Condition { get; set; }
         public DateTime CreatedAt { get; set; }

@@ -187,7 +187,7 @@ namespace SobotySTechnikou.Controllers
         [HttpGet("MainAction")]
         public async Task<ActionResult<ActionVM>> GetMainAction()
         {
-            var action = _context.Actions.Include(x=>x.Creator).Where(x => x.Availability == true).OrderBy(x => x.Start).Select(x=>new ActionVM
+            var action = await _context.Actions.Include(x => x.Creator).Where(x => x.Availability == true).OrderBy(x => x.Start).Select(x => new ActionVM
             {
                 Id = x.Id,
                 Name = x.Name,
@@ -200,13 +200,14 @@ namespace SobotySTechnikou.Controllers
                 CreateTime = x.CreatedAt.ToString(),
                 UpdateTime = x.UpdatedAt.ToString(),
                 CreatorName = x.Creator.FirstName + " " + x.Creator.LastName,
-                Type = x.FormOfAction
-            }).FirstOrDefault();
+                Type = x.FormOfAction,
+                UserIsInAction = false
+            }).FirstOrDefaultAsync();
 
             if (action is null)
                 return NoContent();
 
-            action.Groups = _context.Groups.Include(x => x.HeadLector).Where(x => x.ActionId==action.Id).Select(x => new GroupVM
+            action.Groups = await _context.Groups.Include(x => x.HeadLector).Where(x => x.ActionId==action.Id).Select(x => new GroupVM
             {
                 Id=x.Id,
                 NameId = x.NameId,
@@ -218,33 +219,32 @@ namespace SobotySTechnikou.Controllers
                 NumberOfLectors = x.NumberOfLectors,
                 Note = x.Note,
                 MinYearToEnter = x.MinimalYear,
-                CountOfUsers = _context.UsersInGroups.Where(c=>c.GroupId == x.Id).Count(),
-            }).ToList();
+                CountOfUsers = _context.UsersInGroups.Where(c => c.GroupId == x.Id && c.CancelledAt == null).Count(),
+                IsUserAdded = false
+            }).ToListAsync();
+            var userId = User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
+            if(userId != null)
+            {
+                foreach (var group in action.Groups)
+                {
+                    var usersIds = await _context.UsersInGroups.Where(x => x.GroupId == group.Id && x.CancelledAt == null).Select(x => x.UserId).ToListAsync();
+                    if (usersIds.Contains(userId))
+                    {
+                        action.UserIsInAction = true;
+                        group.IsUserAdded = true;
+                    }
+                    else
+                    {
+                        group.IsUserAdded = false;
+                    }
+                }
+            }
+            
 
             return Ok(action);
         }
 
-        [Authorize]
-        [HttpPost("{groupId}")]
-        public async Task<IActionResult> AddUserToGroup(string groupId, string userId = "")
-        {
-            if (String.IsNullOrEmpty(userId))
-                userId = User.Claims.Where(x => x.Type==ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
-            var group = _context.Groups.Find(groupId);
-            var exist = _context.UsersInGroups.Include(x => x.Group).Where(x => x.UserId==userId && x.Group.ActionId == group.ActionId).ToList();
-            if (exist.Count > 0)
-                return BadRequest();
-            var userInGroup = new UserInGroup
-            {
-                UserId=userId,
-                GroupId=groupId,
-                CreatedAt=DateTime.Now,
-                CancelledById = User.Claims.Where(x => x.Type==ClaimTypes.NameIdentifier).FirstOrDefault()?.Value
-            };
-            _context.UsersInGroups.Add(userInGroup);
-            await _context.SaveChangesAsync();
-            return Ok();
-        }
+        
 
         [Authorize]
         [HttpGet("Selector")]

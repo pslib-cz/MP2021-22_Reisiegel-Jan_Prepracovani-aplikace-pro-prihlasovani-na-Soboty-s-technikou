@@ -31,10 +31,13 @@ namespace SobotySTechnikou.Controllers
 
         [Authorize]
         [HttpGet("UserInfo")]
-        public async Task<ActionResult<UserVM>> GetUser()
+        public async Task<ActionResult<UserVM>> GetUser(string mail)
         {
-            var userId = User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
-            Console.WriteLine(userId);
+            string userId = "";
+            if (String.IsNullOrEmpty(mail))
+                userId = User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
+            else
+                userId = _context.Users.Where(x => x.Email == mail).Select(x => x.Id).FirstOrDefault();
             if (userId is null)
                 return BadRequest();
             var userInfo = await _context.Users

@@ -25,5 +25,7 @@ namespace SobotySTechnikou.ViewModels
         public ActionVM Action { get; set; }
         public List<UserVM> Users { get; set; }
         public int CountOfUsers { get; set; }
+
+        public bool IsUserAdded { get; set; }
     }
 }

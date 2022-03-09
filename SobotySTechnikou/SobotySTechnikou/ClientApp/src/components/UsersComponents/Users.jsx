@@ -134,7 +134,7 @@ const Users = props => {
 const ActionCell = ({ rowData, dataKey, ...props }) => {
     return (
         <Table.Cell {...props}>
-            <Button color="blue" appearance="primary" as={Link} to={"/EditUser/" + rowData["email"]}>Detail</Button>
+            <Button color="blue" appearance="primary" as={Link} to={"/UserDetail/" + rowData["email"]}>Detail</Button>
         </Table.Cell>
     )
 }

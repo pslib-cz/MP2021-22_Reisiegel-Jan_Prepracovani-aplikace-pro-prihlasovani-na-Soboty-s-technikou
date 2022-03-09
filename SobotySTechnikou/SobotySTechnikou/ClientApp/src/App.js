@@ -22,6 +22,7 @@ import EditGroup from './components/GroupsComponents/EditGroup';
 import GroupDetail from './components/GroupsComponents/GroupDetail';
 import EditAction from './components/ActionsComponents/EditAction';
 import ActionDetail from './components/ActionsComponents/ActionDetail';
+import AllApplications from './components/GroupsApplications/AllApplications';
 
 
 export default class App extends Component {
@@ -40,6 +41,7 @@ export default class App extends Component {
               <Route path='/log-out' element={<Home />} />
               
               <Route path="/Profile" element={<Profile />} />
+              <Route path="/UserDetail/:mail" element={<Profile />} />
               <Route path="/Users" element={<Users />} />
               <Route path="/EditUser/:mail" element={<EditUser /> } />
               <Route path="/EditUser" element={<EditUser /> } />
@@ -53,6 +55,8 @@ export default class App extends Component {
               <Route path="/AllGroups" element={<AllGroups />} />
               <Route path="/EditGroup/:year/:actionId/:groupId" element={<EditGroup />} />
               <Route path="/Group/:year/:actionId/:groupId" element={<GroupDetail />} />
+
+              <Route path='/Applications' element={<AllApplications />} />
               
               <Route path="*" element={<NotFound />} />
             </Routes>

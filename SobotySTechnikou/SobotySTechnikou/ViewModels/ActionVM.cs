@@ -18,5 +18,6 @@ namespace SobotySTechnikou.ViewModels
         public ActionType Type { get; set; }
         public List<GroupVM> Groups { get; set; }
 
+        public bool UserIsInAction { get; set; }
     }
 }
