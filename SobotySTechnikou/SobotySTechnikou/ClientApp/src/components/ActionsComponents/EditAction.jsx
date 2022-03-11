@@ -10,51 +10,54 @@ import { Button, Checkbox, Col, Form, Input, InputNumber, Row } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
 
 const EditAction = () => {
-    const {year, actionId} = useParams();
-    const [{accessToken}] = useAuthContext();
+    const { year, actionId } = useParams();
+    const [{ accessToken }] = useAuthContext();
     const [isLoading, setIsLoading] = useState();
     const [error, setError] = useState();
 
     const [actionData, setActionData] = useState();
     const [name, setName] = useState();
     const [description, setDescription] = useState();
-    const [startDate, setStartDate] = useState();
-    const [endDate, setEndDate] = useState();
+    const [startDate, setStartDate] = useState(Date);
+    const [endDate, setEndDate] = useState(Date);
     const [schoolYear, setSchoolYear] = useState();
     const [type, setType] = useState();
     const [active, setActive] = useState();
     const [availability, setAvailability] = useState();
 
+    const [datum, setDatum] = useState(Date);
+
     const getActionData = () => {
         setIsLoading(true);
         setError(false);
-        axios.get(`/api/Actions/${year}/${actionId}`, {
+        axios.get(`/api/Actions/${year}/${actionId}?forEdit=true`, {
             headers: {
                 //"Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`
             }
         })
-        .then(response=>{
-            setActionData(response.data);
-            console.log(response.data);
-            setName(response.data.name);
-            setDescription(response.data.description);
-            setStartDate(response.data.start);
-            setEndDate(response.data.end);
-            setSchoolYear(response.data.year);
-            setType(response.data.type);
-            setActive(response.data.active);
-            setAvailability(response.data.availability);
-        })
-        .catch(error => {
-            setError(true);
-        })
-        .finally(()=>{
-            setIsLoading(false);
-        });
+            .then(response => {
+                setActionData(response.data);
+                console.log(response.data);
+                setName(response.data.name);
+                setDescription(response.data.description);
+                setStartDate(response.data.start);
+                setEndDate(response.data.end);
+                setDatum(response.data.end);
+                setSchoolYear(response.data.year);
+                setType(response.data.type);
+                setActive(response.data.active);
+                setAvailability(response.data.availability);
+            })
+            .catch(error => {
+                setError(true);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     }
 
-    const saveActionData  = () => {
+    const saveActionData = () => {
         setIsLoading(true);
         setError(false);
         axios.put(`api/Actions`, {
@@ -73,18 +76,18 @@ const EditAction = () => {
                 "Authorization": `Bearer ${accessToken}`
             }
         })
-        .then(response=>{
-            console.log(response);
-        })
-        .catch(error => {
-            setError(true);
-        })
-        .finally(()=>{
-            setIsLoading(false);
-        })
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                setError(true);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            })
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         getActionData();
     }, [accessToken]);
 
@@ -126,7 +129,7 @@ const EditAction = () => {
                                     <Form.ControlLabel >Začátek</Form.ControlLabel>
                                 </Col>
                                 <Col lg={10}>
-                                    
+                                    <Input type="datetime-local" value={startDate} onChange={e => { console.log(e) }} />
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -139,7 +142,7 @@ const EditAction = () => {
                                     <Form.ControlLabel >Konec</Form.ControlLabel>
                                 </Col>
                                 <Col lg={10}>
-                                    
+                                    <Input type="datetime-local" value={endDate} onChange={e => { console.log(e) }} />
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -152,21 +155,21 @@ const EditAction = () => {
                                     <Form.ControlLabel>Popis</Form.ControlLabel>
                                 </Col>
                                 <Col lg={10}>
-                                <CKEditor
-                                    config={{
-                                        language: 'cs'
-                                    }}
-                                    
-                                    editor={ClassicEditor}
-                                    data={description}
-                                    onReady={ editor => {
-                                        description ? editor.setData(description) : editor.setData("");
-                                    } }
-                                    onChange={(event, editor) => {
-                                        //const data = editor.getData();
-                                        setDescription(editor.getData());
-                                    }}
-                                />
+                                    <CKEditor
+                                        config={{
+                                            language: 'cs'
+                                        }}
+
+                                        editor={ClassicEditor}
+                                        data={description}
+                                        /*onReady={editor => {
+                                            description ? editor.setData(description) : editor.setData("");
+                                        }}*/
+                                        onChange={(event, editor) => {
+                                            //const data = editor.getData();
+                                            setDescription(editor.getData());
+                                        }}
+                                    />
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -175,9 +178,9 @@ const EditAction = () => {
                     <Row>
                         <Col lg={20} lgOffset={2}>
                             <Form.Group>
-                            <Col lg={10} lgOffset={10}>
-                                        <Checkbox checked={active} onChange={e => setActive(!active)}  >Aktivní akce</Checkbox>
-                                    </Col>
+                                <Col lg={10} lgOffset={10}>
+                                    <Checkbox checked={active} onChange={e => setActive(!active)}  >Aktivní akce</Checkbox>
+                                </Col>
                             </Form.Group>
                         </Col>
                     </Row>
@@ -185,9 +188,9 @@ const EditAction = () => {
                     <Row>
                         <Col lg={20} lgOffset={2}>
                             <Form.Group>
-                            <Col lg={10} lgOffset={10}>
-                                        <Checkbox checked={availability} onChange={e => setAvailability(!availability)}  >Zveřejněná na titulní stránce</Checkbox>
-                                    </Col>
+                                <Col lg={10} lgOffset={10}>
+                                    <Checkbox checked={availability} onChange={e => setAvailability(!availability)}  >Zveřejněná na titulní stránce</Checkbox>
+                                </Col>
                             </Form.Group>
                         </Col>
                     </Row>

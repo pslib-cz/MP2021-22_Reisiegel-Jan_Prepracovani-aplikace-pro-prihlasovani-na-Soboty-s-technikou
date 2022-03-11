@@ -53,25 +53,49 @@ namespace SobotySTechnikou.Controllers
 
         [Authorize]
         [HttpGet("{year}/{nameId}")]
-        public async Task<ActionResult<ActionVM>> GetAction(string nameId, int year)
+        public async Task<ActionResult<ActionVM>> GetAction(string nameId, int year, bool? forEdit)
         {
-            var action = await _context.Actions.Where(x => x.NameId == nameId && year == year)
-                .Include(x=>x.Creator)
+            ActionVM action = null;
+            if (forEdit == true)
+            {
+                action = await _context.Actions.Where(x => x.NameId == nameId && year == year)
+                .Include(x => x.Creator)
                 .Select(x => new ActionVM
                 {
                     Id = x.Id,
                     Name = x.Name,
                     Year = x.Year,
-                    Start = x.Start.ToString(),
-                    End = x.End.ToString(),
+                    Start = x.Start.ToString(DateFormats.EditTimeFormat),
+                    End = x.End.ToString(DateFormats.EditTimeFormat),
                     Active = x.Active,
                     Availability = x.Availability,
                     Description = x.Description,
-                    CreateTime=x.CreatedAt.ToString(),
-                    UpdateTime = x.UpdatedAt.ToString(),
+                    CreateTime=x.CreatedAt.ToString(DateFormats.CreateTimeFormat),
+                    UpdateTime = x.UpdatedAt.ToString(DateFormats.CreateTimeFormat),
                     CreatorName = $"{x.Creator.FirstName} {x.Creator.LastName}",
                     Type = x.FormOfAction
                 }).FirstOrDefaultAsync();
+            }
+            else
+            {
+                action = await _context.Actions.Where(x => x.NameId == nameId && year == year)
+                .Include(x => x.Creator)
+                .Select(x => new ActionVM
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Year = x.Year,
+                    Start = x.Start.ToString(DateFormats.InfoDateTimeFormat),
+                    End = x.End.ToString(DateFormats.InfoDateTimeFormat),
+                    Active = x.Active,
+                    Availability = x.Availability,
+                    Description = x.Description,
+                    CreateTime=x.CreatedAt.ToString(DateFormats.CreateTimeFormat),
+                    UpdateTime = x.UpdatedAt.ToString(DateFormats.CreateTimeFormat),
+                    CreatorName = $"{x.Creator.FirstName} {x.Creator.LastName}",
+                    Type = x.FormOfAction
+                }).FirstOrDefaultAsync();
+            }
             if(action is null)
                 return NotFound();
             return Ok(action);

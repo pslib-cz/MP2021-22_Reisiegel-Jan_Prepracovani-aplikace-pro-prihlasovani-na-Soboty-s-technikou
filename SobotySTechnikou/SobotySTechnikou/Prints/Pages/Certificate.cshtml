@@ -1,0 +1,18 @@
+﻿@using SobotySTechnikou.Prints.ViewModels
+@model CertificatePrintVM
+
+<header>Osvědčení</header>
+<section>
+    <h2>@Model.UserName</h2>
+    <br />
+    <p>Dne: @Model.Date</p>
+    <p>absolvoval akci:</p>
+    <h5>@Model.ActionName</h5>
+</section>
+<section>
+    <p>V Liberci @Model.Date</p>
+</section>
+<section>
+    <p>Ing. Radek Havlík</p>
+    <p>koordinátor akce</p>
+</section>

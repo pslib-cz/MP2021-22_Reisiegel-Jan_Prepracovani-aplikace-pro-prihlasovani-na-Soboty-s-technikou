@@ -77,39 +77,17 @@ namespace SobotySTechnikou.Controllers
                     {
                         Name = x.Action.Name,
                         Year = x.Action.Year,
-                        Start = x.Action.Start.ToString(),
-                        End = x.Action.End.ToString(),
+                        Start = x.Action.Start.ToString(DateFormats.InfoDateTimeFormat),
+                        End = x.Action.End.ToString(DateFormats.InfoDateTimeFormat),
                         Active = x.Action.Active,
                         Description = x.Description
                     }
                 }).FirstOrDefaultAsync();
-            group.Users = _context.UsersInGroups.Include(x => x.User).Where(x => x.GroupId==group.Id)
-                .Select(x => new UserVM
-                {
-                    FirstName = x.User.FirstName,
-                    LastName = x.User.LastName,
-                    BirthDate = x.User.BirthDate.ToString(),
-                    Gender = x.User.Gender,
-                    Year = x.User.Year,
-                    Email = x.User.Email,
-                    UserSetInGroup = x.CreatedAt.ToString()
-                }).ToList();
 
             if (group == null)
             {
                 return NotFound();
             }
-
-            group.Action = _context.Actions.Where(x => x.Id == group.ActionId)
-                .Select(x => new ActionVM
-                {
-                    Name = x.Name,
-                    Year = x.Year,
-                    Start = x.Start.ToString(),
-                    End = x.End.ToString(),
-                    Active = x.Active,
-                    Description = x.Description,
-                }).FirstOrDefault();
 
             group.Users = _context.UsersInGroups.Include(x => x.Group).Where(x => x.GroupId == group.Id)
                 .Select(x => new UserVM
@@ -120,7 +98,8 @@ namespace SobotySTechnikou.Controllers
                     Gender = x.User.Gender,
                     BirthDate = DateTime.Parse(x.User.BirthDate).ToShortDateString(),
                     Year = x.User.Year,
-                    UserSetInGroup = x.CreatedAt.ToString()
+                    UserSetInGroup = x.CreatedAt.ToString(),
+                    Id = x.User.Id
                 }).ToList();
             return Ok(group);
         }

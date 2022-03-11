@@ -4,8 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SobotySTechnikou.Data;
 using SobotySTechnikou.Models;
+using SobotySTechnikou.Prints.ViewModels;
+using SobotySTechnikou.Services;
 using SobotySTechnikou.ViewModels;
 using System.Security.Claims;
+using System.Text;
 
 namespace SobotySTechnikou.Controllers
 {
@@ -15,10 +18,12 @@ namespace SobotySTechnikou.Controllers
     {
 
         private readonly ApplicationDbContext _context;
+        private readonly RazorViewToStringRenderer _razorRenderer;
 
-        public ApplicationsController(ApplicationDbContext context)
+        public ApplicationsController(ApplicationDbContext context, RazorViewToStringRenderer razorRenderer)
         {
             _context = context;
+            _razorRenderer = razorRenderer;
         }
         
         [Authorize]
@@ -92,6 +97,30 @@ namespace SobotySTechnikou.Controllers
                 CancelledBy = x.CancelledBy.FirstName + " " + x.CancelledBy.LastName,
                 CancelDate = x.CancelledAt.ToString()
             }).ToList();
+        }
+
+        [Authorize]
+        [HttpGet("Print")]
+        public async Task<ActionResult> DownloadCertificate(string? userId = "", string? actionId = "")
+        {
+            if (String.IsNullOrEmpty(userId))
+                userId="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
+            Models.Action action;
+            if (!String.IsNullOrEmpty(actionId))
+                 action = await _context.Actions.Where(x => x.Id==actionId).FirstOrDefaultAsync();
+            else
+                action = await _context.Actions.FirstOrDefaultAsync();
+            var user = await _context.Users.Where(x => x.Email == userId).FirstOrDefaultAsync();
+            string fileName = "/Prints/Pages/Certificate.cshtml";
+            string outputFileName = $"certificate-{action.NameId}_{action.Year}-{user.FirstName}{user.LastName}";
+            string documentBody = await _razorRenderer.RenderViewToStringAsync(fileName, new CertificatePrintVM
+            {
+                UserName = user.FirstName + " " + user.LastName,
+                ActionName = action.Name,
+                Date = action.Start.ToShortDateString()
+            });
+            MemoryStream memory = new(Encoding.UTF8.GetBytes(documentBody));
+            return File(memory, "text/html", outputFileName + ".html");
         }
     }
 }

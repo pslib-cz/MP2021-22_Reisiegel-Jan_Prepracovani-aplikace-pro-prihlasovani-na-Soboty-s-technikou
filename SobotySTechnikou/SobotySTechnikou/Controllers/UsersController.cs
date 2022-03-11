@@ -4,9 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SobotySTechnikou.Data;
 using SobotySTechnikou.Models;
+using SobotySTechnikou.Prints.ViewModels;
+using SobotySTechnikou.Services;
 using SobotySTechnikou.ViewModels;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Text;
 
 namespace SobotySTechnikou.Controllers
 {
@@ -273,6 +276,8 @@ namespace SobotySTechnikou.Controllers
             _context.Users.Remove(user);
             return Ok();
         }
+
+        
 
         private bool UserExist(string id)
         {
