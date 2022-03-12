@@ -34,7 +34,7 @@ namespace SobotySTechnikou.Controllers
 
         [Authorize]
         [HttpGet("UserInfo")]
-        public async Task<ActionResult<UserVM>> GetUser(string mail)
+        public async Task<ActionResult<UserVM>> GetUser(string? mail)
         {
             string userId = "";
             if (String.IsNullOrEmpty(mail))
