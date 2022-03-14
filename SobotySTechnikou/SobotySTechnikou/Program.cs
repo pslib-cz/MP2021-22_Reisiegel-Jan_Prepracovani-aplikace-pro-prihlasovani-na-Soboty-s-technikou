@@ -1,3 +1,4 @@
+using Duende.IdentityServer.AspNetIdentity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -29,18 +30,25 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 })
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddIdentityServer()
-    .AddApiAuthorization<ApplicationUser, ApplicationDbContext>(options => { });
+builder.Services.AddIdentityServer(options => { })
+    .AddAspNetIdentity<ApplicationUser>()
+    .AddOperationalStore<ApplicationDbContext>()
+    .AddIdentityResources()
+    .AddApiResources()
+    .AddProfileService<ProfileService<ApplicationUser>>()
+    .AddClients()
+    .AddSigningCredentials();
+//.AddApiAuthorization<ApplicationUser, ApplicationDbContext>(options => { });
 
 builder.Services.AddAuthentication("Bearer").AddIdentityServerJwt();
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("Administrator", policy =>
+    options.AddPolicy(RolesDefinition.ADMINISTRATOR_POLICY, policy =>
     {
         policy.RequireClaim(RolesDefinition.ADMINISTRATOR_CLAIM, "1");
     });
-    options.AddPolicy("Lector", policy =>
+    options.AddPolicy(RolesDefinition.LECTOR_POLICY, policy =>
     {
         policy.RequireClaim(RolesDefinition.LECTOR_CLAIM, "1");
     });

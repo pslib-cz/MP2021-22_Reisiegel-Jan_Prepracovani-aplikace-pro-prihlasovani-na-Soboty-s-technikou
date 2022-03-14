@@ -37,6 +37,20 @@ namespace SobotySTechnikou.Data
                 Name = "Lector",
                 NormalizedName = "LECTOR"
             });
+            modelBuilder.Entity<IdentityRoleClaim<string>>().HasData(new IdentityRoleClaim<string>
+            {
+                Id = 1,
+                RoleId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1",
+                ClaimType = "admin",
+                ClaimValue = "1"
+            });
+            modelBuilder.Entity<IdentityRoleClaim<string>>().HasData(new IdentityRoleClaim<string>
+            {
+                Id = 2,
+                RoleId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2",
+                ClaimType = "lector",
+                ClaimValue = "1"
+            });
 
             var hasher = new PasswordHasher<ApplicationUser>();
 
@@ -85,7 +99,7 @@ namespace SobotySTechnikou.Data
                 Id = 1,
                 UserId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
                 ClaimValue = "1",
-                ClaimType = RolesDefinition.ADMINISTRATOR_CLAIM
+                ClaimType = "admin"
             });
             modelBuilder.Entity<UserInGroup>(entity =>
             {

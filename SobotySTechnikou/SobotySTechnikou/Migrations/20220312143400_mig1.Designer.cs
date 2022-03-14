@@ -12,7 +12,7 @@ using SobotySTechnikou.Data;
 namespace SobotySTechnikou.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220309175702_mig1")]
+    [Migration("20220312143400_mig1")]
     partial class mig1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -195,14 +195,14 @@ namespace SobotySTechnikou.Migrations
                         new
                         {
                             Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1",
-                            ConcurrencyStamp = "7cbf1509-7f46-41d0-92d4-57b888be08fe",
+                            ConcurrencyStamp = "95eb5e26-e292-4bc1-afef-bdd1d367b3c4",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2",
-                            ConcurrencyStamp = "d8b608a2-a2fb-4a3e-81fb-dd8ab274d692",
+                            ConcurrencyStamp = "4dc0bc12-041c-4042-be27-8f8162d1a97a",
                             Name = "Lector",
                             NormalizedName = "LECTOR"
                         });
@@ -231,6 +231,22 @@ namespace SobotySTechnikou.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ClaimType = "admin",
+                            ClaimValue = "1",
+                            RoleId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ClaimType = "lector",
+                            ClaimValue = "1",
+                            RoleId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -261,7 +277,7 @@ namespace SobotySTechnikou.Migrations
                         new
                         {
                             Id = 1,
-                            ClaimType = "administrator",
+                            ClaimType = "admin",
                             ClaimValue = "1",
                             UserId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
                         });
@@ -391,15 +407,15 @@ namespace SobotySTechnikou.Migrations
                             Id = "XXXXXXXX-XXXX-AKCE-XXXX-XXXXXXXXXXXX",
                             Active = false,
                             Availability = false,
-                            CreatedAt = new DateTime(2022, 3, 9, 18, 57, 1, 817, DateTimeKind.Local).AddTicks(2080),
+                            CreatedAt = new DateTime(2022, 3, 12, 15, 33, 58, 194, DateTimeKind.Local).AddTicks(7321),
                             CreatorId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
                             Description = "",
-                            End = new DateTime(2022, 3, 10, 18, 57, 1, 817, DateTimeKind.Local).AddTicks(2077),
+                            End = new DateTime(2022, 3, 13, 15, 33, 58, 194, DateTimeKind.Local).AddTicks(7317),
                             FormOfAction = 0,
                             Name = "Defaultní akce",
                             NameId = "Defaultní_akce",
-                            Start = new DateTime(2022, 3, 9, 18, 57, 1, 817, DateTimeKind.Local).AddTicks(2073),
-                            UpdatedAt = new DateTime(2022, 3, 9, 18, 57, 1, 817, DateTimeKind.Local).AddTicks(2082),
+                            Start = new DateTime(2022, 3, 12, 15, 33, 58, 194, DateTimeKind.Local).AddTicks(7304),
+                            UpdatedAt = new DateTime(2022, 3, 12, 15, 33, 58, 194, DateTimeKind.Local).AddTicks(7324),
                             Year = 0
                         });
                 });
@@ -511,8 +527,8 @@ namespace SobotySTechnikou.Migrations
                             Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
                             AccessFailedCount = 0,
                             BeInformed = false,
-                            BirthDate = "09.03.2022 0:00:00",
-                            ConcurrencyStamp = "7d11c4b2-a79e-4ec3-9b62-e0895840498d",
+                            BirthDate = "12.03.2022 0:00:00",
+                            ConcurrencyStamp = "136d150e-eff9-4331-9388-324ba386a9fc",
                             Condition = 0,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "sobota@pslib.cz",
@@ -523,7 +539,7 @@ namespace SobotySTechnikou.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "SOBOTA@PSLIB.CZ",
                             NormalizedUserName = "SOBOTA@PSLIB.CZ",
-                            PasswordHash = "AQAAAAEAACcQAAAAEOmSKt6eUp2Nr9+DkgKNfQj5vq5v6e0h3E/PaYvvT68XMiB0wInDG/eDst82++GmMw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAENr+60X4CeXK95TsdrY7xn9Ijx+dRlSOmSetOsWYNuvON9h/WZ9pPGTIejmJbsuUiA==",
                             PhoneNumberConfirmed = false,
                             PotentionalStudent = false,
                             School = "Střední průmyslová škola strojní a elektrotechnická Liberec",

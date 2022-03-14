@@ -331,27 +331,36 @@ namespace SobotySTechnikou.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1", "7cbf1509-7f46-41d0-92d4-57b888be08fe", "Administrator", "ADMINISTRATOR" });
+                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1", "95eb5e26-e292-4bc1-afef-bdd1d367b3c4", "Administrator", "ADMINISTRATOR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2", "d8b608a2-a2fb-4a3e-81fb-dd8ab274d692", "Lector", "LECTOR" });
+                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2", "4dc0bc12-041c-4042-be27-8f8162d1a97a", "Lector", "LECTOR" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "BeInformed", "BirthDate", "ConcurrencyStamp", "Condition", "CreatedAt", "Email", "EmailConfirmed", "FirstName", "Gender", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "PotentionalStudent", "School", "SecurityStamp", "TwoFactorEnabled", "UpdatedAt", "UserName", "Year" },
-                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX", 0, false, "09.03.2022 0:00:00", "7d11c4b2-a79e-4ec3-9b62-e0895840498d", 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "sobota@pslib.cz", true, "Admin", 0, "PSLIB", false, null, "SOBOTA@PSLIB.CZ", "SOBOTA@PSLIB.CZ", "AQAAAAEAACcQAAAAEOmSKt6eUp2Nr9+DkgKNfQj5vq5v6e0h3E/PaYvvT68XMiB0wInDG/eDst82++GmMw==", null, false, false, "Střední průmyslová škola strojní a elektrotechnická Liberec", "", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "sobota@pslib.cz", 4 });
+                values: new object[] { "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX", 0, false, "12.03.2022 0:00:00", "136d150e-eff9-4331-9388-324ba386a9fc", 0, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "sobota@pslib.cz", true, "Admin", 0, "PSLIB", false, null, "SOBOTA@PSLIB.CZ", "SOBOTA@PSLIB.CZ", "AQAAAAEAACcQAAAAENr+60X4CeXK95TsdrY7xn9Ijx+dRlSOmSetOsWYNuvON9h/WZ9pPGTIejmJbsuUiA==", null, false, false, "Střední průmyslová škola strojní a elektrotechnická Liberec", "", false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "sobota@pslib.cz", 4 });
 
             migrationBuilder.InsertData(
                 table: "Actions",
                 columns: new[] { "Id", "Active", "Availability", "CreatedAt", "CreatorId", "Description", "End", "FormOfAction", "Name", "NameId", "Start", "UpdatedAt", "Year" },
-                values: new object[] { "XXXXXXXX-XXXX-AKCE-XXXX-XXXXXXXXXXXX", false, false, new DateTime(2022, 3, 9, 18, 57, 1, 817, DateTimeKind.Local).AddTicks(2080), "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX", "", new DateTime(2022, 3, 10, 18, 57, 1, 817, DateTimeKind.Local).AddTicks(2077), 0, "Defaultní akce", "Defaultní_akce", new DateTime(2022, 3, 9, 18, 57, 1, 817, DateTimeKind.Local).AddTicks(2073), new DateTime(2022, 3, 9, 18, 57, 1, 817, DateTimeKind.Local).AddTicks(2082), 0 });
+                values: new object[] { "XXXXXXXX-XXXX-AKCE-XXXX-XXXXXXXXXXXX", false, false, new DateTime(2022, 3, 12, 15, 33, 58, 194, DateTimeKind.Local).AddTicks(7321), "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX", "", new DateTime(2022, 3, 13, 15, 33, 58, 194, DateTimeKind.Local).AddTicks(7317), 0, "Defaultní akce", "Defaultní_akce", new DateTime(2022, 3, 12, 15, 33, 58, 194, DateTimeKind.Local).AddTicks(7304), new DateTime(2022, 3, 12, 15, 33, 58, 194, DateTimeKind.Local).AddTicks(7324), 0 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoleClaims",
+                columns: new[] { "Id", "ClaimType", "ClaimValue", "RoleId" },
+                values: new object[,]
+                {
+                    { 1, "admin", "1", "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1" },
+                    { 2, "lector", "1", "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2" }
+                });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserClaims",
                 columns: new[] { "Id", "ClaimType", "ClaimValue", "UserId" },
-                values: new object[] { 1, "administrator", "1", "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX" });
+                values: new object[] { 1, "admin", "1", "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",

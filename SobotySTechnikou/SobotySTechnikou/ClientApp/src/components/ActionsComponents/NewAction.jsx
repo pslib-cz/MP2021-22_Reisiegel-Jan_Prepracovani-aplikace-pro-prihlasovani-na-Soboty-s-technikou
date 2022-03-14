@@ -4,8 +4,8 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Checkbox, Col, DatePicker, Form, Input, InputNumber, Row, SelectPicker } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
-import Editor from 'ckeditor5-custom-build/build/ckeditor';
-import { CKEditor } from '@ckeditor/ckeditor5-react'
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
 const actionType = [
     {
@@ -143,8 +143,9 @@ const NewAction = () => {
                                 <CKEditor
                                     config={{
                                         language: 'cs',
+                                        toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote']
                                     }}
-                                    editor={Editor}
+                                    editor={ClassicEditor}
                                     data={description}
                                     onReady={editor => {
                                         // You can store the "editor" and use when it is needed.
