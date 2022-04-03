@@ -31,7 +31,7 @@ const yearData = [
 ];
 
 const NewGroup = () => {
-    const [{accessToken}] = useAuthContext();
+    const [{ accessToken }] = useAuthContext();
     const [error, setError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [groupData, setGroupData] = useState();
@@ -66,7 +66,7 @@ const NewGroup = () => {
             minYear: minYear,
             noteForLectors: lectorNote,
             note: note
-        },{
+        }, {
             headers: {
                 //"Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`
@@ -99,7 +99,7 @@ const NewGroup = () => {
             .catch(error => {
                 setError(true);
             })
-            .finally(()=>{
+            .finally(() => {
                 setIsLoading(false);
             });
     }
@@ -120,12 +120,12 @@ const NewGroup = () => {
             .catch(error => {
                 setError(true);
             })
-            .finally(()=>{
+            .finally(() => {
                 setIsLoading(false);
             });
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         getActionsSelector();
         getLectorsSelector();
     }, [accessToken]);
@@ -193,9 +193,10 @@ const NewGroup = () => {
                                 <Form.ControlLabel >Poznámka k Lektorům</Form.ControlLabel>
                             </Col>
                             <Col lg={16}>
-                            <CKEditor
+                                <CKEditor
                                     config={{
-                                        language: 'cs'
+                                        language: 'cs',
+                                        toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote']
                                     }}
                                     editor={ClassicEditor}
                                     data={lectorNote}
@@ -229,7 +230,7 @@ const NewGroup = () => {
                                 <Form.ControlLabel >Minimální ročník</Form.ControlLabel>
                             </Col>
                             <Col lg={16}>
-                                <SelectPicker block data={yearData} searchable={false}  value={minYear} onChange={e => setMinYear(e)}></SelectPicker>
+                                <SelectPicker block data={yearData} searchable={false} value={minYear} onChange={e => setMinYear(e)}></SelectPicker>
                             </Col>
                         </Form.Group>
                     </Col>
@@ -242,9 +243,10 @@ const NewGroup = () => {
                                 <Form.ControlLabel >Popis</Form.ControlLabel>
                             </Col>
                             <Col lg={16}>
-                            <CKEditor
+                                <CKEditor
                                     config={{
-                                        language: 'cs'
+                                        language: 'cs',
+                                        toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote']
                                     }}
                                     editor={ClassicEditor}
                                     data={desc}
@@ -278,9 +280,10 @@ const NewGroup = () => {
                                 <Form.ControlLabel >Poznámka</Form.ControlLabel>
                             </Col>
                             <Col lg={16}>
-                            <CKEditor
+                                <CKEditor
                                     config={{
-                                        language: 'cs'
+                                        language: 'cs',
+                                        toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote']
                                     }}
                                     editor={ClassicEditor}
                                     data={note}

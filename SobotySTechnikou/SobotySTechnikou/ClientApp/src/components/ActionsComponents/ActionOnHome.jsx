@@ -2,7 +2,7 @@ import axios from "axios";
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { Col, Row, Panel, Button, ButtonGroup, Progress } from "rsuite";
+import { Col, Row, Panel, Button, ButtonGroup, Progress, Message } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
 import parse from 'html-react-parser';
 import { Link } from "react-router-dom";
@@ -60,17 +60,17 @@ const ActionOnHome = () => {
             console.log(profile);
             axios.put(`/api/Applications/${group.id}/Unenrol`, {
                 userId: ""
-            } , {
+            }, {
                 headers: {
                     "Authorization": `Bearer ${accessToken}`
                 }
             })
-            .then(response=>{
-                console.log(response);
-            })
-            .finally(()=>{
-                setReload(!reload);
-            })
+                .then(response => {
+                    console.log(response);
+                })
+                .finally(() => {
+                    setReload(!reload);
+                })
         }
         return (
             <Col lg={6} md={8} Style={{ position: "relative" }} >
@@ -157,14 +157,26 @@ const ActionOnHome = () => {
                         </Row>
                         <br />
                     </>
-                ) : (<p>nic nedorazilo</p>)
+                ) : (
+                    <Message type="info" showIcon header={<h2>Neexistuje žádná akce</h2>}>
+                        <p>Bohužel ještě nebyla vytvořena či zpřístupněna akce.</p>
+                        {
+                            accessToken ? null : (
+                                <>
+                                    <p>Přihlaste se, abyste nepřišli o další akce</p>
+                                    <Button color='blue' appearance='ghost' as={Link} to="/log-in" onClick={() => { userManager.signinRedirect({ redirectUrl: "/" }) }}>Přihlásit se</Button>
+                                </>
+                            )
+                        }
+                    </Message>
+                )
             }
         </>
     )
 
 
 }
-
+//userManager.signinRedirect({ redirectUrl: "/" })
 
 
 export default ActionOnHome;

@@ -42,15 +42,15 @@ const conditionData = [
 const userRoles = [
     {
         "label": "Uživatel",
-        "value": "",
+        "value": "user",
     },
     {
         "label": "Lektor",
-        "value": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2",
+        "value": "lector",
     },
     {
         "label": "Administrátor",
-        "value": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1",
+        "value": "admin",
     },
 ]
 
@@ -110,7 +110,7 @@ const EditUser = () => {
                 });
         }
         else {
-            axios.get("/api/Users/User/" + profile.name, {
+            axios.get("/api/Users/User/" + profile.email, {
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${accessToken}`
@@ -180,7 +180,8 @@ const EditUser = () => {
         setIsLoading(true);
         setError(false);
         console.log("userId: " + userData.id + " | funkce: " + role);
-        axios.get("/api/Users/"+userData.id+"/ChangeAuthorization/" + (role ? role : ""), {
+        axios.post("/api/Users/"+userData.id+"/ChangeAuthorization/" + role,{
+        }, {
             headers: {
                 //"Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`
@@ -313,14 +314,24 @@ const EditUser = () => {
                     <Row>
                         <Col lg={20} lgOffset={2}>
                             <Form.Group>
+                                <Col lg={10} lgOffset={10}>
+                                    <Checkbox checked={informed} onChange={e => setInformed(!informed)}  >Chce být informován</Checkbox>
+                                </Col>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <br />
+                    <Row>
+                        <Col lg={20} lgOffset={2}>
+                            <Form.Group>
                                 <Col lg={10}>
                                     <Form.ControlLabel>Role</Form.ControlLabel>
                                 </Col>
                                 <Col lg={5}>
-                                    <SelectPicker block searchable={false} data={userRoles} value={role} onChange={e => setRole(e)} />
+                                    <SelectPicker block searchable={false} data={userRoles} value={role} onChange={e => setRole(e)} disabled={profile.admin ? false :true} />
                                 </Col>
                                 <Col lg={5}>
-                                    <Button color="cyan" appearance="primary" onClick={() => addRole()} as={Link} to="/Users">Změnit roli</Button>
+                                    <Button color="cyan" appearance="primary" onClick={() => addRole()} as={Link} to="/Users" disabled={profile.admin ? false :true}>Změnit roli</Button>
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -333,21 +344,12 @@ const EditUser = () => {
                                     <Form.ControlLabel>Stav</Form.ControlLabel>
                                 </Col>
                                 <Col lg={10}>
-                                    <SelectPicker block searchable={false} data={conditionData} value={condition} onChange={e => setCondition(e)} />
+                                    <SelectPicker block searchable={false} data={conditionData} value={condition} onChange={e => setCondition(e)} disabled={profile.admin ? false :true} />
                                 </Col>
                             </Form.Group>
                         </Col>
                     </Row>
-                    <br />
-                    <Row>
-                        <Col lg={20} lgOffset={2}>
-                            <Form.Group>
-                                <Col lg={10} lgOffset={10}>
-                                    <Checkbox checked={informed} onChange={e => setInformed(!informed)}  >Chce být informován</Checkbox>
-                                </Col>
-                            </Form.Group>
-                        </Col>
-                    </Row>
+                    
                     <br />
                     <Row>
                         <Col lg={20} lgOffset={2}>
@@ -359,7 +361,6 @@ const EditUser = () => {
                         </Col>
                     </Row>
                     <Button color="cyan" appearance="primary" onClick={() => saveUserData()} as={Link} to="/Users" >Uložit</Button>
-                    <Button color="cyan" appearance="primary" onClick={() => console.log(typeof(date))} >Datum</Button>
                 </Form>
             </div>
         )

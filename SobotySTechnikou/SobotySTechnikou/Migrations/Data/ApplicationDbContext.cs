@@ -78,6 +78,13 @@ namespace SobotySTechnikou.Data
                 RoleId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1",
                 UserId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
             });
+            modelBuilder.Entity<IdentityUserClaim<string>>().HasData(new IdentityUserClaim<string>
+            {
+                Id = 1,
+                UserId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+                ClaimType = "admin",
+                ClaimValue = "1"
+            });
             modelBuilder.Entity<SobotySTechnikou.Models.Action>().HasData(new SobotySTechnikou.Models.Action
             {
                 Id = "XXXXXXXX-XXXX-AKCE-XXXX-XXXXXXXXXXXX",
@@ -93,13 +100,6 @@ namespace SobotySTechnikou.Data
                 Active=false,
                 Availability = false,
                 CreatorId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
-            });
-            modelBuilder.Entity<IdentityUserClaim<string>>().HasData(new IdentityUserClaim<string>
-            {
-                Id = 1,
-                UserId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
-                ClaimValue = "1",
-                ClaimType = "admin"
             });
             modelBuilder.Entity<UserInGroup>(entity =>
             {

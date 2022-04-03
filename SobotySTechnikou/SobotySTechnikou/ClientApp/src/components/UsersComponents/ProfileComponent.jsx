@@ -26,7 +26,7 @@ const Profile = props => {
                 .then(response => {
                     setError(false);
                     setUserData(response.data);
-                    //console.log(userData);
+                    console.log(userData);
                 })
                 .catch(error => {
                     setError(true);
@@ -46,7 +46,7 @@ const Profile = props => {
                 .then(response => {
                     setError(false);
                     setUserData(response.data);
-                    //console.log(userData);
+                    console.log(response.data);
                 })
                 .catch(error => {
                     setError(true);
@@ -128,6 +128,11 @@ const Profile = props => {
                                     }
                                 </Col>
                             </Row>
+                        </Panel>
+                    </Col>
+                    <Col lg={15} lgOffset={4}>
+                        <Panel shaded bordered header={"Skupiny"}>
+                            
                         </Panel>
                     </Col>
                 </Row>

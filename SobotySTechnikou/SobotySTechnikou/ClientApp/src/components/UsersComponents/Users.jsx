@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, Pagination, Table } from "rsuite";
+import { Button, ButtonGroup, Pagination, Table } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
 
 const Users = props => {
@@ -39,7 +39,7 @@ const Users = props => {
     }
 
     const dataToTable = () => {
-        
+
         if (sortCol && sortType) {
             return users.sort((a, b) => {
                 let x = a[sortCol];
@@ -122,7 +122,7 @@ const Users = props => {
                     <Table.HeaderCell align="center">Ročník</Table.HeaderCell>
                     <YearCell dataKey={"year"} />
                 </Table.Column>
-                <Table.Column sortable resizable width={80} autoHeight >
+                <Table.Column sortable resizable width={150} autoHeight >
                     <Table.HeaderCell align="center">Akce</Table.HeaderCell>
                     <ActionCell />
                 </Table.Column>
@@ -134,36 +134,39 @@ const Users = props => {
 const ActionCell = ({ rowData, dataKey, ...props }) => {
     return (
         <Table.Cell {...props}>
-            <Button color="blue" appearance="primary" as={Link} to={"/UserDetail/" + rowData["email"]}>Detail</Button>
+            <ButtonGroup>
+                <Button color="blue" appearance="primary" as={Link} to={"/UserDetail/" + rowData["email"]}>Detail</Button>
+                <Button color="blue" appearance="primary" as={Link} to={"/EditUser/" + rowData["email"]}>Upravit</Button>
+            </ButtonGroup>
         </Table.Cell>
     )
 }
 
-const YesNoCell = ({rowData, dataKey, ...props}) => {
-    return(
+const YesNoCell = ({ rowData, dataKey, ...props }) => {
+    return (
         <Table.Cell {...props}>
             {rowData[dataKey] ? "Ano" : "Ne"}
         </Table.Cell>
     )
 }
-const GenderCell = ({rowData, dataKey, ...props}) => {
-    return(
+const GenderCell = ({ rowData, dataKey, ...props }) => {
+    return (
         <Table.Cell {...props}>
-            {rowData[dataKey] === 1 ? "Muž" : rowData[dataKey] === 2 ? "Žena" : "Jiné" }
+            {rowData[dataKey] === 1 ? "Muž" : rowData[dataKey] === 2 ? "Žena" : "Jiné"}
         </Table.Cell>
     )
 }
-const ConditionCell = ({rowData, dataKey, ...props})=>{
-    return(
+const ConditionCell = ({ rowData, dataKey, ...props }) => {
+    return (
         <Table.Cell {...props}>
             {rowData[dataKey] === 0 ? "Aktivní" : "Blokovaný"}
         </Table.Cell>
     )
 }
-const YearCell = ({rowData, dataKey, ...props}) => {
-    return(
+const YearCell = ({ rowData, dataKey, ...props }) => {
+    return (
         <Table.Cell {...props}>
-            {rowData[dataKey] === 0 ? "1. - 7." : rowData[dataKey] === 1 ? "8." : rowData[dataKey] === 2 ? "9." : "SŠ" }
+            {rowData[dataKey] === 0 ? "1. - 7." : rowData[dataKey] === 1 ? "8." : rowData[dataKey] === 2 ? "9." : "SŠ"}
         </Table.Cell>
     )
 }

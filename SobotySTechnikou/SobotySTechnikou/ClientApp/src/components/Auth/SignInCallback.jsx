@@ -2,7 +2,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useAuthContext } from "../../providers/AuthProvider";
 
 export const SignInCallback = props => {
-    const [{ userManager }] = useAuthContext();
+    const [{ userManager, accessToken }] = useAuthContext();
     let navigate = useNavigate();
     if (userManager) userManager.signinRedirectCallback();
     navigate("/");

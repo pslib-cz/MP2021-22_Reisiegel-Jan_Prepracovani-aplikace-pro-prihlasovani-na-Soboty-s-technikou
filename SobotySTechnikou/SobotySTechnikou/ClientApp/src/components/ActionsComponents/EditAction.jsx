@@ -157,7 +157,8 @@ const EditAction = () => {
                                 <Col lg={10}>
                                     <CKEditor
                                         config={{
-                                            language: 'cs'
+                                            language: 'cs',
+                                            toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote']
                                         }}
 
                                         editor={ClassicEditor}

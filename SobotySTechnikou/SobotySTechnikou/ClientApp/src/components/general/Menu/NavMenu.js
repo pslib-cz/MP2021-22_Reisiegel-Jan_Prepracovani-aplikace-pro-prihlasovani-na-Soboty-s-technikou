@@ -10,7 +10,7 @@ export const NavMenu = props => {
     const [{ profile, accessToken, isUserLoading, userManager }] = useAuthContext();
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
-    console.log(accessToken);
+    console.log(profile)
     return (
         <Navbar>
             <Row>
@@ -20,27 +20,67 @@ export const NavMenu = props => {
                     <Navbar.Brand as={Link} to={"/"} style={{ fontWeight: "bold" }}>
                         Soboty S technikou
                     </Navbar.Brand>
-                    <Nav>
-                        <Nav.Item as={Link} to={"/"}>
-                            Domu
-                        </Nav.Item>
-                        <Nav.Item as={Link} to={"/Users"}>
-                            Uživatelé
-                        </Nav.Item>
-                        <Nav.Item as={Link} to={"/AllActions"}>
-                            Akce
-                        </Nav.Item>
-                        <Nav.Item as={Link} to={"/AllGroups"}>
-                            Skupiny
-                        </Nav.Item>
-                        <Nav.Item as={Link} to={"/Applications"}>
-                            Všechny Přihlášky
-                        </Nav.Item>
-                    </Nav>
+                    {
+                        profile ? !profile.admin ? (
+                            <Nav>
+                                <Nav.Dropdown title={"Uživatelé"}>
+                                    <Nav.Dropdown.Item as={Link} to="/Users">
+                                        Seznam
+                                    </Nav.Dropdown.Item>
+                                    <Nav.Dropdown.Item as={Link} to="/Profile">
+                                        Detail
+                                    </Nav.Dropdown.Item>
+                                </Nav.Dropdown>
+                                <Nav.Dropdown title={"Skupiny"}>
+                                    <Nav.Dropdown.Item as={Link} to="/NewGroup">
+                                        Nová
+                                    </Nav.Dropdown.Item>
+                                    <Nav.Dropdown.Item as={Link} to="/AllGroups">
+                                        Seznam
+                                    </Nav.Dropdown.Item>
+
+                                </Nav.Dropdown>
+                                <Nav.Dropdown title={"Akce"}>
+                                    <Nav.Dropdown.Item as={Link} to="/NewAction">
+                                        Nová
+                                    </Nav.Dropdown.Item>
+                                    <Nav.Dropdown.Item as={Link} to="/AllActions">
+                                        Seznam
+                                    </Nav.Dropdown.Item>
+                                </Nav.Dropdown>
+                                <Nav.Item as={Link} to={"/Applications"}>
+                                    Přihlášky
+                                </Nav.Item>
+                            </Nav>
+                        ) : profile.lector ? (
+                            <Nav>
+                                <Nav.Dropdown title={"Skupiny"}>
+                                    <Nav.Dropdown.Item as={Link} to="/NewGroup">
+                                        Nová
+                                    </Nav.Dropdown.Item>
+                                    <Nav.Dropdown.Item as={Link} to="/AllGroups">
+                                        Seznam
+                                    </Nav.Dropdown.Item>
+
+                                </Nav.Dropdown>
+                                <Nav.Dropdown title={"Akce"}>
+                                    <Nav.Dropdown.Item as={Link} to="/NewAction">
+                                        Nová
+                                    </Nav.Dropdown.Item>
+                                    <Nav.Dropdown.Item as={Link} to="/AllActions">
+                                        Seznam
+                                    </Nav.Dropdown.Item>
+                                </Nav.Dropdown>
+                            </Nav>
+                        ) : null : null
+                    }
                     <Nav pullRight>
                         {
                             accessToken ?
-                                <Nav.Item as={Link} to="/Profile">{profile.name}</Nav.Item>
+                                <Nav.Dropdown title={profile.preferred_username}>
+                                    <Nav.Dropdown.Item as={Link} to="/Profile">Profil</Nav.Dropdown.Item>
+                                    <Nav.Dropdown.Item as={Link} to={"/EditUser"}>Upravit</Nav.Dropdown.Item>
+                                </Nav.Dropdown>
                                 : isUserLoading ?
                                     <Spinner size={"sm"} />
                                     : null

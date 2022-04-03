@@ -67,7 +67,7 @@ const EditGroup = () => {
             .catch(error => {
                 setError(true);
             })
-            .finally(()=>{
+            .finally(() => {
                 setIsLoading(false);
             });
     }
@@ -88,7 +88,7 @@ const EditGroup = () => {
             .catch(error => {
                 setError(true);
             })
-            .finally(()=>{
+            .finally(() => {
                 setIsLoading(false);
             });
     }
@@ -226,22 +226,23 @@ const EditGroup = () => {
                                     <Form.ControlLabel>Poznámka k lektorům</Form.ControlLabel>
                                 </Col>
                                 <Col lg={10}>
-                                <CKEditor
-                                    config={{
-                                        language: 'cs'
-                                    }}
-                                    
-                                    editor={ClassicEditor}
-                                    data={lectorNote}
-                                    onReady={ editor => {
-                                        console.log(lectorNote);
-                                        lectorNote ? editor.setData(lectorNote) : editor.setData("");
-                                    } }
-                                    onChange={(event, editor) => {
-                                        //const data = editor.getData();
-                                        setLectorNote(editor.getData());
-                                    }}
-                                />
+                                    <CKEditor
+                                        config={{
+                                            language: 'cs',
+                                            toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote']
+                                        }}
+
+                                        editor={ClassicEditor}
+                                        data={lectorNote}
+                                        onReady={editor => {
+                                            console.log(lectorNote);
+                                            lectorNote ? editor.setData(lectorNote) : editor.setData("");
+                                        }}
+                                        onChange={(event, editor) => {
+                                            //const data = editor.getData();
+                                            setLectorNote(editor.getData());
+                                        }}
+                                    />
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -254,7 +255,7 @@ const EditGroup = () => {
                                     <Form.ControlLabel>Kapacita</Form.ControlLabel>
                                 </Col>
                                 <Col lg={10}>
-                                <InputNumber block value={capacity} onChange={e => setCapacity(e)} ></InputNumber>
+                                    <InputNumber block value={capacity} onChange={e => setCapacity(e)} ></InputNumber>
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -280,20 +281,21 @@ const EditGroup = () => {
                                     <Form.ControlLabel>Popis</Form.ControlLabel>
                                 </Col>
                                 <Col lg={10}>
-                                <CKEditor
-                                    config={{
-                                        language: 'cs'
-                                    }}
-                                    onReady={ editor => {
-                                        desc ? editor.setData(desc) : editor.setData("");
-                                    } }
-                                    editor={ClassicEditor}
-                                    data={desc}
-                                    onChange={(event, editor) => {
-                                        //const data = editor.getData();
-                                        setDesc(editor.getData());
-                                    }}
-                                />
+                                    <CKEditor
+                                        config={{
+                                            language: 'cs',
+                                            toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote']
+                                        }}
+                                        onReady={editor => {
+                                            desc ? editor.setData(desc) : editor.setData("");
+                                        }}
+                                        editor={ClassicEditor}
+                                        data={desc}
+                                        onChange={(event, editor) => {
+                                            //const data = editor.getData();
+                                            setDesc(editor.getData());
+                                        }}
+                                    />
                                 </Col>
                             </Form.Group>
                         </Col>
@@ -318,26 +320,27 @@ const EditGroup = () => {
                                     <Form.ControlLabel>Poznámka</Form.ControlLabel>
                                 </Col>
                                 <Col lg={10}>
-                                <CKEditor
-                                    config={{
-                                        language: 'cs'
-                                    }}
-                                    editor={ClassicEditor}
-                                    data={note}
-                                    onReady={ editor => {
-                                        note ? editor.setData(note) : editor.setData("");
-                                    } }
-                                    onChange={(event, editor) => {
-                                        //const data = editor.getData();
-                                        setNote(editor.getData());
-                                    }}
-                                />
+                                    <CKEditor
+                                        config={{
+                                            language: 'cs',
+                                            toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote']
+                                        }}
+                                        editor={ClassicEditor}
+                                        data={note}
+                                        onReady={editor => {
+                                            note ? editor.setData(note) : editor.setData("");
+                                        }}
+                                        onChange={(event, editor) => {
+                                            //const data = editor.getData();
+                                            setNote(editor.getData());
+                                        }}
+                                    />
                                 </Col>
                             </Form.Group>
                         </Col>
                     </Row>
                     <br />
-                    
+
                     <Button color="cyan" appearance="primary" onClick={() => saveGroupData()} as={Link} to="/AllGroups" >Uložit</Button>
                     <Button color="cyan" appearance="primary" onClick={() => console.log(typeof (date))} >Datum</Button>
                 </Form>

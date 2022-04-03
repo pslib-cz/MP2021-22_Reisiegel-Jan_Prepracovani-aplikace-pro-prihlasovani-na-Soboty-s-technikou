@@ -22,5 +22,6 @@ namespace SobotySTechnikou.ViewModels
 
         public string UserSetInGroup { get; set; }
 
+        public List<GroupVM> Groups { get; set; } 
     }
 }

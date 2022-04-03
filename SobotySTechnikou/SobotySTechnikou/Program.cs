@@ -1,4 +1,3 @@
-using Duende.IdentityServer.AspNetIdentity;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -44,13 +43,13 @@ builder.Services.AddAuthentication("Bearer").AddIdentityServerJwt();
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy(RolesDefinition.ADMINISTRATOR_POLICY, policy =>
+    options.AddPolicy(AuthorizationConstants.ADMINISTRATOR_POLICY, policy =>
     {
-        policy.RequireClaim(RolesDefinition.ADMINISTRATOR_CLAIM, "1");
+        policy.RequireClaim(AuthorizationConstants.ADMINISTRATOR_CLAIM, "1");
     });
-    options.AddPolicy(RolesDefinition.LECTOR_POLICY, policy =>
+    options.AddPolicy(AuthorizationConstants.LECTOR_POLICY, policy =>
     {
-        policy.RequireClaim(RolesDefinition.LECTOR_CLAIM, "1");
+        policy.RequireClaim(AuthorizationConstants.LECTOR_CLAIM, "1");
     });
 });
 

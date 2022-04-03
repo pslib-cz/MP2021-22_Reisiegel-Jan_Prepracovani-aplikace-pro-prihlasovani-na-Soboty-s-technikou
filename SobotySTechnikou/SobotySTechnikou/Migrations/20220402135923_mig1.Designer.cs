@@ -12,14 +12,14 @@ using SobotySTechnikou.Data;
 namespace SobotySTechnikou.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220312143400_mig1")]
+    [Migration("20220402135923_mig1")]
     partial class mig1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.2")
+                .HasAnnotation("ProductVersion", "6.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -195,14 +195,14 @@ namespace SobotySTechnikou.Migrations
                         new
                         {
                             Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1",
-                            ConcurrencyStamp = "95eb5e26-e292-4bc1-afef-bdd1d367b3c4",
+                            ConcurrencyStamp = "3382a2d1-a04f-414a-8cb8-d6a33e3073f4",
                             Name = "Administrator",
                             NormalizedName = "ADMINISTRATOR"
                         },
                         new
                         {
                             Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2",
-                            ConcurrencyStamp = "4dc0bc12-041c-4042-be27-8f8162d1a97a",
+                            ConcurrencyStamp = "9e42bb0c-111f-4da0-aa50-aea7b47898ca",
                             Name = "Lector",
                             NormalizedName = "LECTOR"
                         });
@@ -407,15 +407,15 @@ namespace SobotySTechnikou.Migrations
                             Id = "XXXXXXXX-XXXX-AKCE-XXXX-XXXXXXXXXXXX",
                             Active = false,
                             Availability = false,
-                            CreatedAt = new DateTime(2022, 3, 12, 15, 33, 58, 194, DateTimeKind.Local).AddTicks(7321),
+                            CreatedAt = new DateTime(2022, 4, 2, 15, 59, 22, 648, DateTimeKind.Local).AddTicks(9882),
                             CreatorId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
                             Description = "",
-                            End = new DateTime(2022, 3, 13, 15, 33, 58, 194, DateTimeKind.Local).AddTicks(7317),
+                            End = new DateTime(2022, 4, 3, 15, 59, 22, 648, DateTimeKind.Local).AddTicks(9879),
                             FormOfAction = 0,
                             Name = "Defaultní akce",
                             NameId = "Defaultní_akce",
-                            Start = new DateTime(2022, 3, 12, 15, 33, 58, 194, DateTimeKind.Local).AddTicks(7304),
-                            UpdatedAt = new DateTime(2022, 3, 12, 15, 33, 58, 194, DateTimeKind.Local).AddTicks(7324),
+                            Start = new DateTime(2022, 4, 2, 15, 59, 22, 648, DateTimeKind.Local).AddTicks(9875),
+                            UpdatedAt = new DateTime(2022, 4, 2, 15, 59, 22, 648, DateTimeKind.Local).AddTicks(9884),
                             Year = 0
                         });
                 });
@@ -432,7 +432,6 @@ namespace SobotySTechnikou.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("BirthDate")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -490,7 +489,6 @@ namespace SobotySTechnikou.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("School")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
@@ -527,8 +525,8 @@ namespace SobotySTechnikou.Migrations
                             Id = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
                             AccessFailedCount = 0,
                             BeInformed = false,
-                            BirthDate = "12.03.2022 0:00:00",
-                            ConcurrencyStamp = "136d150e-eff9-4331-9388-324ba386a9fc",
+                            BirthDate = "02.04.2022 0:00:00",
+                            ConcurrencyStamp = "0604fd87-035d-4276-863d-62731004b74a",
                             Condition = 0,
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "sobota@pslib.cz",
@@ -539,7 +537,7 @@ namespace SobotySTechnikou.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "SOBOTA@PSLIB.CZ",
                             NormalizedUserName = "SOBOTA@PSLIB.CZ",
-                            PasswordHash = "AQAAAAEAACcQAAAAENr+60X4CeXK95TsdrY7xn9Ijx+dRlSOmSetOsWYNuvON9h/WZ9pPGTIejmJbsuUiA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBNfxcGw+z9Kd81zmnQRiykubZHngfdtjozHd8lWoTY2RX1XNnQLMMKwoeAZcuvPGQ==",
                             PhoneNumberConfirmed = false,
                             PotentionalStudent = false,
                             School = "Střední průmyslová škola strojní a elektrotechnická Liberec",
