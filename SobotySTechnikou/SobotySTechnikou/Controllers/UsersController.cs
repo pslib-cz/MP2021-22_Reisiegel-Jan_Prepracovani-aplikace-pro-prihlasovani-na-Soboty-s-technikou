@@ -74,7 +74,8 @@ namespace SobotySTechnikou.Controllers
             return Ok(userInfo);
         }
 
-        [Authorize]//(Roles = "Administrator")
+        //[Authorize]//(Roles = "Administrator")
+        [Authorize(Policy = AuthorizationConstants.ADMINISTRATOR_POLICY)]
         [HttpGet("AllUsers")]
         public async Task<ActionResult<ICollection<ApplicationUser>>> GetAll()
         {
@@ -84,7 +85,8 @@ namespace SobotySTechnikou.Controllers
             return allUsers;
         }
 
-        [Authorize] //(Roles = "Administrator")
+        //[Authorize] //(Roles = "Administrator")
+        [Authorize(Policy = AuthorizationConstants.ADMINISTRATOR_POLICY)]
         [HttpPost("{userId}/ChangeAuthorization/{function}")]
         public async Task<ActionResult> UserAddPolicy(string userId, string function)
         {
@@ -166,7 +168,8 @@ namespace SobotySTechnikou.Controllers
             return CreatedAtAction("GetUsersByRole", new { roleid = roleClaim.RoleId }, user);
         }
 
-        [Authorize] //(Roles = "Administrator")
+        //[Authorize] //(Roles = "Administrator")
+        [Authorize(Policy = AuthorizationConstants.ADMINISTRATOR_POLICY)]
         [HttpGet("{roleId}")]
         public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUsersByRole(string roleId)
         {

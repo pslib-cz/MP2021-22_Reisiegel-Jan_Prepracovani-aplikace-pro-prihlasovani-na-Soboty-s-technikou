@@ -21,7 +21,7 @@ export const NavMenu = props => {
                         Soboty S technikou
                     </Navbar.Brand>
                     {
-                        profile ? !profile.admin ? (
+                        profile ? profile.admin ? (
                             <Nav>
                                 <Nav.Dropdown title={"Uživatelé"}>
                                     <Nav.Dropdown.Item as={Link} to="/Users">

@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Col, Container, Grid, Panel, Row } from "rsuite";
+import { Col, Container, Grid, Panel, Row, Table } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
 
 const Profile = props => {
@@ -10,6 +10,8 @@ const Profile = props => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(false);
     const [userData, setUserData] = useState();
+    const [sortColumn, setSortColumn] = useState();
+    const [sortType, setSortType] = useState();
     //console.log(profile);
     const getUserData = () => {
         setIsLoading(true);
@@ -59,6 +61,7 @@ const Profile = props => {
         //}
 
     }
+
     useEffect(() => {
         getUserData();
         //console.log(mail);
@@ -132,7 +135,28 @@ const Profile = props => {
                     </Col>
                     <Col lg={15} lgOffset={4}>
                         <Panel shaded bordered header={"Skupiny"}>
-                            
+                            <Table
+                            data = {userData.groups}
+                            autoHeight={true}
+                            loading={isLoading}
+                            >
+                                <Table.Column width={130} align="center">
+                                    <Table.HeaderCell>Název</Table.HeaderCell>
+                                    <Table.Cell dataKey="name" />
+                                </Table.Column>
+                                <Table.Column width={130} align="center">
+                                    <Table.HeaderCell>Akce</Table.HeaderCell>
+                                    <Table.Cell dataKey="actionName" />
+                                </Table.Column>
+                                <Table.Column width={130} align="center">
+                                    <Table.HeaderCell>Rok</Table.HeaderCell>
+                                    <Table.Cell dataKey="name" />
+                                </Table.Column>
+                                <Table.Column width={130} align="center">
+                                    <Table.HeaderCell>Akce</Table.HeaderCell>
+                                    <Table.Cell dataKey="year" />
+                                </Table.Column>
+                            </Table>
                         </Panel>
                     </Col>
                 </Row>

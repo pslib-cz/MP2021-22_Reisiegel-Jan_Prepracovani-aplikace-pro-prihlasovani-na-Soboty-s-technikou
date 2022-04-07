@@ -104,7 +104,9 @@ namespace SobotySTechnikou.Controllers
             return Ok(group);
         }
 
-        [Authorize] //(Roles = "Administrator, Lector")
+        //[Authorize] //(Roles = "Administrator, Lector")
+        [Authorize(Policy = AuthorizationConstants.LECTOR_POLICY)]
+        [Authorize(Policy = AuthorizationConstants.ADMINISTRATOR_POLICY)]
         [HttpPost]
         public async Task<ActionResult<Group>> Post(GroupIM group)
         {
@@ -145,7 +147,9 @@ namespace SobotySTechnikou.Controllers
             return StatusCode(201);//CreatedAtAction("GetGroup", new { id = newGroup.Id }, newGroup);
         }
 
-        [Authorize] //(Roles = "Administrator, Lector")
+        //[Authorize] //(Roles = "Administrator, Lector")
+        [Authorize(Policy = AuthorizationConstants.LECTOR_POLICY)]
+        [Authorize(Policy = AuthorizationConstants.ADMINISTRATOR_POLICY)]
         [HttpPut]
         public async Task<ActionResult> Put(GroupIM inputGroup)
         {
@@ -181,7 +185,9 @@ namespace SobotySTechnikou.Controllers
             return Ok();
         }
 
-        [Authorize] //(Roles = "Administrator, Lector")
+        //[Authorize] //(Roles = "Administrator, Lector")
+        [Authorize(Policy = AuthorizationConstants.LECTOR_POLICY)]
+        [Authorize(Policy = AuthorizationConstants.ADMINISTRATOR_POLICY)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(string id)
         {
@@ -201,7 +207,9 @@ namespace SobotySTechnikou.Controllers
             return Ok();
         }
 
-        [Authorize] //(Roles = "Administrator, Lector")
+        //[Authorize] //(Roles = "Administrator, Lector")
+        [Authorize(Policy = AuthorizationConstants.LECTOR_POLICY)]
+        [Authorize(Policy = AuthorizationConstants.ADMINISTRATOR_POLICY)]
         [HttpGet("{id}/Users")]
         public async Task<ActionResult<ICollection<ApplicationUser>>> GetUsers(string id)
         {
