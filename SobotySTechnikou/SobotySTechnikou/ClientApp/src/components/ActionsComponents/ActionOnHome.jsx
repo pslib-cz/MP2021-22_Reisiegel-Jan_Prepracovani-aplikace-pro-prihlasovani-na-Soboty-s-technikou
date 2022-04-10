@@ -2,10 +2,11 @@ import axios from "axios";
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { Col, Row, Panel, Button, ButtonGroup, Progress, Message } from "rsuite";
+import { Col, Row, Panel, Button, ButtonGroup, Progress, Message, Whisper, Modal } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
 import parse from 'html-react-parser';
 import { Link } from "react-router-dom";
+import { translateDOMPositionXY } from "rsuite/esm/DOMHelper";
 
 const ActionOnHome = () => {
     const [{ accessToken, userManager, profile }] = useAuthContext();
@@ -13,6 +14,8 @@ const ActionOnHome = () => {
     const [error, setError] = useState(false);
     const [action, setAction] = useState();
     const [reload, setReload] = useState(false);
+
+    const [modalOpen, setModalOpen] = useState(false);
 
     const loadAction = () => {
         setIsLoading(true);
@@ -41,6 +44,7 @@ const ActionOnHome = () => {
     }
 
     const GroupCard = ({ group }) => {
+        console.log(group);
         const enroll = () => {
             axios.post(`/api/Applications/${group.id}/Enroll`, {
                 userId: ""
@@ -73,61 +77,112 @@ const ActionOnHome = () => {
                 })
         }
         return (
-            <Col lg={6} md={8} Style={{ position: "relative" }} >
-                <Panel bordered shaded style={{ height: "100%", textAlign: "left" }}
-                    header={<h5>{group.name}</h5>}>
+            <>
 
-                    <Row>
-                        <Col >
-                            {
-                                parse(group.description)
-                            }
-                            {
-                                group.note ? <p onClick={console.info("Funkce")} style={{ color: "#5bc0de" }}>Podívejte se na poznámku k této skupině.</p>
-                                    : null
-                            }
-                        </Col>
-                    </Row>
-                    <br />
+                <Col lg={6} md={8} Style={{ position: "relative" }} >
+                    <Panel bordered shaded style={{ height: "100%", textAlign: "left" }}
+                        header={<h5>{group.name}</h5>}>
 
-                </Panel>
-                <Col lg={24} style={{ position: "relative", bottom: "6em" }} >
-
-                    <Row style={{ marginBottom: "0.5em" }}>
-
-                        <ButtonGroup style={{ width: "87%" }}>
-                            {
-                                accessToken ? (
-                                    action.userIsInAction ? (
-                                        group.isUserAdded ?
-                                            <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { unenroll() }} disabled={false} >Odzapsat se</Button>
-                                            : <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { enroll() }} disabled={true} >Zapsat se</Button>
-                                    )
-                                        : <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { enroll() }} disabled={false} >Zapsat se</Button>
-                                )
-                                    : <Button
-                                        style={{ width: "50%", border: "0.1em solid #2196f3" }}
-                                        color="blue" appearance="subtle" onClick={() => { userManager.signinRedirect({ redirectUrl: "/" }) }}
-                                    >Zapsat se</Button>
-                            }
-                            <Button style={{ width: "50%", border: "0.1em solid #2196f3", borderLeft: "none" }} color="blue" appearance="subtle">Detail</Button>
-                        </ButtonGroup>
-
+                        <Row>
+                            <Col >
+                                {
+                                    parse(group.description)
+                                }
+                                {
+                                    group.note ? <p onClick={console.info("Funkce")} style={{ color: "#5bc0de" }}>Podívejte se na poznámku k této skupině.</p>
+                                        : null
+                                }
+                            </Col>
+                        </Row>
                         <br />
-                    </Row>
-                    <Row >
+
+                    </Panel>
+                    <Col lg={24} style={{ position: "relative", bottom: "6em" }} >
+
+                        <Row style={{ marginBottom: "0.5em" }}>
+
+                            <ButtonGroup style={{ width: "87%" }}>
+                                {
+                                    accessToken ? (
+                                        action.userIsInAction ? (
+                                            group.isUserAdded ?
+                                                <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { unenroll() }} disabled={false} >Odzapsat se</Button>
+                                                : <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { enroll() }} disabled={true} >Zapsat se</Button>
+                                        )
+                                            : <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { enroll() }} disabled={false} >Zapsat se</Button>
+                                    )
+                                        : <Button
+                                            style={{ width: "50%", border: "0.1em solid #2196f3" }}
+                                            color="blue" appearance="subtle" onClick={() => { userManager.signinRedirect({ redirectUrl: "/" }) }}
+                                        >Zapsat se</Button>
+                                }
+                                <Button style={{ width: "50%", border: "0.1em solid #2196f3", borderLeft: "none" }} onClick={() => { setModalOpen(true) }} color="blue" appearance="subtle">Detail</Button>
+
+                            </ButtonGroup>
+
+                            <br />
+                        </Row>
+                        <Row >
+                            <Col lg={3} style={{ position: "relative", top: "0.16em", left: "0.75em" }}>
+                                <p style={{ textAlign: "center" }}>{`${group.countOfUsers}/${group.capacity}`}</p>
+                            </Col>
+                            <Col lg={21}>
+                                <Progress.Line showInfo={false} percent={percentageProgress(group.capacity, group.countOfUsers)} strokeColor={group.countOfUsers === group.capacity ? "#f44336" : "#4caf50"} status={group.countOfUsers === group.capacity ? "fail" : "active"} />
+                            </Col>
+                        </Row>
+                    </Col>
+                    <br />
+                </Col>
+
+                <Modal open={modalOpen} onClose={() => { setModalOpen(false) }} >
+                    <Modal.Header>
+                        <h2>{group.name}</h2>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Col lg={5}>
+                            <Modal.Title>Hlavní lektor:</Modal.Title>
+                        </Col>
+                        <Col lg={19}>
+                            {group.headLectorName}
+                        </Col>
+                    </Modal.Body>
+                    <Modal.Title>Popis skupiny</Modal.Title>
+                    <Modal.Body>
+                        {parse(group.description)}
+                    </Modal.Body>
+                    <hr />
+                    <Modal.Body>
+                        <Message showIcon type="info" header={<Modal.Title>Poznámka</Modal.Title>} >
+                            {parse(group.note)}
+                        </Message>
+                    </Modal.Body>
+                    <hr />
+                    <Modal.Body>
                         <Col lg={3} style={{ position: "relative", top: "0.16em", left: "0.75em" }}>
                             <p style={{ textAlign: "center" }}>{`${group.countOfUsers}/${group.capacity}`}</p>
                         </Col>
                         <Col lg={21}>
                             <Progress.Line showInfo={false} percent={percentageProgress(group.capacity, group.countOfUsers)} strokeColor={group.countOfUsers === group.capacity ? "#f44336" : "#4caf50"} status={group.countOfUsers === group.capacity ? "fail" : "active"} />
                         </Col>
-                    </Row>
-
-                </Col>
-                <br />
-
-            </Col>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        {
+                            accessToken ? (
+                                action.userIsInAction ? (
+                                    group.isUserAdded ?
+                                        <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { unenroll() }} disabled={false} >Odzapsat se</Button>
+                                        : <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { enroll() }} disabled={true} >Zapsat se</Button>
+                                )
+                                    : <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { enroll() }} disabled={false} >Zapsat se</Button>
+                            )
+                                : <Button
+                                    style={{ width: "50%", border: "0.1em solid #2196f3" }}
+                                    color="blue" appearance="subtle" onClick={() => { userManager.signinRedirect({ redirectUrl: "/" }) }}
+                                >Zapsat se</Button>
+                        }
+                    </Modal.Footer>
+                </Modal>
+            </>
         )
     }
 
@@ -177,6 +232,7 @@ const ActionOnHome = () => {
 
 }
 //userManager.signinRedirect({ redirectUrl: "/" })
+
 
 
 export default ActionOnHome;

@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { getAuthorization, useRequireAdmin } from "../Auth/useAuthorization";
+import Unauthorized from "../general/Unauthorized";
 
 const yearData = [
     {
@@ -129,6 +131,7 @@ const NewGroup = () => {
         getActionsSelector();
         getLectorsSelector();
     }, [accessToken]);
+
 
     return (
         <div>
@@ -300,6 +303,8 @@ const NewGroup = () => {
             </Form>
         </div>
     )
+
+
 }
 
 export default NewGroup;

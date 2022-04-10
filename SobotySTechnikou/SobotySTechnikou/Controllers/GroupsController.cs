@@ -106,7 +106,7 @@ namespace SobotySTechnikou.Controllers
 
         //[Authorize] //(Roles = "Administrator, Lector")
         [Authorize(Policy = AuthorizationConstants.LECTOR_POLICY)]
-        [Authorize(Policy = AuthorizationConstants.ADMINISTRATOR_POLICY)]
+        //[Authorize(Policy = AuthorizationConstants.ADMINISTRATOR_POLICY)]
         [HttpPost]
         public async Task<ActionResult<Group>> Post(GroupIM group)
         {

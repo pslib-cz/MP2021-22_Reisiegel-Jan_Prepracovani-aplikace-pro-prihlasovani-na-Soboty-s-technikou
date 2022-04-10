@@ -45,7 +45,10 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy(AuthorizationConstants.ADMINISTRATOR_POLICY, policy =>
     {
-        policy.RequireClaim(AuthorizationConstants.ADMINISTRATOR_CLAIM, "1");
+        //policy.RequireClaim(AuthorizationConstants.ADMINISTRATOR_CLAIM, "1");
+        policy.RequireAssertion(context =>
+            context.User.HasClaim(
+                c => (c.Type == AuthorizationConstants.LECTOR_CLAIM || c.Type == AuthorizationConstants.ADMINISTRATOR_CLAIM) && c.Value == "1"));
     });
     options.AddPolicy(AuthorizationConstants.LECTOR_POLICY, policy =>
     {
