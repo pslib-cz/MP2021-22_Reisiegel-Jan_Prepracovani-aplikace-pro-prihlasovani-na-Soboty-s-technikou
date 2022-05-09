@@ -26,7 +26,11 @@ namespace SobotySTechnikou.Controllers
         public async Task<ActionResult> DownloadCertificate(string userId, string actionId)
         {
             var action = await _context.Actions.Where(x=>x.Id==actionId).FirstOrDefaultAsync();
+            if (action == null)
+                return NotFound();
             var user = await _context.Users.Where(x=>x.Id == userId).FirstOrDefaultAsync();
+            if (user == null)
+                return NotFound();
             string fileName = "/Prints/Pages/Certificate.cshtml";
             string outputFileName = $"certificate-{action.NameId}_{action.Year}-{user.FirstName}{user.LastName}";
             string documentBody = await _razorRenderer.RenderViewToStringAsync(fileName, new CertificatePrintVM

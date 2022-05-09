@@ -61,7 +61,7 @@ namespace SobotySTechnikou.Controllers
                 }).FirstOrDefaultAsync();
             if (userInfo is null)
                 return NotFound();
-            userInfo.Groups = await _context.UsersInGroups.Where(x => x.UserId == userId).Include(x => x.Group).Include(x => x.Group.Action)
+            userInfo.Groups = await _context.UsersInGroups.Include(x=>x.Group.Action).Where(x => x.UserId == userId && x.CancelledAt== null).Include(x => x.Group).Include(x => x.Group.Action)
                 .Select(x => new GroupVM
                 {
                     Id = x.Group.Id,
@@ -69,7 +69,10 @@ namespace SobotySTechnikou.Controllers
                     NameId = x.Group.NameId,
                     Description = x.Group.Description,
                     Year = x.Group.Action.Year,
-                    ActionName = x.Group.Action.Name
+                    ActionName = x.Group.Action.Name,
+                    ActionId = x.Group.ActionId,
+                    CanEnroll = x.Group.Action.Start < DateTime.Now ? true : false,
+                    CanGenerateCertificate = x.Group.Action.End <= DateTime.Now ? true : false,
                 }).ToListAsync();
             return Ok(userInfo);
         }
@@ -93,79 +96,87 @@ namespace SobotySTechnikou.Controllers
             var user = await _context.Users.FindAsync(userId);
             if (user == null)
                 return NotFound();
-            var userClaim = _context.UserClaims.Where(x=>x.UserId == user.Id).FirstOrDefault();
-            var userRole = _context.UserRoles.Where(x => x.UserId == user.Id).FirstOrDefault();
-            if (userClaim != null)
-                _context.UserClaims.Remove(userClaim);
-            if (userRole != null)
-                _context.UserRoles.Remove(userRole);
-            
-            int newClaimId = _context.UserClaims.Count() + 1;
-            var roleClaim = _context.RoleClaims.Where(x => x.ClaimType == function).FirstOrDefault();
-            if (roleClaim == null)
+
+            if (function == "user")
             {
+                var userClaims = await _context.UserClaims.Where(x => x.UserId == user.Id).ToListAsync();
+                var userRoles = await _context.UserRoles.Where(x => x.UserId == user.Id).ToListAsync();
+                if (userClaims != null)
+                    foreach (var claim in userClaims)
+                    {
+                        claim.ClaimValue = "0";
+                        _context.Entry(claim).State = EntityState.Modified;
+                    }
+                if (userRoles != null)
+                    foreach (var userRoleH in userRoles)
+                    {
+                        _context.UserRoles.Remove(userRoleH);
+                    }
                 await _context.SaveChangesAsync();
                 return Ok();
             }
-            if(function == "admin")
+
+            var userFunctionClaim = await _context.UserClaims.Where(x => x.ClaimType == function && x.UserId == user.Id).FirstOrDefaultAsync();
+
+            var userRole = await _context.UserRoles.Where(x => x.UserId == user.Id).FirstOrDefaultAsync();
+            var role = await _context.Roles.Where(x => x.Id == userRole.RoleId).FirstOrDefaultAsync();
+            
+            if (userFunctionClaim != null)
             {
-                IdentityUserRole<string> newRole = new IdentityUserRole<string>
+                if (userFunctionClaim.ClaimValue == "0")
                 {
-                    RoleId = roleClaim.RoleId,
-                    UserId = user.Id,
-                };
-                _context.UserRoles.Add(newRole);
-                IdentityUserClaim<string> newClaim = new IdentityUserClaim<string>
+                    userFunctionClaim.ClaimValue = "1";
+                    _context.Entry(userFunctionClaim).State = EntityState.Modified;
+                }
+                if (userRole != null && role.Name.ToLower() != function)
+                {
+                    userRole.RoleId = _context.Roles.Where(x => x.Name.ToLower() == function).Select(x=>x.Id).FirstOrDefault();
+                }
+                else
+                {
+                    var newUserRole = new IdentityUserRole<string>
+                    {
+                        RoleId = _context.RoleClaims.Where(x => x.ClaimType == function).Select(x => x.RoleId).FirstOrDefault(),
+                        UserId = user.Id
+                    };
+                    _context.UserRoles.Add(newUserRole);
+                }
+            }
+            else
+            {
+                var newUserClaim = new IdentityUserClaim<string>
                 {
                     UserId = user.Id,
                     ClaimType = function,
-                    ClaimValue = "1",
+                    ClaimValue = "1"
                 };
-                _context.UserClaims.Add(newClaim);
-            }
-            if(function == "lector")
-            {
-                IdentityUserRole<string> newRole = new IdentityUserRole<string>
+                if(function == "lector")
                 {
-                    RoleId = roleClaim.RoleId,
-                    UserId = user.Id,
-                };
-                _context.UserRoles.Add(newRole);
-                IdentityUserClaim<string> newClaim = new IdentityUserClaim<string>
+                    var lectorClaim = await _context.UserClaims.Where(x => x.ClaimType != function && x.UserId == user.Id).FirstOrDefaultAsync();
+                    if (lectorClaim != null)
+                    {
+                        lectorClaim.ClaimValue = "0";
+                        _context.Entry(lectorClaim).State = EntityState.Modified;
+                    }
+                }
+                _context.UserClaims.Add(newUserClaim);
+                if (userRole != null)
                 {
-                    UserId = user.Id,
-                    ClaimType = function,
-                    ClaimValue = "1",
-                };
-                _context.UserClaims.Add(newClaim);
-            }
-            
-
-
-            /*var policy2 = _context.UserRoles.Where(x => x.UserId == userId).FirstOrDefault();
-            if (policy2 != null)
-                _context.UserRoles.Remove(policy2);
-            
-            var policy = _context.RoleClaims.Where(x => x.ClaimType == function); //_context.Roles.Where(x => x.Id == function).FirstOrDefault();
-            var user = await _context.Users.FindAsync(userId);
-            if ((user is null) || (policy is null))
-                return NotFound();
-            
-            
-
-            var lastClaimId = _context.UserClaims.OrderByDescending(x => x.Id).Select(x => x.Id).FirstOrDefault();
-            if(function == "admin")
-            {
-                IdentityUserRole<string> userRole = new IdentityUserRole<string>
+                    if(role.Name.ToLower() != function)
+                        userRole.RoleId = _context.Roles.Where(x => x.Name.ToLower() == function).Select(x => x.Id).FirstOrDefault();
+                }
+                else
                 {
-                    RoleId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1",
-                    UserId = user.Id,
-                };
-
+                    var newUserRole = new IdentityUserRole<string>
+                    {
+                        RoleId = _context.RoleClaims.Where(x => x.ClaimType == function).Select(x => x.RoleId).FirstOrDefault(),
+                        UserId = user.Id
+                    };
+                    _context.UserRoles.Add(newUserRole);
+                }
             }
-            */
             await _context.SaveChangesAsync();
-            return CreatedAtAction("GetUsersByRole", new { roleid = roleClaim.RoleId }, user);
+            return Ok();
         }
 
         //[Authorize] //(Roles = "Administrator")

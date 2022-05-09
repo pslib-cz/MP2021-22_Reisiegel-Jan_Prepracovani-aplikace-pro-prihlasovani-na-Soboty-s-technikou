@@ -1,4 +1,6 @@
-﻿namespace SobotySTechnikou.Prints.ViewModels
+﻿using SobotySTechnikou.Models;
+
+namespace SobotySTechnikou.Prints.ViewModels
 {
     public class CertificatePrintVM
     {
@@ -6,5 +8,6 @@
         public string ActionName { get; set; }
         //public string GroupName { get; set; }
         public string Date { get; set; }
+        public Gender Gender { get; set; }
     }
 }

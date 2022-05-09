@@ -149,7 +149,7 @@ const EditUser = () => {
             lastName: surname,
             birthDate: birthDate,
             gender: gender,
-            school: school,
+            school: school ? school : "",
             year: year,
             potentialStudent: potStudent,
             condition: condition,

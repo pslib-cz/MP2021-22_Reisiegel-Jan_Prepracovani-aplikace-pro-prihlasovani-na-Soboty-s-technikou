@@ -7,117 +7,60 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <style type="text/css">
         /* CLIENT-SPECIFIC STYLES */
-        html {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 9pt;
-            width: 210mm;
+        .certificateBody {
+            margin: 0 auto;
+            padding: 0;
+            color: black;
+            font-family: sans-serif;
+            background-image: url(~/img/bg.png);
+            background-size: cover;
+            /*background-image-resize: 3;*/
+            position: relative;
         }
-        @@media print {
-            @@page {
-                size: auto;
-                margin: 0;
-                margin-bottom: 1cm;
-                @@bottom-center {
-                    border-top: .25pt solid #666;
-                    content: counter(page) " / " counter(pages);
-                    font-size: 9pt;
-                    color: #333;
-                }
-            }
-            @@page :blank {
-                @@top-center { content: "This page is intentionally left blank." }
-            }
-            body {
-                margin: 1.6cm;
-            }
-        }
-        h1, h2, h3, h4, h5 {
-            page-break-after: avoid;
-        }
-        table, figure {
-            page-break-inside: avoid;
-        }
-        .new-page, .pagebreak-before {
-            page-break-before: always;
-        }
-        h2, h3, h4, h5, h6 {
-            font-size: 1.2rem;
+
+        .jmeno {
+            position: absolute;
             font-weight: bold;
-            padding: 0;
-            margin: 0;
-            margin-top: .5em;
-        }
-        table {
-            margin: 0;
-            width: 100%;
-            border-collapse: collapse;
-        }
-        table td, table th {
-            text-align: left;
-            padding: 3px 0;
-        }
-        table.table tr td, table.table tr th {
-            border: 1px solid gray;
-            padding: 3px;
-        }
-        table.fixed {
-            table-layout: fixed;
-        }
-        table td.number-column {
-            top1cm;
-        }
-        table td.vertical-top {
-            vertical-align: top;
-        }
-        .document-logo {
-            padding-top: 20px;
-        }
-        .no-bold,
-        .no-bold td {
-            font-weight: normal;
-            font-size: 1em;
-        }
-        .bottom {
-            vertical-align: bottom;
-        }
-        .center {
+            font-size: 36px;
+            left: 420px;
+            top: 460px;
             text-align: center;
+            color: #3a3a3d;
+            width: 550px;
         }
-        .left {
+
+        .kdy {
+            position: absolute;
+            font-size: 18px;
+            left: 420px;
+            top: 520px;
+            width: 550px;
+            text-align: center;
+            color: #88898b;
+        }
+
+        .kde {
+            position: absolute;
+            font-size: 18px;
+            left: 420px;
+            top: 640px;
+            width: 250px;
             text-align: left;
+            color: #121212;
         }
-        .right {
+
+        .garant {
+            position: absolute;
+            font-size: 18px;
+            right: 120px;
+            top: 640px;
+            width: 250px;
             text-align: right;
+            color: #121212;
         }
-        .hidden {
-            display: none;
-        }
-        p {
-            text-align: justify;
-            padding: 0;
-            margin: 0 0 0.3em;
-        }
-        article {
-            page-break-after: always;
-        }
-        section {
-            margin-bottom: 5px;
-        }
-        header#document-title, header#page-title {
-            padding-top: 5px;
-        }
-        header#document-title h1, header#page-title h1 {
-            text-align: center;
-            font-weight: 100;
-        }
-        .signature {
-            font-weight: normal;
-            font-size: 0.7em;
-            border-bottom: 1px dotted gray;
-            vertical-align: bottom;
-        }
-        .signature-space {
-            padding-top: 1cm;
+
+        .garant span {
+            color: #96989b;
         }
     </style>
 </head>

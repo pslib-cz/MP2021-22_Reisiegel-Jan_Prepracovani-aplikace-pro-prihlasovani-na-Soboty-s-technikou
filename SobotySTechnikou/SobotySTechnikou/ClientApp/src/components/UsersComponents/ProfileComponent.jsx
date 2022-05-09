@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Col, Container, Grid, Panel, Row, Table } from "rsuite";
+import { Button, ButtonGroup, Col, Container, Grid, Panel, Row, Table } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
 
 const Profile = props => {
@@ -61,6 +61,49 @@ const Profile = props => {
         //}
 
     }
+    const ClickCell = ({ rowData, dataKey, ...props }) => {
+        const generateCertificate = () => {
+            axios.get("/api/Applications/Print",{
+                headers: {
+                    Authorization: "Bearer " + accessToken,
+                    "Content-Type": "text/html"
+                },
+                params: {
+                    userId: profile.sub,
+                    actionId: rowData.actionId,
+                }
+            }).then((response) => {
+                let fileContent = new Blob([response.data]);
+                const url = window.URL.createObjectURL(fileContent);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'cektifikat.html')
+                document.body.appendChild(link);
+                link.click();
+            }).catch((error)=>{
+                console.log(error);
+            })
+        }
+        return (
+            <Table.Cell {...props}>
+                <ButtonGroup size="xs">
+                    
+                    {
+                        rowData.canEnroll ? <Button color="blue" appearance="primary" >Odhlásit</Button> : null
+                    } 
+                    {
+                        rowData.canGenerateCertificate ? <Button  color="blue" appearance="primary"
+                        onClick={e => {
+                            generateCertificate()
+                        }} >Generovat certifikát</Button> : null
+                    }
+                    
+                </ButtonGroup>
+            </Table.Cell>
+        )
+    }
+
+    
 
     useEffect(() => {
         getUserData();
@@ -140,21 +183,21 @@ const Profile = props => {
                             autoHeight={true}
                             loading={isLoading}
                             >
-                                <Table.Column width={130} align="center">
+                                <Table.Column align="center">
                                     <Table.HeaderCell>Název</Table.HeaderCell>
                                     <Table.Cell dataKey="name" />
                                 </Table.Column>
-                                <Table.Column width={130} align="center">
+                                <Table.Column  align="center">
                                     <Table.HeaderCell>Akce</Table.HeaderCell>
                                     <Table.Cell dataKey="actionName" />
                                 </Table.Column>
-                                <Table.Column width={130} align="center">
+                                <Table.Column  align="center">
                                     <Table.HeaderCell>Rok</Table.HeaderCell>
-                                    <Table.Cell dataKey="name" />
-                                </Table.Column>
-                                <Table.Column width={130} align="center">
-                                    <Table.HeaderCell>Akce</Table.HeaderCell>
                                     <Table.Cell dataKey="year" />
+                                </Table.Column>
+                                <Table.Column width={500} align="center">
+                                    <Table.HeaderCell>Akce</Table.HeaderCell>
+                                    <ClickCell />
                                 </Table.Column>
                             </Table>
                         </Panel>

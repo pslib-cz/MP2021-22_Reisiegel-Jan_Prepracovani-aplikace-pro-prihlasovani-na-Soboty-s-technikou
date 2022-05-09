@@ -47,6 +47,13 @@ namespace SobotySTechnikou.Data
             modelBuilder.Entity<IdentityRoleClaim<string>>().HasData(new IdentityRoleClaim<string>
             {
                 Id = 2,
+                RoleId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX1",
+                ClaimType = "lector",
+                ClaimValue = "1"
+            });
+            modelBuilder.Entity<IdentityRoleClaim<string>>().HasData(new IdentityRoleClaim<string>
+            {
+                Id = 3,
                 RoleId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXX2",
                 ClaimType = "lector",
                 ClaimValue = "1"
@@ -83,6 +90,13 @@ namespace SobotySTechnikou.Data
                 Id = 1,
                 UserId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
                 ClaimType = "admin",
+                ClaimValue = "1"
+            },
+            new IdentityUserClaim<string>
+            {
+                Id = 2,
+                UserId = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+                ClaimType = "lector",
                 ClaimValue = "1"
             });
             modelBuilder.Entity<SobotySTechnikou.Models.Action>().HasData(new SobotySTechnikou.Models.Action

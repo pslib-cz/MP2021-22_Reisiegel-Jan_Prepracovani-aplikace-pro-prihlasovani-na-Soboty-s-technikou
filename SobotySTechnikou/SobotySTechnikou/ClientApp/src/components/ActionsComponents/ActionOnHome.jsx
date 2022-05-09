@@ -16,6 +16,7 @@ const ActionOnHome = () => {
     const [reload, setReload] = useState(false);
 
     const [modalOpen, setModalOpen] = useState(false);
+    const [modalData, setModalData] = useState();
 
     const loadAction = () => {
         setIsLoading(true);
@@ -42,40 +43,43 @@ const ActionOnHome = () => {
         let per = (actualCapacity / maxCapacity) * 100;
         return per;
     }
+    const enroll = (group) => {
+        axios.post(`/api/Applications/Enroll`, {
+            userId: profile.sub,
+            groupId: group.id
+        }, {
+            headers: {
+                "Authorization": `Bearer ${accessToken}`
+            }
+        })
+            .then(response => {
+                console.log(response.data);
+            })
+            .finally(() => {
+                setReload(!reload);
+            })
+    }
+    const unenroll = (group) => {
+        console.log(profile);
+        axios.put(`/api/Applications/Unenroll`, {
+            userId: profile.sub,
+            groupId: group.id
+        }, {
+            headers: {
+                "Authorization": `Bearer ${accessToken}`
+            }
+        })
+            .then(response => {
+                console.log(response);
+            })
+            .finally(() => {
+                setReload(!reload);
+            })
+    }
 
-    const GroupCard = ({ group }) => {
+    const GroupCard = ({ group, itemIndex }) => {
         console.log(group);
-        const enroll = () => {
-            axios.post(`/api/Applications/${group.id}/Enroll`, {
-                userId: ""
-            }, {
-                headers: {
-                    "Authorization": `Bearer ${accessToken}`
-                }
-            })
-                .then(response => {
-                    console.log(response.data);
-                })
-                .finally(() => {
-                    setReload(!reload);
-                })
-        }
-        const unenroll = () => {
-            console.log(profile);
-            axios.put(`/api/Applications/${group.id}/Unenrol`, {
-                userId: ""
-            }, {
-                headers: {
-                    "Authorization": `Bearer ${accessToken}`
-                }
-            })
-                .then(response => {
-                    console.log(response);
-                })
-                .finally(() => {
-                    setReload(!reload);
-                })
-        }
+        
         return (
             <>
 
@@ -106,17 +110,17 @@ const ActionOnHome = () => {
                                     accessToken ? (
                                         action.userIsInAction ? (
                                             group.isUserAdded ?
-                                                <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { unenroll() }} disabled={false} >Odzapsat se</Button>
-                                                : <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { enroll() }} disabled={true} >Zapsat se</Button>
+                                                <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { unenroll(group) }} disabled={false} >Odzapsat se</Button>
+                                                : <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { enroll(group) }} disabled={true} >Zapsat se</Button>
                                         )
-                                            : <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { enroll() }} disabled={false} >Zapsat se</Button>
+                                            : <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { enroll(group) }} disabled={false} >Zapsat se</Button>
                                     )
                                         : <Button
                                             style={{ width: "50%", border: "0.1em solid #2196f3" }}
                                             color="blue" appearance="subtle" onClick={() => { userManager.signinRedirect({ redirectUrl: "/" }) }}
                                         >Zapsat se</Button>
                                 }
-                                <Button style={{ width: "50%", border: "0.1em solid #2196f3", borderLeft: "none" }} onClick={() => { setModalOpen(true) }} color="blue" appearance="subtle">Detail</Button>
+                                <Button style={{ width: "50%", border: "0.1em solid #2196f3", borderLeft: "none" }} onClick={() => { setModalOpen(true); setModalData(group) }} color="blue" appearance="subtle">Detail</Button>
 
                             </ButtonGroup>
 
@@ -133,55 +137,6 @@ const ActionOnHome = () => {
                     </Col>
                     <br />
                 </Col>
-
-                <Modal open={modalOpen} onClose={() => { setModalOpen(false) }} >
-                    <Modal.Header>
-                        <h2>{group.name}</h2>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <Col lg={5}>
-                            <Modal.Title>Hlavní lektor:</Modal.Title>
-                        </Col>
-                        <Col lg={19}>
-                            {group.headLectorName}
-                        </Col>
-                    </Modal.Body>
-                    <Modal.Title>Popis skupiny</Modal.Title>
-                    <Modal.Body>
-                        {parse(group.description)}
-                    </Modal.Body>
-                    <hr />
-                    <Modal.Body>
-                        <Message showIcon type="info" header={<Modal.Title>Poznámka</Modal.Title>} >
-                            {parse(group.note)}
-                        </Message>
-                    </Modal.Body>
-                    <hr />
-                    <Modal.Body>
-                        <Col lg={3} style={{ position: "relative", top: "0.16em", left: "0.75em" }}>
-                            <p style={{ textAlign: "center" }}>{`${group.countOfUsers}/${group.capacity}`}</p>
-                        </Col>
-                        <Col lg={21}>
-                            <Progress.Line showInfo={false} percent={percentageProgress(group.capacity, group.countOfUsers)} strokeColor={group.countOfUsers === group.capacity ? "#f44336" : "#4caf50"} status={group.countOfUsers === group.capacity ? "fail" : "active"} />
-                        </Col>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        {
-                            accessToken ? (
-                                action.userIsInAction ? (
-                                    group.isUserAdded ?
-                                        <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { unenroll() }} disabled={false} >Odzapsat se</Button>
-                                        : <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { enroll() }} disabled={true} >Zapsat se</Button>
-                                )
-                                    : <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { enroll() }} disabled={false} >Zapsat se</Button>
-                            )
-                                : <Button
-                                    style={{ width: "50%", border: "0.1em solid #2196f3" }}
-                                    color="blue" appearance="subtle" onClick={() => { userManager.signinRedirect({ redirectUrl: "/" }) }}
-                                >Zapsat se</Button>
-                        }
-                    </Modal.Footer>
-                </Modal>
             </>
         )
     }
@@ -207,7 +162,7 @@ const ActionOnHome = () => {
                         <br />
                         <Row style={{ display: "flex", flexWrap: "wrap" }} >
                             {
-                                action.groups.map((item, index) => (<GroupCard group={item} />))
+                                action.groups.map((item, index) => (<GroupCard group={item} itemIndex={index} />))
                             }
                         </Row>
                         <br />
@@ -225,6 +180,58 @@ const ActionOnHome = () => {
                         }
                     </Message>
                 )
+            }
+            {
+                modalData ? (
+                    <Modal open={modalOpen} onClose={() => { setModalOpen(false) }} >
+                    <Modal.Header>
+                        <h2>{modalData.name}</h2>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Col lg={5}>
+                            <Modal.Title>Hlavní lektor:</Modal.Title>
+                        </Col>
+                        <Col lg={19}>
+                            {modalData.headLectorName}
+                        </Col>
+                    </Modal.Body>
+                    <Modal.Title>Popis skupiny</Modal.Title>
+                    <Modal.Body>
+                        {parse(modalData.description)}
+                    </Modal.Body>
+                    <hr />
+                    <Modal.Body>
+                        <Message showIcon type="info" header={<Modal.Title>Poznámka</Modal.Title>} >
+                            {parse(modalData.note)}
+                        </Message>
+                    </Modal.Body>
+                    <hr />
+                    <Modal.Body>
+                        <Col lg={3} style={{ position: "relative", top: "0.16em", left: "0.75em" }}>
+                            <p style={{ textAlign: "center" }}>{`${modalData.countOfUsers}/${modalData.capacity}`}</p>
+                        </Col>
+                        <Col lg={21}>
+                            <Progress.Line showInfo={false} percent={percentageProgress(modalData.capacity, modalData.countOfUsers)} strokeColor={modalData.countOfUsers === modalData.capacity ? "#f44336" : "#4caf50"} status={modalData.countOfUsers === modalData.capacity ? "fail" : "active"} />
+                        </Col>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        {
+                            accessToken ? (
+                                action.userIsInAction ? (
+                                    modalData.isUserAdded ?
+                                        <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { unenroll(modalData) }} disabled={false} >Odzapsat se</Button>
+                                        : <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { enroll(modalData) }} disabled={true} >Zapsat se</Button>
+                                )
+                                    : <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { enroll(modalData) }} disabled={false} >Zapsat se</Button>
+                            )
+                                : <Button
+                                    style={{ width: "50%", border: "0.1em solid #2196f3" }}
+                                    color="blue" appearance="subtle" onClick={() => { userManager.signinRedirect({ redirectUrl: "/" }) }}
+                                >Zapsat se</Button>
+                        }
+                    </Modal.Footer>
+                </Modal>
+                ) : null
             }
         </>
     )

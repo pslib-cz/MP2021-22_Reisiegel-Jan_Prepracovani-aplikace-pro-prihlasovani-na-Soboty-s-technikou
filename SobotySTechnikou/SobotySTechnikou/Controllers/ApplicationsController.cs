@@ -27,12 +27,15 @@ namespace SobotySTechnikou.Controllers
         }
         
         [Authorize]
-        [HttpPost("{groupId}/Enroll")]
-        public async Task<IActionResult> AddUserToGroup(string groupId, string? userId = "")
+        [HttpPost("Enroll")]
+        public async Task<IActionResult> AddUserToGroup(ApplicationsIM application)
         {
-            if (String.IsNullOrEmpty(userId))
+            string userId = "";
+            if (String.IsNullOrEmpty(application.UserId))
                 userId = User.Claims.Where(x => x.Type==ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
-            var group = _context.Groups.Find(groupId);
+            else
+                userId = application.UserId;
+            var group = _context.Groups.Find(application.GroupId);
             var enrolled = _context.UsersInGroups.Include(x => x.Group).Where(x => x.UserId==userId && x.Group.ActionId == group.ActionId && x.CancelledAt == null).ToList();
             if (enrolled.Count > 0)
                 return BadRequest();
@@ -40,7 +43,7 @@ namespace SobotySTechnikou.Controllers
             {
                 Id = Guid.NewGuid().ToString(),
                 UserId=userId,
-                GroupId=groupId,
+                GroupId=application.GroupId,
                 CreatedAt=DateTime.Now,
                 CreatedById = User.Claims.Where(x => x.Type==ClaimTypes.NameIdentifier).FirstOrDefault()?.Value,
                 CancelledBy = null,
@@ -52,12 +55,14 @@ namespace SobotySTechnikou.Controllers
         }
 
         [Authorize]
-        [HttpPut("{groupId}/Unenrol")]
-        public async Task<IActionResult> RemoveUserfromGroup(string groupId, string? userId = "")
+        [HttpPut("Unenroll")]
+        public async Task<IActionResult> RemoveUserfromGroup(ApplicationsIM application)
         {
-            if (String.IsNullOrEmpty(userId))
+            string userId = "";
+            if (String.IsNullOrEmpty(application.UserId))
                 userId = User.Claims.Where(x => x.Type==ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
-            var exist = _context.UsersInGroups.Where(x => x.UserId==userId && x.GroupId == groupId&&x.CancelledAt == null).FirstOrDefault();
+            else userId = application.UserId;
+            var exist = _context.UsersInGroups.Where(x => x.UserId==userId && x.GroupId == application.GroupId&&x.CancelledAt == null).FirstOrDefault();
             if (exist == null)
                 return NotFound();
             exist.CancelledAt = DateTime.Now;
@@ -101,7 +106,7 @@ namespace SobotySTechnikou.Controllers
 
         [Authorize]
         [HttpGet("Print")]
-        public async Task<ActionResult> DownloadCertificate(string? userId = "", string? actionId = "")
+        public async Task<ActionResult> DownloadCertificate(string? userId, string? actionId)
         {
             if (String.IsNullOrEmpty(userId))
                 userId="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX";
@@ -110,14 +115,16 @@ namespace SobotySTechnikou.Controllers
                  action = await _context.Actions.Where(x => x.Id==actionId).FirstOrDefaultAsync();
             else
                 action = await _context.Actions.FirstOrDefaultAsync();
-            var user = await _context.Users.Where(x => x.Email == userId).FirstOrDefaultAsync();
+            var user = await _context.Users.Where(x => x.Id == userId).FirstOrDefaultAsync();
             string fileName = "/Prints/Pages/Certificate.cshtml";
             string outputFileName = $"certificate-{action.NameId}_{action.Year}-{user.FirstName}{user.LastName}";
             string documentBody = await _razorRenderer.RenderViewToStringAsync(fileName, new CertificatePrintVM
             {
                 UserName = user.FirstName + " " + user.LastName,
+                Gender = user.Gender,
                 ActionName = action.Name,
                 Date = action.Start.ToShortDateString()
+              
             });
             MemoryStream memory = new(Encoding.UTF8.GetBytes(documentBody));
             return File(memory, "text/html", outputFileName + ".html");

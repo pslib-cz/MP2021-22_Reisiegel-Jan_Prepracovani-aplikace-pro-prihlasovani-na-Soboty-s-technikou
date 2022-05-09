@@ -52,7 +52,6 @@ namespace SobotySTechnikou.Controllers
         }
 
         [Authorize(Policy = AuthorizationConstants.LECTOR_POLICY)]
-        [Authorize(Policy = AuthorizationConstants.ADMINISTRATOR_POLICY)]
         [HttpGet("{year}/{nameId}")]
         public async Task<ActionResult<ActionVM>> GetAction(string nameId, int year, bool? forEdit)
         {
@@ -102,9 +101,7 @@ namespace SobotySTechnikou.Controllers
             return Ok(action);
         }
 
-        //[Authorize] //(Roles = "Administrator, Lector")
         [Authorize(Policy = AuthorizationConstants.LECTOR_POLICY)]
-        [Authorize(Policy = AuthorizationConstants.ADMINISTRATOR_POLICY)]
         [HttpPut]
         public async Task<ActionResult> PutAction(ActionIM actionInput)
         {
@@ -142,9 +139,7 @@ namespace SobotySTechnikou.Controllers
             return Ok();
         }
 
-        //[Authorize] //(Roles = "Administrator, Lector")
         [Authorize(Policy = AuthorizationConstants.LECTOR_POLICY)]
-        //[Authorize(Policy = AuthorizationConstants.ADMINISTRATOR_POLICY)]
         [HttpPost]
         public async Task<ActionResult<Models.Action>> PostAction(ActionIM actionInput)
         {
@@ -152,7 +147,7 @@ namespace SobotySTechnikou.Controllers
                 return BadRequest();
             var existAction = await _context.Actions.Where(x=>x.NameId == actionInput.Name && x.Year == actionInput.Year).ToListAsync();
             if (existAction.Count > 0)
-                return StatusCode(418);
+                return BadRequest("Akce již existuje");
             var userId = User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault().Value;
             Models.Action action = new Models.Action
             {
@@ -176,9 +171,7 @@ namespace SobotySTechnikou.Controllers
             return CreatedAtAction("GetAction", new { id = action.Id }, action);
         }
 
-        //[Authorize]//(Roles = "Administrator, Lector")
         [Authorize(Policy = AuthorizationConstants.LECTOR_POLICY)]
-        [Authorize(Policy = AuthorizationConstants.ADMINISTRATOR_POLICY)]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAction(string id)
         {
@@ -200,9 +193,7 @@ namespace SobotySTechnikou.Controllers
             return Ok();
         }
 
-        //[Authorize]
         [Authorize(Policy = AuthorizationConstants.LECTOR_POLICY)]
-        [Authorize(Policy = AuthorizationConstants.ADMINISTRATOR_POLICY)]
         [HttpGet("{id}/Groups")]
         public async Task<ActionResult<ICollection<Group>>> GetActionGroups(string id)
         {

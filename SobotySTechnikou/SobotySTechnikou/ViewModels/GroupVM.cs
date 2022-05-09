@@ -27,5 +27,9 @@ namespace SobotySTechnikou.ViewModels
         public int CountOfUsers { get; set; }
 
         public bool IsUserAdded { get; set; }
+
+        public bool CanEnroll { get; set; }
+
+        public bool CanGenerateCertificate { get; set; }
     }
 }

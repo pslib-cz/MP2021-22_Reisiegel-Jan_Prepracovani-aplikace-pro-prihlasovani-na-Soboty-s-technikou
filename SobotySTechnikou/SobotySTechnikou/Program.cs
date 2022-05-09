@@ -18,6 +18,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<EmailSender>();
 
+builder.Services.AddScoped<RazorViewToStringRenderer>();
+
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 {
     options.SignIn.RequireConfirmedAccount = true;
