@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import { Button, ButtonGroup, Col, Container, Grid, Panel, Row, Table } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
 
+const yearData = [ "Nevybráno", "7. a nižší třída", "8. třída ZŠ", "9. třída ZŠ", "Vyšší třída (SŠ)"];
+
 const Profile = props => {
     const { mail } = useParams();
     const [{ accessToken, userManager, profile }] = useAuthContext();
@@ -111,7 +113,7 @@ const Profile = props => {
     }, [accessToken]);
     if (userData) {
         return (
-            <div>
+            <Col xs={24} sm={24} md={24} lg={24}>
                 <Row>
                     <Col lg={15} lgOffset={4}>
                         <Panel shaded bordered header={userData.firstName + " " + userData.lastName}>
@@ -160,7 +162,7 @@ const Profile = props => {
                                     Ročník:
                                 </Col>
                                 <Col lg={17} style={{ fontSize: "1.5em" }}>
-                                    {userData.year}
+                                    {yearData[userData.year]}
                                 </Col>
                             </Row>
                             <Row>
@@ -203,7 +205,7 @@ const Profile = props => {
                         </Panel>
                     </Col>
                 </Row>
-            </div>
+            </Col>
         )
     }
     else {

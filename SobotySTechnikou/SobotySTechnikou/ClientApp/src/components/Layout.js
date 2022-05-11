@@ -11,19 +11,15 @@ export class Layout extends Component {
       <Container>
         <Header><NavMenu /></Header>
         <Content>
-          <Container>
-            <Content>
               <Row>
-                <Col lg={2}>
+                <Col xs={1} sm={1} md={1} lg={2}>
                 </Col>
-                <Col lg={20} >
+                <Col xs={22} sm={22} md={22} lg={20} >
                   {this.props.children}
                 </Col>
-                <Col lg={2}>
+                <Col xs={1} sm={1} md={1} lg={2}>
                 </Col>
               </Row>
-            </Content>
-          </Container>
         </Content>
         <Footer></Footer>
       </Container>

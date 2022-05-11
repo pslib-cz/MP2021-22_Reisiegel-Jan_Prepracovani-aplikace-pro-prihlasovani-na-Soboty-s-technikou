@@ -82,8 +82,8 @@ const ActionOnHome = () => {
         
         return (
             <>
-
-                <Col lg={6} md={8} Style={{ position: "relative" }} >
+                
+                <Col xs={24} sm={12} lg={6} md={8} Style={{ position: "relative" }} >
                     <Panel bordered shaded style={{ height: "100%", textAlign: "left" }}
                         header={<h5>{group.name}</h5>}>
 
@@ -101,7 +101,7 @@ const ActionOnHome = () => {
                         <br />
 
                     </Panel>
-                    <Col lg={24} style={{ position: "relative", bottom: "6em" }} >
+                    <Col lg={24} xs={24} sm={24} md={24} style={{ position: "relative", bottom: "6em" }} >
 
                         <Row style={{ marginBottom: "0.5em" }}>
 

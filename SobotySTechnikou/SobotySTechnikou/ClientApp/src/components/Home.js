@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { SILENT_RENEW_ERROR, useAuthContext } from '../providers/AuthProvider';
-import { IconButton, Message } from 'rsuite';
+import { Col, IconButton, Message } from 'rsuite';
 import { Link } from 'react-router-dom';
 import { Edit } from '@rsuite/icons/lib/icons';
 import axios from 'axios';
@@ -24,6 +24,7 @@ export const Home = () => {
             : null : null
         }
         <ActionOnHome />
+        
       </div>
     )
 

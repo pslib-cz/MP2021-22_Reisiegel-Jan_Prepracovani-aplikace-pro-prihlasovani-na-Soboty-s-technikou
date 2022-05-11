@@ -74,7 +74,7 @@ namespace SobotySTechnikou.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ApplicationsVM>>> GetAllApplications(string? lastName, string? actionId)
+        public async Task<ActionResult<IEnumerable<ApplicationsVM>>> GetAllApplications(string? lastName, string? actionName, string? groupName, int? actionYear)
         {
             IQueryable<UserInGroup> applications = _context.UsersInGroups
                 .Include(x => x.User)
@@ -84,11 +84,19 @@ namespace SobotySTechnikou.Controllers
                 .Include(x => x.CancelledBy);
             if (!String.IsNullOrEmpty(lastName))
             {
-                applications = applications.Where(x => x.User.LastName == lastName);
+                applications = applications.Where(x => x.User.LastName.Contains(lastName));
             }
-            if (!String.IsNullOrEmpty(actionId))
+            if (!String.IsNullOrEmpty(actionName))
             {
-                applications = applications.Where(x=>x.Group.ActionId == actionId);
+                applications = applications.Where(x=>x.Group.Action.Name.Contains(actionName));
+            }
+            if (!String.IsNullOrEmpty(groupName))
+            {
+                applications = applications.Where(x => x.Group.Name.Contains(groupName));
+            }
+            if (actionYear != null && actionYear > 0)
+            {
+                applications = applications.Where(x => x.Group.Action.Year.ToString().Contains(actionYear.ToString()));
             }
             return applications.Select(x => new ApplicationsVM
             {
