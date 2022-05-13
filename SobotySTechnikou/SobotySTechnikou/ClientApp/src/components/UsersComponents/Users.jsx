@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, ButtonGroup, Col, Form, Pagination, Panel, Row, Table } from "rsuite";
+import { Button, ButtonGroup, Col, Form, Pagination, Panel, Row, SelectPicker, Table } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
 
 const Users = props => {
@@ -15,8 +15,10 @@ const Users = props => {
     const [page, setPage] = useState(1);
     const [limit, setLimit] = useState();
 
-    const [lastNameFiter, setLastNAmeFilter] = useState("");
+    const [lastNameFiter, setLastNameFilter] = useState("");
     const [schoolFilter, setSchoolFilter] = useState("");
+    const [conditionFilter, setConditionFilter] = useState("");
+    const [mailFilter, setMailFilter] = useState("");
 
     const getUsers = () => {
         setIsLoading(true);
@@ -26,6 +28,11 @@ const Users = props => {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`
+            },
+            params: {
+                surname: lastNameFiter,
+                schoolName: schoolFilter,
+                mail: mailFilter,
             }
         })
             .then(response => {
@@ -83,11 +90,11 @@ const Users = props => {
                     <ButtonGroup>
                         <Button color="blue" appearance="primary" onClick={()=>getUsers()} >Filtrovat</Button>
                         <Button color="cyan" appearance="primary" onClick={() => {
-                            setLastNAmeFilter("");
-                            setLastNAmeFilter("");
-                            setLastNAmeFilter("");
-                            setLastNAmeFilter("")
-                            setLastNAmeFilter();
+                            setLastNameFilter("");
+                            setSchoolFilter("");
+                            setMailFilter("");
+                            setConditionFilter("");
+                            getUsers();
                         }} >Reset filtru</Button>
                     </ButtonGroup>
                 </Col>
@@ -111,16 +118,13 @@ const Users = props => {
                     <Panel header={<FilterHeader />} bordered>
                         <Form fluid>
                             <Col xs={12} sm={12} md={6} lg={6}>
-                                <Form.Control placeholder="Název akce" value={lastNameFiter} onChange={e => setLastNAmeFilter(e)} />
+                                <Form.Control placeholder="Příjmení" value={lastNameFiter} onChange={e => setLastNameFilter(e)} />
                             </Col>
                             <Col xs={12} sm={12} md={6} lg={6} >
-                                <Form.Control placeholder="Název skupiny" value={lastNameFiter} onChange={e => setLastNAmeFilter(e)} />
-                            </Col>
-                            <Col xs={12} sm={12} md={6} lg={6}>
-                                <Form.Control placeholder="Rok akce" value={lastNameFiter} onChange={e => setLastNAmeFilter(e)} />
+                                <Form.Control placeholder="Název školy" value={schoolFilter} onChange={e => setSchoolFilter(e)} />
                             </Col>
                             <Col xs={12} sm={12} md={6} lg={6} >
-                                <Form.Control placeholder="Jméno uživatele" value={lastNameFiter} onChange={e => setLastNAmeFilter(e)} />
+                                <Form.Control placeholder="Email" value={mailFilter} onChange={e => setMailFilter(e)} />
                             </Col>
                             <br />
                         </Form>

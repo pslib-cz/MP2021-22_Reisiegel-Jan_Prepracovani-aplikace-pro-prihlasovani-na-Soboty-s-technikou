@@ -19,6 +19,10 @@ const AllGroups = () => {
     const [groupAction, setGroupAction] = useState();
     const [groupOpen, setGroupOpen] = useState();
 
+    
+    const [nameFilter, setNameFilter] = useState();
+    const [actionNameFilter, setActionNameFilter] = useState();
+
     const getConditions = () => {
         let conditions = "?";
         if (groupName) {
@@ -52,6 +56,10 @@ const AllGroups = () => {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`
+            },
+            params: {
+                name: nameFilter,
+                actionName: actionNameFilter,
             }
         })
             .then(response => {
@@ -98,71 +106,90 @@ const AllGroups = () => {
         }, 500)
     }
 
+    const FilterHeader = () => {
+        return (
+            <Row>
+                <Col xs={15} sm={7} md={4} lg={7}>
+                    <h5>Filter</h5>
+                </Col>
+                <Col xsHidden sm={24} md={24} lg={24} />
+                <Col xs={15} sm={17} md={17} lg={17}>
+                    <ButtonGroup>
+                        <Button color="blue" appearance="primary" onClick={()=>{getGroups()}} >Filtrovat</Button>
+                        <Button color="cyan" appearance="primary" onClick={()=>{
+                            setActionNameFilter("");
+                            setNameFilter("");
+                            getGroups();
+                        }} >Reset filtru</Button>
+                    </ButtonGroup>
+                </Col>
+                <Col xs={6} sm={5} md={5} lg={5}>
+                    <Button appearance="primary" color="green" as={Link} to="/NewGroup" >Nová skupina</Button>
+                </Col>
+            </Row>
+        )
+    }
+
     useEffect(() => {
         getGroups();
     }, [accessToken])
 
     return (
-        <div>
-            <Col lg={24}>
-                <Row>
-                    <Col lg={21}>
-                        <Panel header={<FilterHeader />} bordered>
-                            <Form fluid>
-                                <Col lg={6}>
-                                    <Form.Control placeholder="Název akce" value={groupName} onChange={e => setGroupName(e)} />
-                                </Col>
-                                <Col lg={6}>
-                                    <Form.Control placeholder="Rok akce" value={groupAction} onChange={e => setGroupAction(e)} />
-                                </Col>
-                                <Col lg={6}>
-                                    <Form.Control placeholder="Stav akce" value={groupOpen} onChange={e => setGroupOpen(e)} />
-                                </Col>
-                                <br />
-                            </Form>
-                        </Panel>
-                    </Col>
-                    <Col lg={3}>
+        <Col xs={24} sm={24} md={24} lg={24}>
+            <Row>
+                <Col xs={24} sm={24} md={24} lg={24}>
+                    <Panel header={<FilterHeader />} bordered>
+                        <Form fluid>
+                            <Col xs={12} sm={12} md={6} lg={6} >
+                                <Form.Control placeholder="Název Skupiny" value={nameFilter} onChange={e => setNameFilter(e)} />
+                            </Col>
+                            <Col xs={12} sm={12} md={6} lg={6} >
+                                <Form.Control placeholder="Název akce skupiny" value={actionNameFilter} onChange={e => setActionNameFilter(e)} />
+                            </Col>
+                            <br />
+                        </Form>
+                    </Panel>
+                </Col>
+                <Col lg={3}>
 
-                    </Col>
-                </Row>
-                <Row>
-                    <Col lg={24}>
-                        <Table
-                            data={dataToTable()}
-                            onSortColumn={handleSortColumn}
-                            sortType={sortType}
-                            sortColumn={sortCol}
-                            loading={isLoading}
-                            autoHeight={true}
-                            bordered
-                            cellBordered
-                            wordWrap >
-                            <Table.Column sortable resizable  width={400} >
-                                <Table.HeaderCell align="center" >Název</Table.HeaderCell>
-                                <Table.Cell dataKey="name" />
-                            </Table.Column>
-                            <Table.Column sortable resizable  width={600} >
-                                <Table.HeaderCell align="center" >Akce</Table.HeaderCell>
-                                <Table.Cell dataKey="actionName" />
-                            </Table.Column>
-                            <Table.Column sortable resizable  width={90} >
-                                <Table.HeaderCell align="center" >Kapacita</Table.HeaderCell>
-                                <Table.Cell dataKey="capacity" />
-                            </Table.Column>
-                            <Table.Column sortable resizable fied width={90} >
-                                <Table.HeaderCell align="center" >Otevřená</Table.HeaderCell>
-                                <ActiveCell dataKey="open" />
-                            </Table.Column>
-                            <Table.Column resizable  width={200} >
-                                <Table.HeaderCell align="center" >Akce</Table.HeaderCell>
-                                <ActionCell />
-                            </Table.Column>
-                        </Table>
-                    </Col>
-                </Row>
-            </Col>
-        </div>
+                </Col>
+            </Row>
+            <Row>
+                <Col xs={24} sm={24} md={24} lg={24}>
+                    <Table
+                        data={dataToTable()}
+                        onSortColumn={handleSortColumn}
+                        sortType={sortType}
+                        sortColumn={sortCol}
+                        loading={isLoading}
+                        autoHeight={true}
+                        bordered
+                        cellBordered
+                        wordWrap >
+                        <Table.Column sortable resizable width={300} >
+                            <Table.HeaderCell align="center" >Název</Table.HeaderCell>
+                            <Table.Cell dataKey="name" />
+                        </Table.Column>
+                        <Table.Column sortable resizable width={300} >
+                            <Table.HeaderCell align="center" >Akce</Table.HeaderCell>
+                            <Table.Cell dataKey="actionName" />
+                        </Table.Column>
+                        <Table.Column sortable resizable width={90} >
+                            <Table.HeaderCell align="center" >Kapacita</Table.HeaderCell>
+                            <Table.Cell dataKey="capacity" />
+                        </Table.Column>
+                        <Table.Column sortable resizable width={90} >
+                            <Table.HeaderCell align="center" >Otevřená</Table.HeaderCell>
+                            <ActiveCell dataKey="open" />
+                        </Table.Column>
+                        <Table.Column resizable width={100} >
+                            <Table.HeaderCell align="center" >Akce</Table.HeaderCell>
+                            <ActionCell />
+                        </Table.Column>
+                    </Table>
+                </Col>
+            </Row>
+        </Col>
     )
 }
 
@@ -182,21 +209,6 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
     )
 }
 
-const FilterHeader = () => {
-    return (
-        <Row>
-            <Col lg={5}>
-                <h5>Filter</h5>
-            </Col>
-            <Col lg={6} lgOffset={13}>
-                <ButtonGroup>
-                    <Button color="blue" appearance="primary" >Filtrovat</Button>
-                    <Button color="cyan" appearance="primary" >Reset filtru</Button>
-                    <Button appearance="primary" color="green" as={Link} to="/NewGroup" >Nová skupina</Button>
-                </ButtonGroup>
-            </Col>
-        </Row>
-    )
-}
+
 
 export default AllGroups;

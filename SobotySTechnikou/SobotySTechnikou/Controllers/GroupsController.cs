@@ -38,11 +38,11 @@ namespace SobotySTechnikou.Controllers
                 });
             if (!String.IsNullOrEmpty(name))
             {
-                groups = groups.Where(x=>x.Name == name);
+                groups = groups.Where(x=>x.Name.Contains(name));
             }
             if (!String.IsNullOrEmpty(actionName))
             {
-                groups = groups.Where(x => x.Action.Name == actionName);
+                groups = groups.Where(x => x.ActionName.Contains(actionName));
             }
             if(open != null)
             {

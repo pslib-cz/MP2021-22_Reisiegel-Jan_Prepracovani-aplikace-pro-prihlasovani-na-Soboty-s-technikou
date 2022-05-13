@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button, ButtonGroup, Col, Container, Grid, Panel, Row, Table } from "rsuite";
+import { Button, ButtonGroup, Col, Container, Divider, Grid, Panel, Row, Table } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
 
 const yearData = [ "Nevybráno", "7. a nižší třída", "8. třída ZŠ", "9. třída ZŠ", "Vyšší třída (SŠ)"];
@@ -115,61 +115,79 @@ const Profile = props => {
         return (
             <Col xs={24} sm={24} md={24} lg={24}>
                 <Row>
-                    <Col lg={15} lgOffset={4}>
+                    <Col xs={24} sm={24} lg={15} lgOffset={4}>
                         <Panel shaded bordered header={userData.firstName + " " + userData.lastName}>
                             <Row>
-                                <Col lg={7} style={{ textAlign: "right", fontSize: "1.5em" }}>
+                                <Col xs={12} sm={10} md={10} lg={7} style={{ textAlign: "right", fontSize: "1.5em" }}>
                                     Uživatelské jméno:
                                 </Col>
-                                <Col lg={17} style={{ fontSize: "1.5em" }}>
+                                <Col xs={17} sm={14} md={14} lg={17} style={{ fontSize: "1.5em" }}>
                                     {userData.userName}
                                 </Col>
+                                <Col xs={24}>
+                                    <Divider />
+                                </Col>
                             </Row>
                             <Row>
-                                <Col lg={7} style={{ textAlign: "right", fontSize: "1.5em" }}>
+                                <Col xs={5} sm={10} md={10} lg={7} style={{ textAlign: "right", fontSize: "1.5em" }}>
                                     Email:
                                 </Col>
-                                <Col lg={17} style={{ fontSize: "1.5em" }}>
+                                <Col sx={19} sm={14} md={14} lg={17} style={{ fontSize: "1.5em" }}>
                                     {userData.email}
                                 </Col>
+                                <Col xs={24}>
+                                    <Divider />
+                                </Col>
                             </Row>
                             <Row>
-                                <Col lg={7} style={{ textAlign: "right", fontSize: "1.5em" }}>
+                                <Col xs={13} sm={10} md={10} lg={7} style={{ textAlign: "right", fontSize: "1.5em" }}>
                                     Datum narození:
                                 </Col>
-                                <Col lg={17} style={{ fontSize: "1.5em" }} >
+                                <Col xs={11} sm={14} md={14} lg={17} style={{ fontSize: "1.5em" }} >
                                     {userData.birthDate}
                                 </Col>
+                                <Col xs={24}>
+                                    <Divider />
+                                </Col>
                             </Row>
                             <Row>
-                                <Col lg={7} style={{ textAlign: "right", fontSize: "1.5em" }}>
+                                <Col xs={6} sm={10} md={10} lg={7} style={{ textAlign: "right", fontSize: "1.5em" }}>
                                     Pohlaví:
                                 </Col>
-                                <Col lg={17} style={{ fontSize: "1.5em" }} >
-                                    {userData.gender}
+                                <Col xs={18} sm={14} md={14} lg={17} style={{ fontSize: "1.5em" }} >
+                                    {userData.gender === 1 ? "muž" : userData.gender === 2 ? "žena" : "jiné"}
+                                </Col>
+                                <Col xs={24}>
+                                    <Divider />
                                 </Col>
                             </Row>
                             <Row>
-                                <Col lg={7} style={{ textAlign: "right", fontSize: "1.5em" }}>
+                                <Col xs={4} sm={10} md={10} lg={7} style={{ textAlign: "right", fontSize: "1.5em" }}>
                                     Škola:
                                 </Col>
-                                <Col lg={17} style={{ fontSize: "1.5em", wordWrap: "break-word" }}>
+                                <Col xs={24} sm={14} md={14} lg={17} style={{ fontSize: "1.5em", wordWrap: "break-word" }}>
                                     {userData.school}
                                 </Col>
+                                <Col xs={24}>
+                                    <Divider />
+                                </Col>
                             </Row>
                             <Row>
-                                <Col lg={7} style={{ textAlign: "right", fontSize: "1.5em" }}>
+                                <Col xs={5} sm={10} md={10} lg={7} style={{ textAlign: "right", fontSize: "1.5em" }}>
                                     Ročník:
                                 </Col>
-                                <Col lg={17} style={{ fontSize: "1.5em" }}>
+                                <Col xs={19} sm={14} md={14} lg={17} style={{ fontSize: "1.5em" }}>
                                     {yearData[userData.year]}
+                                </Col>
+                                <Col xs={24}>
+                                    <Divider />
                                 </Col>
                             </Row>
                             <Row>
-                                <Col lg={7} style={{ textAlign: "right", fontSize: "1.5em" }}>
+                                <Col xs={13} sm={10} md={10} lg={7} style={{ textAlign: "right", fontSize: "1.5em" }}>
                                     Zájemce o studium:
                                 </Col>
-                                <Col lg={17} style={{ fontSize: "1.5em" }}>
+                                <Col xs={5} sm={14} md={14} lg={17} style={{ fontSize: "1.5em" }}>
                                     {
                                         userData.potentionalStudent ?
                                             "Ano" : "Ne"
@@ -178,7 +196,7 @@ const Profile = props => {
                             </Row>
                         </Panel>
                     </Col>
-                    <Col lg={15} lgOffset={4}>
+                    <Col xs={24} sm={24} lg={15} lgOffset={4}>
                         <Panel shaded bordered header={"Skupiny"}>
                             <Table
                             data = {userData.groups}

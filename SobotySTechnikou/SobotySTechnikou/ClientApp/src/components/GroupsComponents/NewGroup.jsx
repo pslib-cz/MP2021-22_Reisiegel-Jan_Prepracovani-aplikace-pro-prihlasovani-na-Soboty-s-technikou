@@ -134,16 +134,16 @@ const NewGroup = () => {
 
 
     return (
-        <div>
+        <Col xs={24} sm={24} md={24} lg={24}>
             <h2>Vytvořit novou skupinu</h2>
             <Form fluid>
                 <Row>
-                    <Col lg={22} lgOffset={2}>
+                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={6}>
+                            <Col xs={24} sm={8} md={8} lg={6}>
                                 <Form.ControlLabel >Název skupiny</Form.ControlLabel>
                             </Col>
-                            <Col lg={16}>
+                            <Col xs={24} sm={12} md={12} lg={16}>
                                 <Input value={groupName} onChange={e => setGroupName(e)} placeholder="Vývoj webové stránky ve Wordpressu"></Input>
                             </Col>
                         </Form.Group>
@@ -151,12 +151,12 @@ const NewGroup = () => {
                 </Row>
                 <br />
                 <Row>
-                    <Col lg={22} lgOffset={2}>
+                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={6}>
+                            <Col xs={24} sm={8} md={8} lg={6}>
                                 <Form.ControlLabel >Akce</Form.ControlLabel>
                             </Col>
-                            <Col lg={16}>
+                            <Col xs={24} sm={12} md={12} lg={16}>
                                 <SelectPicker block searchable={true} data={actionsSelector} value={action} onChange={e => setAction(e)} />
                             </Col>
                         </Form.Group>
@@ -164,12 +164,12 @@ const NewGroup = () => {
                 </Row>
                 <br />
                 <Row>
-                    <Col lg={22} lgOffset={2}>
+                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={6}>
+                            <Col xs={24} sm={8} md={8} lg={6}>
                                 <Form.ControlLabel >Odpovědný lektor</Form.ControlLabel>
                             </Col>
-                            <Col lg={16}>
+                            <Col xs={24} sm={12} md={12} lg={16}>
                                 <SelectPicker block data={lectors} value={headLector} onChange={e => setHeadLector(e)}></SelectPicker>
                             </Col>
                         </Form.Group>
@@ -177,12 +177,12 @@ const NewGroup = () => {
                 </Row>
                 <br />
                 <Row>
-                    <Col lg={22} lgOffset={2}>
+                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={6}>
+                            <Col xs={24} sm={8} md={8} lg={6}>
                                 <Form.ControlLabel >Počet Lektorů</Form.ControlLabel>
                             </Col>
-                            <Col lg={16}>
+                            <Col xs={24} sm={12} md={12} lg={16}>
                                 <InputNumber style={{ width: "100%" }} value={numberOfLectors} onChange={e => setNumberOfLectors(e)}></InputNumber>
                             </Col>
                         </Form.Group>
@@ -190,12 +190,12 @@ const NewGroup = () => {
                 </Row>
                 <br />
                 <Row>
-                    <Col lg={22} lgOffset={2}>
+                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={6}>
+                            <Col xs={24} sm={8} md={8} lg={6}>
                                 <Form.ControlLabel >Poznámka k Lektorům</Form.ControlLabel>
                             </Col>
-                            <Col lg={16}>
+                            <Col xs={24} sm={12} md={12} lg={16}>
                                 <CKEditor
                                     config={{
                                         language: 'cs',
@@ -214,12 +214,12 @@ const NewGroup = () => {
                 </Row>
                 <br />
                 <Row>
-                    <Col lg={22} lgOffset={2}>
+                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={6}>
+                            <Col xs={24} sm={8} md={8} lg={6}>
                                 <Form.ControlLabel >Kapacita</Form.ControlLabel>
                             </Col>
-                            <Col lg={16}>
+                            <Col xs={24} sm={12} md={12} lg={16}>
                                 <InputNumber style={{ width: "100%" }} value={capacity} onChange={e => setCapacity(e)}></InputNumber>
                             </Col>
                         </Form.Group>
@@ -227,12 +227,12 @@ const NewGroup = () => {
                 </Row>
                 <br />
                 <Row>
-                    <Col lg={22} lgOffset={2}>
+                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={6}>
+                            <Col xs={24} sm={8} md={8} lg={6}>
                                 <Form.ControlLabel >Minimální ročník</Form.ControlLabel>
                             </Col>
-                            <Col lg={16}>
+                            <Col xs={24} sm={12} md={12} lg={16}>
                                 <SelectPicker block data={yearData} searchable={false} value={minYear} onChange={e => setMinYear(e)}></SelectPicker>
                             </Col>
                         </Form.Group>
@@ -240,12 +240,12 @@ const NewGroup = () => {
                 </Row>
                 <br />
                 <Row>
-                    <Col lg={22} lgOffset={2}>
+                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={6}>
+                            <Col xs={24} sm={8} md={8} lg={6}>
                                 <Form.ControlLabel >Popis</Form.ControlLabel>
                             </Col>
-                            <Col lg={16}>
+                            <Col xs={24} sm={12} lg={16}>
                                 <CKEditor
                                     config={{
                                         language: 'cs',
@@ -264,12 +264,12 @@ const NewGroup = () => {
                 </Row>
                 <br />
                 <Row>
-                    <Col lg={22} lgOffset={2}>
+                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={6}>
+                            <Col xs={24} sm={8} md={8} lg={6}>
                                 <Form.ControlLabel >Otevřená</Form.ControlLabel>
                             </Col>
-                            <Col lg={16}>
+                            <Col xs={24} sm={12} md={12} lg={16}>
                                 <Checkbox value={open} onChange={e => setOpen(!open)}></Checkbox>
                             </Col>
                         </Form.Group>
@@ -277,12 +277,12 @@ const NewGroup = () => {
                 </Row>
                 <br />
                 <Row>
-                    <Col lg={22} lgOffset={2}>
+                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={6}>
+                            <Col xs={24} sm={8} md={8} lg={6}>
                                 <Form.ControlLabel >Poznámka</Form.ControlLabel>
                             </Col>
-                            <Col lg={16}>
+                            <Col xs={24} sm={12} md={12} lg={16}>
                                 <CKEditor
                                     config={{
                                         language: 'cs',
@@ -299,9 +299,12 @@ const NewGroup = () => {
                         </Form.Group>
                     </Col>
                 </Row>
-                <Button color="cyan" appearance="primary" onClick={() => createGroup()} as={Link} to="/AllGroups" >Vytvořit</Button>
+                <br />
+                <Col xs={24} sm={8} smOffset={8} md={8} mdOffset={8} lg={8} lgOffset={8}>
+                <Button block color="cyan" appearance="primary" onClick={() => createGroup()} as={Link} to="/AllGroups" >Vytvořit skupinu</Button>
+                </Col>
             </Form>
-        </div>
+        </Col>
     )
 
 

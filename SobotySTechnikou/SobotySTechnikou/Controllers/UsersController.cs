@@ -80,12 +80,24 @@ namespace SobotySTechnikou.Controllers
         //[Authorize]//(Roles = "Administrator")
         [Authorize(Policy = AuthorizationConstants.ADMINISTRATOR_POLICY)]
         [HttpGet("AllUsers")]
-        public async Task<ActionResult<ICollection<ApplicationUser>>> GetAll()
+        public async Task<ActionResult<ICollection<ApplicationUser>>> GetAll(string? surname, string? schoolName, string? mail)
         {
-            var allUsers = await _context.Users.ToListAsync();
+            IQueryable<ApplicationUser> allUsers = _context.Users;
             if (allUsers == null)
-                return StatusCode(418);
-            return allUsers;
+                return NotFound();
+            if (!String.IsNullOrEmpty(surname))
+            {
+                allUsers = allUsers.Where(x => x.LastName.Contains(surname));
+            }
+            if (!String.IsNullOrEmpty(schoolName))
+            {
+                allUsers = allUsers.Where(x => x.School.Contains(schoolName));
+            }
+            if (!String.IsNullOrEmpty(mail))
+            {
+                allUsers = allUsers.Where(x => x.Email.Contains(mail));
+            }
+            return await allUsers.ToListAsync();
         }
 
         //[Authorize] //(Roles = "Administrator")
