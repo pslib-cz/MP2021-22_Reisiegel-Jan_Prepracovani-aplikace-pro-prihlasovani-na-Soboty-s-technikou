@@ -110,7 +110,7 @@ const AllGroups = () => {
         return (
             <Row>
                 <Col xs={15} sm={7} md={4} lg={7}>
-                    <h5>Filter</h5>
+                    <h5 style={{ textAlign: "center" }}>Filter</h5>
                 </Col>
                 <Col xsHidden sm={24} md={24} lg={24} />
                 <Col xs={15} sm={17} md={17} lg={17}>

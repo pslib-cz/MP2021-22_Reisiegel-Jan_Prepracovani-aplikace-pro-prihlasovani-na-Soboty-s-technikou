@@ -36,8 +36,8 @@ const ActionDetail = () => {
             });
     }
 
-    const PanelHeader = ({nameId, year, actionData}) => {
-        const [{accessToken}] = useAuthContext();
+    const PanelHeader = ({ nameId, year, actionData }) => {
+        const [{ accessToken }] = useAuthContext();
         const deleteAction = () => {
             axios.delete("/api/Actions/" + actionData.id, {
                 headers: {
@@ -67,18 +67,18 @@ const ActionDetail = () => {
                     "Authorization": `Bearer ${accessToken}`
                 }
             })
-            .then(response=>{
-                console.log(response);
-            })
-            .catch(error => {
-                setError(true);
-            })
-            .finally(()=>{
-                setIsLoading(false);
-                getData();
-            })
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(error => {
+                    setError(true);
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                    getData();
+                })
         }
-    
+
         const changeAvailabilityAction = () => {
             setIsLoading(true);
             setError(false);
@@ -98,35 +98,53 @@ const ActionDetail = () => {
                     "Authorization": `Bearer ${accessToken}`
                 }
             })
-            .then(response=>{
-                console.log(response);
-            })
-            .catch(error => {
-                setError(true);
-            })
-            .finally(()=>{
-                setIsLoading(false);
-                getData();
-            })
+                .then(response => {
+                    console.log(response);
+                })
+                .catch(error => {
+                    setError(true);
+                })
+                .finally(() => {
+                    setIsLoading(false);
+                    getData();
+                })
         }
         return (
             <>
                 <Row>
-                    <Col lg={12}>
+                    <Col xs={24} sm={24} md={9} lg={11}>
                         <h2>Informace o akci</h2>
                     </Col>
-                    <Col lg={12} style={{ textAlign: "right" }}>
+                    <Col xs={24} smHidden mdHidden lgHidden>
+                        <Row>
+                            <Col xs={12}>
+                                <Button block color="blue" appearance="primary" as={Link} to={`/EditAction/${year}/${nameId}`} >Upravit</Button>
+                            </Col>
+                            <Col xs={12}>
+                                <Button block appearance="ghost" onClick={() => { changeActionActive() }} >{actionData.active ? "Deaktivovat" : "Aktivovat"}</Button>
+                            </Col>
+                        </Row>
+                        <Row style={{marginTop: '.25em'}}>
+                            <Col xs={12}>
+                                <Button block appearance="ghost" onClick={() => { changeAvailabilityAction() }} >{actionData.availability ? "Skrýt z Titulní stránky" : "Zveřejnit na titulní stránku"}</Button>
+                            </Col>
+                            <Col xs={12}>
+                                <Button block appearance="primary" onClick={() => { deleteAction() }} as={Link} to="/AllActions" color="red">Smazat</Button>
+                            </Col>
+                        </Row>
+                    </Col>
+                    <Col xsHidden sm={23} md={12} lg={12} style={{ textAlign: "right" }}>
                         <ButtonGroup>
                             <Button color="blue" appearance="primary" as={Link} to={`/EditAction/${year}/${nameId}`} >Upravit</Button>
-                            <Button appearance="ghost" onClick={() => {changeActionActive()}} >{actionData.active ? "Deaktivovat" : "Aktivovat"}</Button>
-                            <Button appearance="ghost" onClick={() => {changeAvailabilityAction()}} >{actionData.availability ? "Skrýt z Titulní stránky" : "Zveřejnit na titulní stránku"}</Button>
-                            <Button appearance="primary" onClick={() => {deleteAction()}} as={Link} to="/AllActions" color="red">Smazat</Button>
+                            <Button appearance="ghost" onClick={() => { changeActionActive() }} >{actionData.active ? "Deaktivovat" : "Aktivovat"}</Button>
+                            <Button appearance="ghost" onClick={() => { changeAvailabilityAction() }} >{actionData.availability ? "Skrýt z Titulní stránky" : "Zveřejnit na titulní stránku"}</Button>
+                            <Button appearance="primary" onClick={() => { deleteAction() }} as={Link} to="/AllActions" color="red">Smazat</Button>
                         </ButtonGroup>
                     </Col>
                 </Row>
             </>
-    
-    
+
+
         )
     }
 
@@ -144,64 +162,64 @@ const ActionDetail = () => {
         return (
             <div>
                 <Row>
-                    <Col lg={20} lgOffset={2}>
+                    <Col xs={24} lg={20} lgOffset={2}>
                         <Panel shaded bordered header={<PanelHeader year={year} nameId={nameId} actionData={actionData} />} >
                             <Row>
                                 <h5>Obecné</h5>
                             </Row>
                             <Row>
-                                <Col lg={7} style={{ textAlign: "right", fontSize: "1.25em", paddingRight: "1.5em" }}>
+                                <Col xs={10} sm={7} md={7} lg={7} style={{ textAlign: "right", fontSize: "1.25em", paddingRight: "1.5em" }}>
                                     Název akce
                                 </Col>
-                                <Col lg={17} style={{ fontSize: "1.25em" }}>
+                                <Col xs={14} sm={17} md={17} lg={17} style={{ fontSize: "1.25em" }}>
                                     {actionData.name}
                                 </Col>
                             </Row>
                             <Row>
-                                <Col lg={7} style={{ textAlign: "right", fontSize: "1.25em", paddingRight: "1.5em" }}>
+                                <Col xs={10} sm={7} md={7} lg={7} style={{ textAlign: "right", fontSize: "1.25em", paddingRight: "1.5em" }}>
                                     Školní rok
                                 </Col>
-                                <Col lg={17} style={{ fontSize: "1.25em" }}>
+                                <Col xs={14} sm={17} md={17} lg={17} style={{ fontSize: "1.25em" }}>
                                     {actionData.year}
                                 </Col>
                             </Row>
                             <Row>
-                                <Col lg={7} style={{ textAlign: "right", fontSize: "1.25em", paddingRight: "1.5em" }}>
+                                <Col xs={10} sm={7} md={7} lg={7} style={{ textAlign: "right", fontSize: "1.25em", paddingRight: "1.5em" }}>
                                     Začátek
                                 </Col>
-                                <Col lg={17} style={{ fontSize: "1.25em" }}>
+                                <Col xs={14} sm={17} md={17} lg={17} style={{ fontSize: "1.25em" }}>
                                     {actionData.start}
                                 </Col>
                             </Row>
                             <Row>
-                                <Col lg={7} style={{ textAlign: "right", fontSize: "1.25em", paddingRight: "1.5em" }}>
+                                <Col xs={10} sm={7} md={7} lg={7} style={{ textAlign: "right", fontSize: "1.25em", paddingRight: "1.5em" }}>
                                     Konec
                                 </Col>
-                                <Col lg={17} style={{ fontSize: "1.25em" }}>
+                                <Col xs={14} sm={17} md={17} lg={17} style={{ fontSize: "1.25em" }}>
                                     {actionData.end}
                                 </Col>
                             </Row>
                             <Row>
-                                <Col lg={7} style={{ textAlign: "right", fontSize: "1.25em", paddingRight: "1.5em" }}>
+                                <Col xs={10} sm={7} md={7} lg={7} style={{ textAlign: "right", fontSize: "1.25em", paddingRight: "1.5em" }}>
                                     Aktivní
                                 </Col>
-                                <Col lg={17} style={{ fontSize: "1.25em" }}>
+                                <Col xs={14} sm={17} md={17} lg={17} style={{ fontSize: "1.25em" }}>
                                     {actionData.active === true ? "Ano" : "Ne"}
                                 </Col>
                             </Row>
                             <Row>
-                                <Col lg={7} style={{ textAlign: "right", fontSize: "1.25em", paddingRight: "1.5em" }}>
+                                <Col xs={10} sm={7} md={7} lg={7} style={{ textAlign: "right", fontSize: "1.25em", paddingRight: "1.5em" }}>
                                     Veřejná
                                 </Col>
-                                <Col lg={17} style={{ fontSize: "1.25em" }}>
+                                <Col xs={14} sm={17} md={17} lg={17} style={{ fontSize: "1.25em" }}>
                                     {actionData.availability === true ? "Ano" : "Ne"}
                                 </Col>
                             </Row>
                             <Row>
-                                <Col lg={7} style={{ textAlign: "right", fontSize: "1.25em", paddingRight: "1.5em" }}>
+                                <Col xs={10} sm={7} md={7} lg={7} style={{ textAlign: "right", fontSize: "1.25em", paddingRight: "1.5em" }}>
                                     Popis
                                 </Col>
-                                <Col lg={17} style={{ fontSize: "1.25em" }}>
+                                <Col xs={14} sm={17} md={17} lg={17} style={{ fontSize: "1.25em" }}>
                                     {
                                         parse(actionData.description)
                                     }
@@ -212,26 +230,26 @@ const ActionDetail = () => {
                                 <h5>Založení</h5>
                             </Row>
                             <Row>
-                                <Col lg={7} style={{ textAlign: "right", fontSize: "1.25em", paddingRight: "1.5em" }}>
+                                <Col xs={10} sm={7} md={7} lg={7} style={{ textAlign: "right", fontSize: "1.25em", paddingRight: "1.5em" }}>
                                     Založení
                                 </Col>
-                                <Col lg={17} style={{ fontSize: "1.25em" }}>
+                                <Col xs={14} sm={17} md={17} lg={17} style={{ fontSize: "1.25em" }}>
                                     {actionData.createTime}
                                 </Col>
                             </Row>
                             <Row>
-                                <Col lg={7} style={{ textAlign: "right", fontSize: "1.25em", paddingRight: "1.5em" }}>
+                                <Col xs={10} sm={7} md={7} lg={7} style={{ textAlign: "right", fontSize: "1.25em", paddingRight: "1.5em" }}>
                                     Poslední aktualizace
                                 </Col>
-                                <Col lg={17} style={{ fontSize: "1.25em" }}>
+                                <Col xs={14} sm={17} md={17} lg={17} style={{ fontSize: "1.25em" }}>
                                     {actionData.updateTime}
                                 </Col>
                             </Row>
                             <Row>
-                                <Col lg={7} style={{ textAlign: "right", fontSize: "1.25em", paddingRight: "1.5em" }}>
+                                <Col xs={10} sm={7} md={7} lg={7} style={{ textAlign: "right", fontSize: "1.25em", paddingRight: "1.5em" }}>
                                     Vytvořil
                                 </Col>
-                                <Col lg={17} style={{ fontSize: "1.25em" }}>
+                                <Col xs={14} sm={17} md={17} lg={17} style={{ fontSize: "1.25em" }}>
                                     {actionData.creatorName}
                                 </Col>
                             </Row>
@@ -244,27 +262,27 @@ const ActionDetail = () => {
                                         <Table
                                             data={actionData.groups}
                                             bordered
-                                            cellBordere
+                                            cellBordered  
                                         >
-                                            <Table.Column resizable fixed width={400} >
+                                            <Table.Column resizable  width={400} >
                                                 <Table.HeaderCell align="center" >Název akce</Table.HeaderCell>
                                                 <Table.Cell dataKey="name" />
                                             </Table.Column>
-                                            <Table.Column resizable fixed width={100} >
+                                            <Table.Column resizable  width={100} >
                                                 <Table.HeaderCell align="center" >Kapacita</Table.HeaderCell>
-                                                <Table.Cell dataKey="name" />
+                                                <Table.Cell dataKey="capacity" />
                                             </Table.Column>
-                                            <Table.Column resizable fixed width={100} >
+                                            <Table.Column resizable  width={100} >
                                                 <Table.HeaderCell align="center" >Přihlášení</Table.HeaderCell>
-                                                <Table.Cell dataKey="name" />
+                                                <Table.Cell dataKey="countOfUsers" />
                                             </Table.Column>
-                                            <Table.Column resizable fixed width={100} >
+                                            <Table.Column resizable  width={100} >
                                                 <Table.HeaderCell align="center" >Počet lektorů</Table.HeaderCell>
-                                                <Table.Cell dataKey="name" />
+                                                <Table.Cell dataKey="numberOfLectors" />
                                             </Table.Column>
-                                            <Table.Column resizable fixed width={100} >
+                                            <Table.Column resizable  width={100} >
                                                 <Table.HeaderCell align="center" >Otevřené</Table.HeaderCell>
-                                                <AvailabilityCell dataKey="name" />
+                                                <AvailabilityCell dataKey="open" />
                                             </Table.Column>
                                         </Table>
                                     </>

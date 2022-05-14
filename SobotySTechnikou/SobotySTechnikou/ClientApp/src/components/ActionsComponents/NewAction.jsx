@@ -65,16 +65,16 @@ const NewAction = () => {
     }
 
     return (
-        <div>
+        <Col xs={24} sm={24} md={24} lg={24}>
             <h1>Nová akce</h1>
             <Form fluid>
                 <Row>
-                    <Col lg={20} lgOffset={2}>
+                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={20} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={6}>
+                            <Col xs={24} sm={8} md={8} lg={6}>
                                 <Form.ControlLabel >Název Akce</Form.ControlLabel>
                             </Col>
-                            <Col lg={16}>
+                            <Col xs={24} sm={12} md={12} lg={16}>
                                 <Input value={name} onChange={e => setName(e)} />
                             </Col>
                         </Form.Group>
@@ -82,12 +82,12 @@ const NewAction = () => {
                 </Row>
                 <br />
                 <Row>
-                    <Col lg={20} lgOffset={2}>
+                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={20} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={6}>
+                            <Col xs={24} sm={8} md={8} lg={6}>
                                 <Form.ControlLabel >školní rok</Form.ControlLabel>
                             </Col>
-                            <Col lg={16}>
+                            <Col xs={24} sm={12} md={12} lg={16}>
                                 <InputNumber style={{ width: "100%" }} value={year} onChange={e => setYear(e)} />
                             </Col>
                         </Form.Group>
@@ -95,12 +95,12 @@ const NewAction = () => {
                 </Row>
                 <br />
                 <Row>
-                    <Col lg={20} lgOffset={2}>
+                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={20} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={6}>
+                            <Col xs={24} sm={8} md={8} lg={6}>
                                 <Form.ControlLabel >Začátek</Form.ControlLabel>
                             </Col>
-                            <Col lg={16}>
+                            <Col xs={24} sm={12} md={12} lg={16}>
                                 <Input type="datetime-local" value={startDate} onChange={e => setStartDate(e)} />
                             </Col>
                         </Form.Group>
@@ -108,12 +108,12 @@ const NewAction = () => {
                 </Row>
                 <br />
                 <Row>
-                    <Col lg={20} lgOffset={2}>
+                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={20} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={6}>
+                            <Col xs={24} sm={8} md={8} lg={6}>
                                 <Form.ControlLabel >Konec</Form.ControlLabel>
                             </Col>
-                            <Col lg={16}>
+                            <Col xs={24} sm={12} md={12} lg={16}>
                                 <Input type="datetime-local" value={endDate} onChange={e => setEndDate(e)} />
                             </Col>
                         </Form.Group>
@@ -121,12 +121,12 @@ const NewAction = () => {
                 </Row>
                 <br />
                 <Row>
-                    <Col lg={20} lgOffset={2}>
+                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={20} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={6}>
+                            <Col xs={24} sm={8} md={8} lg={6}>
                                 <Form.ControlLabel>Forma Akce</Form.ControlLabel>
                             </Col>
-                            <Col lg={16}>
+                            <Col xs={24} sm={12} md={12} lg={16}>
                                 <SelectPicker block searchable={false} data={actionType} value={type} onChange={e => setType(e)} />
                             </Col>
                         </Form.Group>
@@ -134,12 +134,12 @@ const NewAction = () => {
                 </Row>
                 <br />
                 <Row>
-                    <Col lg={20} lgOffset={2}>
+                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={20} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={6}>
+                            <Col xs={24} sm={8} md={8} lg={6}>
                                 <Form.ControlLabel>Popis Akce</Form.ControlLabel>
                             </Col>
-                            <Col lg={16}>
+                            <Col xs={24} sm={12} md={12} lg={16}>
                                 <CKEditor
                                     config={{
                                         language: 'cs',
@@ -168,27 +168,29 @@ const NewAction = () => {
                     </Col>
                 </Row>
                 <Row>
-                    <Col lg={20} lgOffset={2}>
+                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={20} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={16} lgOffset={6}>
+                            <Col xs={24} sm={8} smOffset={8} md={8} mdOffset={8} lg={16} lgOffset={6}>
                                 <Checkbox value={active} onChange={e => setActive(!active)}>Aktivní</Checkbox>
                             </Col>
                         </Form.Group>
                     </Col>
                 </Row>
                 <Row>
-                    <Col lg={20} lgOffset={2}>
+                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={20} lgOffset={2}>
                         <Form.Group>
-                            <Col lg={16} lgOffset={6}>
+                            <Col xs={24} sm={8} smOffset={8} md={8} mdOffset={8} lg={16} lgOffset={6}>
                                 <Checkbox value={availability} onChange={e => setAvailability(!availability)}>Na titulní stránce</Checkbox>
                             </Col>
                         </Form.Group>
                     </Col>
                 </Row>
                 <br />
-                <Button as={Link} to="/AllActions" color="cyan" appearance="primary" onClick={() => { createAction() }}>Uložit</Button>
+                <Col xs={24} sm={8} smOffset={8} md={8} mdOffset={8} lg={4} lgOffset={10}>
+                <Button block as={Link} to="/AllActions" color="cyan" appearance="primary" onClick={() => { createAction() }}>Uložit</Button>
+                </Col>
             </Form>
-        </div>
+        </Col>
     )
 }
 

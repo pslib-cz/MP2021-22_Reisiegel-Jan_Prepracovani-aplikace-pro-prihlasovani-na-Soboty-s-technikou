@@ -22,7 +22,7 @@ namespace SobotySTechnikou.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Models.Action>>> Get(string? name, int? year, bool? isActive, bool? availability)
+        public async Task<ActionResult<IEnumerable<Models.Action>>> Get(string? name, int? year, bool? isActive, int? typeOfAction)
         {
             var userId = User.Claims.Where(x => x.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value;
             var not = User.Claims.ToList();
@@ -40,13 +40,14 @@ namespace SobotySTechnikou.Controllers
             {
                 actions = actions.Where(x=>x.Active == isActive);
             }
-            if (availability != null)
+            if (typeOfAction != null)
             {
-                if(availability == true)
+                actions = typeOfAction switch
                 {
-                    var action = actions.Where(x => x.Availability == availability).OrderBy(x => x.Start).FirstOrDefault(); //to do                     
-                }
-                actions = actions.Where(x=>x.Availability == availability);
+                    0 => actions.Where(x => x.FormOfAction == ActionType.Online),
+                    1 => actions.Where(x => x.FormOfAction == ActionType.Offline),
+                    _ => actions
+                };
             }
             return await actions.ToListAsync();
         }
@@ -95,6 +96,16 @@ namespace SobotySTechnikou.Controllers
                     CreatorName = $"{x.Creator.FirstName} {x.Creator.LastName}",
                     Type = x.FormOfAction
                 }).FirstOrDefaultAsync();
+                action.Groups = await _context.Groups.Where(x => x.ActionId == action.Id).Select(x => new GroupVM
+                {
+                    Id=x.Id,
+                    Name=x.Name,
+                    NameId=x.NameId,
+                    Capacity = x.Capacity,
+                    NumberOfLectors = x.NumberOfLectors,
+                    Open= x.Open,
+                    CountOfUsers = _context.UsersInGroups.Where(a => a.GroupId==x.Id && a.CancelledAt == null).Count()
+                }).ToListAsync();
             }
             if(action is null)
                 return NotFound();
@@ -216,8 +227,8 @@ namespace SobotySTechnikou.Controllers
                 Id = x.Id,
                 Name = x.Name,
                 Year = x.Year,
-                Start = x.Start.ToString(),
-                End = x.End.ToString(),
+                Start = x.Start.ToString(DateFormats.InfoDateTimeFormat),
+                End = x.End.ToString(DateFormats.InfoDateTimeFormat),
                 Active = x.Active,
                 Availability = x.Availability,
                 Description = x.Description,

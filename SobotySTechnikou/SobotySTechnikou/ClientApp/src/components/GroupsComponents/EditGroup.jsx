@@ -305,7 +305,7 @@ const EditGroup = () => {
                         <Col xs={24} sm={24} md={22} mdOffset={2} lg={20} lgOffset={2}>
                             <Form.Group>
                                 <Form.Group>
-                                    <Col xs={24} sm={8} md={8} mdOffset={8} lg={10} lgOffset={10}>
+                                    <Col xs={24} sm={8} smOffset={8} md={8} mdOffset={8} lg={10} lgOffset={10}>
                                         <Checkbox checked={open} onChange={e => setOpen(!open)}  >Otevřená pro zápis</Checkbox>
                                     </Col>
                                 </Form.Group>

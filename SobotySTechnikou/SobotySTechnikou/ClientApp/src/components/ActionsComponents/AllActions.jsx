@@ -3,8 +3,41 @@ import axios from "axios";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, ButtonGroup, Col, Form, IconButton, Panel, Row, Table } from "rsuite";
+import { Button, ButtonGroup, Col, Form, IconButton, Panel, Row, SelectPicker, Table } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
+
+const conditionData = [
+    {
+        "label": "Vyberte stav akce",
+        "value": "",
+    },
+    {
+        "label": "Aktivní",
+        "value": "true",
+    },
+    {
+        "label": "Blokovaný",
+        "value": "false",
+    },
+    
+
+];
+const typeData = [
+    {
+        "label": "Vyberte typ akce",
+        "value": "",
+    },
+    {
+        "label": "Distanční",
+        "value": 0,
+    },
+    {
+        "label": "Prezenční",
+        "value": 1,
+    },
+    
+
+];
 
 const AllActions = () => {
     const [{ accessToken }] = useAuthContext();
@@ -14,56 +47,24 @@ const AllActions = () => {
     const [sortCol, setSortCol] = useState();
     const [sortType, setSortType] = useState();
 
-    const [actionName, setActionName] = useState();
-    const [actionYear, setActionYear] = useState();
-    const [actionIsActive, setActionIsActive] = useState();
-    const [actionAvailability, setActionAvailability] = useState();
-
-    const getConditions = () => {
-        let conditions = "?";
-        if (actionName) {
-            conditions = conditions + "name=" + actionName;
-            if (actionYear) {
-                conditions = conditions + "&year=" + actionYear;
-            }
-            if (actionIsActive) {
-                conditions = conditions + "&isActive=" + actionIsActive;
-            }
-            if (actionAvailability) {
-                conditions = conditions + "&availability=" + actionYear;
-            }
-        }
-        else if (actionYear) {
-            conditions = conditions + "year=" + actionYear;
-            if (actionIsActive) {
-                conditions = conditions + "&isActive=" + actionIsActive;
-            }
-            if (actionAvailability) {
-                conditions = conditions + "&availability=" + actionYear;
-            }
-        }
-        else if (actionIsActive) {
-            conditions = conditions + "isActive=" + actionIsActive;
-            if (actionAvailability) {
-                conditions = conditions + "&availability=" + actionYear;
-            }
-        }
-        else if (actionAvailability) {
-            conditions = conditions + "availability=" + actionYear;
-        }
-        else {
-            conditions = "";
-        }
-        return conditions;
-    }
+    const [actionNameFilter, setActionNameFilter] = useState();
+    const [actionYearFilter, setActionYearFilter] = useState();
+    const [actionIsActiveFilter, setActionIsActiveFilter] = useState();
+    const [actionAvailabilityFilter, setActionAvailabilityFilter] = useState();
 
     const getActions = () => {
         setIsLoading(true);
         setError(false);
-        axios.get("/api/Actions" + getConditions(), {
+        axios.get("/api/Actions", {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`
+            },
+            params: {
+                name: actionNameFilter,
+                year: actionYearFilter,
+                isActive: actionIsActiveFilter,
+                typeOfAction: actionAvailabilityFilter,
             }
         })
             .then(response => {
@@ -111,27 +112,52 @@ const AllActions = () => {
         }, 500)
     }
 
+    const FilterHeader = () => {
+        return (
+            <Row>
+                <Col xs={15} sm={7} md={4} lg={7}>
+                    <h5 style={{ textAlign: "center" }}>Filter</h5>
+                </Col>
+                <Col xsHidden sm={24} md={24} lg={24} />
+                <Col xs={15} sm={17} md={17} lg={17}>
+                    <ButtonGroup>
+                        <Button color="blue" appearance="primary" onClick={()=>getActions()} >Filtrovat</Button>
+                        <Button color="cyan" appearance="primary" onClick={()=>{
+                            setActionNameFilter("");
+                            setActionYearFilter("");
+                            setActionIsActiveFilter("");
+                            setActionAvailabilityFilter("");
+                        }} >Reset filtru</Button>
+                    </ButtonGroup>
+                </Col>
+                <Col xs={6} sm={5} md={5} lg={5}>
+                <Button appearance="primary" color="green" as={Link} to="/NewAction" >Nová akce</Button>
+                </Col>
+            </Row>
+        )
+    }
+
     useEffect(() => {
         getActions();
     }, [accessToken])
 
     return (
-        <Col lg={24}>
+        <Col xs={24} sm={24} md={24} lg={24}>
             <Row>
-                <Col lg={21}>
+                <Col xs={24} sm={24} md={24} lg={24}>
                     <Panel header={<FilterHeader />} bordered>
                         <Form fluid>
-                            <Col lg={6}>
-                                <Form.Control placeholder="Název akce" value={actionName} onChange={e => setActionName(e)} />
+                            <Col xs={12} sm={12} md={6} lg={6}>
+                                <Form.Control placeholder="Název akce" value={actionNameFilter} onChange={e => setActionNameFilter(e)} />
                             </Col>
-                            <Col lg={6}>
-                                <Form.Control placeholder="Rok akce" value={actionYear} onChange={e => setActionYear(e)} />
+                            <Col xs={12} sm={12} md={6} lg={6}>
+                                <Form.Control placeholder="Rok akce" value={actionYearFilter} onChange={e => setActionYearFilter(e)} />
                             </Col>
-                            <Col lg={6}>
-                                <Form.Control placeholder="Stav akce" value={actionIsActive} onChange={e => setActionIsActive(e)} />
+                            <Col xs={12} sm={12} md={6} lg={6}>
+                                <SelectPicker block data={conditionData} searchable={false} value={actionIsActiveFilter} onChange={e => setActionIsActiveFilter(e)} placeholder="Stav akce"  />
                             </Col>
-                            <Col lg={6}>
-                                <Form.Control placeholder="Věřejná" value={actionAvailability} onChange={e => setActionAvailability(e)} />
+                            <Col xs={12} sm={12} md={6} lg={6}>
+                                <SelectPicker block data={typeData} searchable={false} value={actionAvailabilityFilter} onChange={e => setActionAvailabilityFilter(e)} placeholder="Typ akce"  />
                             </Col>
                             <br />
                         </Form>
@@ -142,7 +168,7 @@ const AllActions = () => {
                 </Col>
             </Row>
             <Row>
-                <Col lg={24}>
+                <Col xs={24} sm={24} md={24} lg={24}>
                     <Table
                         data={dataToTable()}
                         onSortColumn={handleSortColumn}
@@ -153,26 +179,27 @@ const AllActions = () => {
                         bordered
                         cellBordered
                         wordWrap >
-                        <Table.Column sortable resizable fixed width={300} >
+                        <Table.Column sortable resizable width={300} >
                             <Table.HeaderCell align="center" >Název akce</Table.HeaderCell>
                             <Table.Cell dataKey="name" />
                         </Table.Column>
-                        <Table.Column sortable resizable fixed width={100} >
+                        <Table.Column sortable resizable width={100} >
                             <Table.HeaderCell align="center" >Rok akce</Table.HeaderCell>
                             <Table.Cell dataKey="year" />
                         </Table.Column>
-                        <Table.Column resizable fixed width={100} >
+                        <Table.Column resizable width={100} >
                             <Table.HeaderCell align="center" >Stav</Table.HeaderCell>
                             <ConditionCell dataKey="active" />
                         </Table.Column>
-                        <Table.Column resizable fixed width={200} >
+                        <Table.Column resizable width={200} >
                             <Table.HeaderCell align="center" >Veřejná</Table.HeaderCell>
                             <AvailabilityCell dataKey="availability" />
                         </Table.Column>
-                        <Table.Column resizable fixed width={200} >
+                        <Table.Column resizable width={200} >
                             <Table.HeaderCell align="center" >Typ akce</Table.HeaderCell>
                             <TypeCell dataKey="formOfAction" />
-                        </Table.Column><Table.Column resizable fixed width={200} >
+                        </Table.Column>
+                        <Table.Column resizable width={200} >
                             <Table.HeaderCell align="center" >Akce</Table.HeaderCell>
                             <ActionCell />
                         </Table.Column>
@@ -215,21 +242,6 @@ const ActionCell = ({ rowData, dataKey, ...props }) => {
     )
 }
 
-const FilterHeader = () => {
-    return (
-        <Row>
-            <Col lg={5}>
-                <h5>Filter</h5>
-            </Col>
-            <Col lg={6} lgOffset={13}>
-                <ButtonGroup>
-                    <Button color="blue" appearance="primary" >Filtrovat</Button>
-                    <Button color="cyan" appearance="primary" >Reset filtru</Button>
-                    <Button appearance="primary" color="green" as={Link} to="/NewAction" >Nová akce</Button>
-                </ButtonGroup>
-            </Col>
-        </Row>
-    )
-}
+
 
 export default AllActions;
