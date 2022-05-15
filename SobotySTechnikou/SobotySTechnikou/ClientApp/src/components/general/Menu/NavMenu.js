@@ -142,28 +142,20 @@ export const NavMenu = props => {
                                     <Spinner size={"sm"} />
                                     : null
                         }
+                        {
+                            userManager ?
+                                accessToken ?
+                                    <Nav.Item as={Link} to="/log-out" onClick={() => { userManager.signoutRedirect() }}>Odhlásit</Nav.Item> :
+                                    <Nav.Item as={Link} to="/log-in" onClick={() => { userManager.signinRedirect({ redirectUrl: "/" }) }}>Přihlásit se</Nav.Item> :
+                                null
 
+                        }
 
                     </Nav>
                 </Col>
                 <Col md={1} lg={2}>
                 </Col>
             </Row>
-            <Drawer placement='left' open={isOpen} onClose={() => { setIsOpen(false) }}>
-                <Drawer.Header>
-                    <Drawer.Title>Drawer Title</Drawer.Title>
-                    <Drawer.Actions>
-                        <Button onClick={() => setIsOpen(false)}>Cancel</Button>
-                        <Button onClick={() => setIsOpen(false)} appearance="primary">
-                            Confirm
-                        </Button>
-                    </Drawer.Actions>
-                </Drawer.Header>
-                <Drawer.Body>
-                    <p>Ahoj jak se vede</p>
-                </Drawer.Body>
-            </Drawer>
-
         </Navbar >
     )
 }
