@@ -89,7 +89,7 @@ namespace SobotySTechnikou.Controllers
                 return NotFound();
             }
 
-            group.Users = _context.UsersInGroups.Include(x => x.Group).Where(x => x.GroupId == group.Id)
+            group.Users = _context.UsersInGroups.Include(x => x.Group).Where(x => x.GroupId == group.Id && x.CancelledAt == null)
                 .Select(x => new UserVM
                 {
                     FirstName = x.User.FirstName,
@@ -99,7 +99,7 @@ namespace SobotySTechnikou.Controllers
                     BirthDate = DateTime.Parse(x.User.BirthDate).ToShortDateString(),
                     Year = x.User.Year,
                     UserSetInGroup = x.CreatedAt.ToString(),
-                    Id = x.User.Id
+                    Id = x.User.Id,
                 }).ToList();
             return Ok(group);
         }

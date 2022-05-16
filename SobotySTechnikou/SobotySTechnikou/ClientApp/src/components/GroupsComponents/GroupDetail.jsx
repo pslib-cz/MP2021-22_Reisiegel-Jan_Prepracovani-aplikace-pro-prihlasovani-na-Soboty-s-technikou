@@ -7,10 +7,14 @@ import { Button, ButtonGroup, Col, Panel, Row, Table, Divider } from 'rsuite';
 import { useAuthContext } from '../../providers/AuthProvider';
 import parse from 'html-react-parser';
 import { Link } from 'react-router-dom';
+import Loading from '../general/Loading';
+import NotFound from '../general/NotFound';
+import ErrorMessage from '../general/ErrorMessage';
+import Unauthorized from '../general/Unauthorized';
 
 const GroupDetail = () => {
     const { year, actionId, groupId } = useParams();
-    const [{ accessToken }] = useAuthContext();
+    const [{ accessToken, profile }] = useAuthContext();
     const [isLoading, setIsLoading] = useState();
     const [error, setError] = useState();
     const [groupData, setGroupData] = useState();
@@ -120,7 +124,6 @@ const GroupDetail = () => {
     const ActionCell = ({ rowData, dataKey, ...props }) => {
         return (
             <Table.Cell {...props}>
-                <Button color="blue" appearance="primary" as={Link} to={"/UserDetail/" + rowData["email"]}>Detail(!)</Button>
                 <Button color="green" appearance="primary" onClick={e => {
                     console.log(typeof (rowData["id"]));
                     axios.get("/api/Applications/Print", {
@@ -151,11 +154,16 @@ const GroupDetail = () => {
         getGroupData();
     }, [accessToken])
 
-    if (isLoading) {
-        return (<div>načítám</div>);
+    if(profile.lector === "1"){
+        return (
+            <Unauthorized lector={true} />
+        )
+    }
+    else if (isLoading) {
+        return (<Loading />);
     }
     else if (error) {
-        return (<div>Error</div>);
+        return (<ErrorMessage />);
     }
     else if (groupData) {
         return (
@@ -398,7 +406,7 @@ const GroupDetail = () => {
                                 <Table.Column resizable width={80} >
                                     <Table.HeaderCell align="center" >Třída</Table.HeaderCell>
                                     <YearCell dataKey="year" />
-                                </Table.Column><Table.Column resizable width={200} >
+                                </Table.Column><Table.Column resizable width={110} >
                                     <Table.HeaderCell align="center" >Akce</Table.HeaderCell>
                                     <ActionCell />
                                 </Table.Column>
@@ -410,7 +418,7 @@ const GroupDetail = () => {
         )
     }
     else {
-        return (<div></div>)
+        return (<NotFound />)
     }
 }
 

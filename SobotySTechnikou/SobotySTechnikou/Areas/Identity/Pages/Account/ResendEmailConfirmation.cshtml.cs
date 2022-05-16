@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using SobotySTechnikou.Models;
+using SobotySTechnikou.Prints.ViewModels;
+using SobotySTechnikou.Services;
 
 namespace SobotySTechnikou.Areas.Identity.Pages.Account
 {
@@ -22,11 +24,13 @@ namespace SobotySTechnikou.Areas.Identity.Pages.Account
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailSender _emailSender;
+        private readonly RazorViewToStringRenderer _razorViewToStringRenderer;
 
-        public ResendEmailConfirmationModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender)
+        public ResendEmailConfirmationModel(UserManager<ApplicationUser> userManager, IEmailSender emailSender, RazorViewToStringRenderer razorViewToStringRenderer)
         {
             _userManager = userManager;
             _emailSender = emailSender;
+            _razorViewToStringRenderer = razorViewToStringRenderer;
         }
 
         /// <summary>
@@ -77,10 +81,15 @@ namespace SobotySTechnikou.Areas.Identity.Pages.Account
                 pageHandler: null,
                 values: new { userId = userId, code = code },
                 protocol: Request.Scheme);
+            string fileName = "/Prints/Pages/EmailBody.cshtml";
+            string mailBody = await _razorViewToStringRenderer.RenderViewToStringAsync(fileName, new EmailBodyVM
+            {
+                CallBackURL = callbackUrl,
+            });
             await _emailSender.SendEmailAsync(
                 Input.Email,
                 "Potvrďte váš email",
-                $"Prosím, potvrďte svou registraci <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>kliknutím zde</a>.");
+                /*mailBody); //*/$"Prosím, potvrďte svou registraci <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>kliknutím zde</a>.");
 
             ModelState.AddModelError(string.Empty, "Ověřovací email byl odeslán. Prosím, zkontrolujte svou emailovou schránku.");
             return Page();

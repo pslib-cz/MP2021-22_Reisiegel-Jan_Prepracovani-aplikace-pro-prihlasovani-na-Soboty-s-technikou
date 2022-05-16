@@ -4,8 +4,11 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Button, Checkbox, Col, DatePicker, Form, Input, Radio, RadioGroup, Row, SelectPicker } from "rsuite";
-import { createNonNullExpression } from "typescript";
 import { useAuthContext } from "../../providers/AuthProvider";
+import ErrorMessage from "../general/ErrorMessage";
+import Loading from "../general/Loading";
+import NotFound from "../general/NotFound";
+import Unauthorized from "../general/Unauthorized";
 
 const yearData = [
     {
@@ -59,6 +62,7 @@ const EditUser = () => {
     const [{ accessToken, profile }] = useAuthContext();
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(false);
+    //const [errorMessage, setErrorMessage] = useState("");
     const [userData, setUserData] = useState();
 
     const [name, setName] = useState();
@@ -80,7 +84,7 @@ const EditUser = () => {
         setIsLoading(true);
         setError(false);
         if (mail) {
-            axios.get("/api/Users/User/" + mail, {
+            axios.get("/api/Users/User" + mail, {
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${accessToken}`
@@ -104,6 +108,7 @@ const EditUser = () => {
                 })
                 .catch(error => {
                     setError(true);
+                    //setErrorMessage(error)
                 })
                 .finally(() => {
                     setIsLoading(false);
@@ -201,7 +206,20 @@ const EditUser = () => {
     useEffect(() => {
         getUserData();
     }, [accessToken || profile]);
-    if (userData) {
+    if(mail){
+        if(profile.admin == undefined || !profile.admin === "1"){
+            return (
+                <Unauthorized admin={true} />
+            )
+        }
+    }
+    else if(!accessToken){
+        
+        return (
+            <Unauthorized />
+        )
+    }
+    else if (userData) {
         return (
             <div>
                 <h2>{userData.firstName + " " + userData.lastName}</h2>
@@ -373,17 +391,17 @@ const EditUser = () => {
     }
     else if (error) {
         return (
-            <div></div>
+            <ErrorMessage />
         )
     }
     else if (isLoading) {
         return (
-            <div></div>
+            <Loading />
         )
     }
     else {
         return (
-            <div></div>
+            <NotFound />
         )
     }
 

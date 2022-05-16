@@ -7,6 +7,10 @@ import { useAuthContext } from "../../providers/AuthProvider";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Link } from "react-router-dom";
+import Loading from "../general/Loading";
+import NotFound from "../general/NotFound";
+import ErrorMessage from "../general/ErrorMessage";
+import Unauthorized from "../general/Unauthorized";
 
 const yearData = [
     {
@@ -33,7 +37,7 @@ const yearData = [
 
 const EditGroup = () => {
     const { year, actionId, groupId } = useParams();
-    const [{ accessToken }] = useAuthContext();
+    const [{ accessToken, profile }] = useAuthContext();
     const [error, setError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [groupData, setGroupData] = useState();
@@ -162,7 +166,12 @@ const EditGroup = () => {
         getActionsSelector();
     }, [accessToken]);
 
-    if (groupData) {
+    if(profile.lector === "1"){
+        return (
+            <Unauthorized lector={true} />
+        )
+    }
+    else if (groupData) {
         return (
             <Col xs={24} sm={24} md={24} lg={24}>
                 <h2>{groupName}</h2>
@@ -349,17 +358,17 @@ const EditGroup = () => {
     }
     else if (error) {
         return (
-            <div></div>
+            <ErrorMessage />
         )
     }
     else if (isLoading) {
         return (
-            <div></div>
+            <Loading />
         )
     }
     else {
         return (
-            <div></div>
+            <NotFound />
         )
     }
 }

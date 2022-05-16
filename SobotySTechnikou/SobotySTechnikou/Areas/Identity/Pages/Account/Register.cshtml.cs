@@ -20,6 +20,8 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using SobotySTechnikou.Data;
 using SobotySTechnikou.Models;
+using SobotySTechnikou.Prints.ViewModels;
+using SobotySTechnikou.Services;
 
 namespace SobotySTechnikou.Areas.Identity.Pages.Account
 {
@@ -32,6 +34,7 @@ namespace SobotySTechnikou.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly ApplicationDbContext _context;
+        private readonly RazorViewToStringRenderer _razorViewToStringRenderer;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
@@ -39,7 +42,8 @@ namespace SobotySTechnikou.Areas.Identity.Pages.Account
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            ApplicationDbContext context)
+            ApplicationDbContext context,
+            RazorViewToStringRenderer razorViewToStringRenderer)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -48,6 +52,7 @@ namespace SobotySTechnikou.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _context = context;
+            _razorViewToStringRenderer = razorViewToStringRenderer;
         }
 
         /// <summary>
@@ -183,8 +188,14 @@ namespace SobotySTechnikou.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
+                    string fileName = "/Prints/Pages/EmailBody.cshtml";
+                    string mailBody = await _razorViewToStringRenderer.RenderViewToStringAsync(fileName, new EmailBodyVM
+                    {
+                        CallBackURL = callbackUrl,
+                    });
+
                     await _emailSender.SendEmailAsync(Input.Email, "Potvrďte váš email",
-                        $"Prosím, potvrďte svou registraci <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>kliknutím zde</a>.");
+                        /*mailBody);//*/$"Prosím, potvrďte svou registraci <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>kliknutím zde</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {

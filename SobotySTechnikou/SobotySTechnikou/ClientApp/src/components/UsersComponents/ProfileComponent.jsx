@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button, ButtonGroup, Col, Container, Divider, Grid, Panel, Row, Table } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
+import Unauthorized from "../general/Unauthorized";
 
 const yearData = [ "Nevybráno", "7. a nižší třída", "8. třída ZŠ", "9. třída ZŠ", "Vyšší třída (SŠ)"];
 
@@ -111,7 +112,20 @@ const Profile = props => {
         getUserData();
         //console.log(mail);
     }, [accessToken]);
-    if (userData) {
+    if(mail){
+        if(profile.admin == undefined || !profile.admin === "1"){
+            return (
+                <Unauthorized admin={true} />
+            )
+        }
+    }
+    else if(!accessToken){
+        
+        return (
+            <Unauthorized />
+        )
+    }
+    else if (userData) {
         return (
             <Col xs={24} sm={24} md={24} lg={24}>
                 <Row>

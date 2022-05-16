@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { Routes, Route } from "react-router-dom";
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
-import { FetchData } from './components/FetchData';
-import { Counter } from './components/Counter';
 import './custom.css'
 import { AuthProvider } from './providers/AuthProvider';
 import { Paths } from './configuration/main';

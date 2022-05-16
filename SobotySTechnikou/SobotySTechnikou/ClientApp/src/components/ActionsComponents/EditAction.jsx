@@ -8,10 +8,14 @@ import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Button, Checkbox, Col, Form, Input, InputNumber, Row } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
+import ErrorMessage from "../general/ErrorMessage";
+import Loading from "../general/Loading";
+import NotFound from "../general/NotFound";
+import Unauthorized from "../general/Unauthorized";
 
 const EditAction = () => {
     const { year, actionId } = useParams();
-    const [{ accessToken }] = useAuthContext();
+    const [{ accessToken, profile }] = useAuthContext();
     const [isLoading, setIsLoading] = useState();
     const [error, setError] = useState();
 
@@ -91,7 +95,12 @@ const EditAction = () => {
         getActionData();
     }, [accessToken]);
 
-    if (actionData) {
+    if(profile.lector === "1"){
+        return (
+            <Unauthorized lector={true} />
+        )
+    }
+    else if (actionData) {
         return (
             <Col xs={24} sm={24} md={24} lg={24}>
                 <h2>{actionData.name}</h2>
@@ -205,17 +214,17 @@ const EditAction = () => {
     }
     else if (error) {
         return (
-            <div></div>
+            <ErrorMessage />
         )
     }
     else if (isLoading) {
         return (
-            <div></div>
+            <Loading />
         )
     }
     else {
         return (
-            <div></div>
+            <NotFound />
         )
     }
 }

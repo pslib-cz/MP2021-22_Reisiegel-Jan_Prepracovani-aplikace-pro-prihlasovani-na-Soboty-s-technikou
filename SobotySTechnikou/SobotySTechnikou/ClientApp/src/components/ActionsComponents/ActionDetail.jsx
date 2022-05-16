@@ -7,13 +7,19 @@ import { Button, ButtonGroup, Col, Panel, Row, Table } from "rsuite";
 import { useAuthContext } from "../../providers/AuthProvider";
 import parse from 'html-react-parser';
 import { Link } from "react-router-dom";
+import Loading from "../general/Loading";
+import NotFound from "../general/NotFound";
+import ErrorMessage from "../general/ErrorMessage";
+import Unauthorized from "../general/Unauthorized";
 
 const ActionDetail = () => {
     const { nameId, year } = useParams();
-    const [{ accessToken }] = useAuthContext();
+    const [{ accessToken, profile }] = useAuthContext();
     const [isLoading, setIsLoading] = useState();
     const [error, setError] = useState();
     const [actionData, setActionData] = useState();
+
+    console.log(profile)
 
     const getData = () => {
         setIsLoading(true);
@@ -148,15 +154,28 @@ const ActionDetail = () => {
         )
     }
 
+    const ActionCell = ({ rowData, dataKey, ...props }) => {
+        return (
+            <Table.Cell {...props} align="center">
+                <Button as={Link} to={`/Group/${year}/${nameId}/${rowData["nameId"]}`} color="blue" appearance="primary" size="sm" >Detail</Button>
+            </Table.Cell>
+        )
+    }
+
     useEffect(() => {
         getData();
     }, [accessToken])
 
-    if (isLoading) {
-        return (<div>načítám</div>);
+    if(profile.lector === "1"){
+        return (
+            <Unauthorized lector={true} />
+        )
+    }
+    else if (isLoading) {
+        return (<Loading />);
     }
     else if (error) {
-        return (<div>Error</div>);
+        return (<ErrorMessage />);
     }
     else if (actionData) {
         return (
@@ -284,6 +303,10 @@ const ActionDetail = () => {
                                                 <Table.HeaderCell align="center" >Otevřené</Table.HeaderCell>
                                                 <AvailabilityCell dataKey="open" />
                                             </Table.Column>
+                                            <Table.Column resizable  width={100} >
+                                                <Table.HeaderCell align="center" >Akce</Table.HeaderCell>
+                                                <ActionCell />
+                                            </Table.Column>
                                         </Table>
                                     </>
 
@@ -298,7 +321,7 @@ const ActionDetail = () => {
         )
     }
     else {
-        return (<div></div>)
+        return (<NotFound />)
     }
 }
 

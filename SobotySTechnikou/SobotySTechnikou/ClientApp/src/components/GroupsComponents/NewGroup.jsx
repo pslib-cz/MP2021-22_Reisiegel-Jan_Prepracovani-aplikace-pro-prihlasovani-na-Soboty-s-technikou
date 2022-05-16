@@ -33,7 +33,7 @@ const yearData = [
 ];
 
 const NewGroup = () => {
-    const [{ accessToken }] = useAuthContext();
+    const [{ accessToken, profile }] = useAuthContext();
     const [error, setError] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [groupData, setGroupData] = useState();
@@ -133,179 +133,186 @@ const NewGroup = () => {
     }, [accessToken]);
 
 
-    return (
-        <Col xs={24} sm={24} md={24} lg={24}>
-            <h2>Vytvořit novou skupinu</h2>
-            <Form fluid>
-                <Row>
-                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
-                        <Form.Group>
-                            <Col xs={24} sm={8} md={8} lg={6}>
-                                <Form.ControlLabel >Název skupiny</Form.ControlLabel>
-                            </Col>
-                            <Col xs={24} sm={12} md={12} lg={16}>
-                                <Input value={groupName} onChange={e => setGroupName(e)} placeholder="Vývoj webové stránky ve Wordpressu"></Input>
-                            </Col>
-                        </Form.Group>
+    if (profile.lector === "1") {
+        return (
+            <Unauthorized lector={true} />
+        )
+    }
+    else {
+        return (
+            <Col xs={24} sm={24} md={24} lg={24}>
+                <h2>Vytvořit novou skupinu</h2>
+                <Form fluid>
+                    <Row>
+                        <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
+                            <Form.Group>
+                                <Col xs={24} sm={8} md={8} lg={6}>
+                                    <Form.ControlLabel >Název skupiny</Form.ControlLabel>
+                                </Col>
+                                <Col xs={24} sm={12} md={12} lg={16}>
+                                    <Input value={groupName} onChange={e => setGroupName(e)} placeholder="Vývoj webové stránky ve Wordpressu"></Input>
+                                </Col>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <br />
+                    <Row>
+                        <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
+                            <Form.Group>
+                                <Col xs={24} sm={8} md={8} lg={6}>
+                                    <Form.ControlLabel >Akce</Form.ControlLabel>
+                                </Col>
+                                <Col xs={24} sm={12} md={12} lg={16}>
+                                    <SelectPicker block searchable={true} data={actionsSelector} value={action} onChange={e => setAction(e)} />
+                                </Col>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <br />
+                    <Row>
+                        <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
+                            <Form.Group>
+                                <Col xs={24} sm={8} md={8} lg={6}>
+                                    <Form.ControlLabel >Odpovědný lektor</Form.ControlLabel>
+                                </Col>
+                                <Col xs={24} sm={12} md={12} lg={16}>
+                                    <SelectPicker block data={lectors} value={headLector} onChange={e => setHeadLector(e)}></SelectPicker>
+                                </Col>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <br />
+                    <Row>
+                        <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
+                            <Form.Group>
+                                <Col xs={24} sm={8} md={8} lg={6}>
+                                    <Form.ControlLabel >Počet Lektorů</Form.ControlLabel>
+                                </Col>
+                                <Col xs={24} sm={12} md={12} lg={16}>
+                                    <InputNumber style={{ width: "100%" }} value={numberOfLectors} onChange={e => setNumberOfLectors(e)}></InputNumber>
+                                </Col>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <br />
+                    <Row>
+                        <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
+                            <Form.Group>
+                                <Col xs={24} sm={8} md={8} lg={6}>
+                                    <Form.ControlLabel >Poznámka k Lektorům</Form.ControlLabel>
+                                </Col>
+                                <Col xs={24} sm={12} md={12} lg={16}>
+                                    <CKEditor
+                                        config={{
+                                            language: 'cs',
+                                            toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote']
+                                        }}
+                                        editor={ClassicEditor}
+                                        data={lectorNote}
+                                        onChange={(event, editor) => {
+                                            //const data = editor.getData();
+                                            setLectorNote(editor.getData());
+                                        }}
+                                    />
+                                </Col>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <br />
+                    <Row>
+                        <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
+                            <Form.Group>
+                                <Col xs={24} sm={8} md={8} lg={6}>
+                                    <Form.ControlLabel >Kapacita</Form.ControlLabel>
+                                </Col>
+                                <Col xs={24} sm={12} md={12} lg={16}>
+                                    <InputNumber style={{ width: "100%" }} value={capacity} onChange={e => setCapacity(e)}></InputNumber>
+                                </Col>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <br />
+                    <Row>
+                        <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
+                            <Form.Group>
+                                <Col xs={24} sm={8} md={8} lg={6}>
+                                    <Form.ControlLabel >Minimální ročník</Form.ControlLabel>
+                                </Col>
+                                <Col xs={24} sm={12} md={12} lg={16}>
+                                    <SelectPicker block data={yearData} searchable={false} value={minYear} onChange={e => setMinYear(e)}></SelectPicker>
+                                </Col>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <br />
+                    <Row>
+                        <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
+                            <Form.Group>
+                                <Col xs={24} sm={8} md={8} lg={6}>
+                                    <Form.ControlLabel >Popis</Form.ControlLabel>
+                                </Col>
+                                <Col xs={24} sm={12} lg={16}>
+                                    <CKEditor
+                                        config={{
+                                            language: 'cs',
+                                            toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote']
+                                        }}
+                                        editor={ClassicEditor}
+                                        data={desc}
+                                        onChange={(event, editor) => {
+                                            //const data = editor.getData();
+                                            setDesc(editor.getData());
+                                        }}
+                                    />
+                                </Col>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <br />
+                    <Row>
+                        <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
+                            <Form.Group>
+                                <Col xs={24} sm={8} md={8} lg={6}>
+                                    <Form.ControlLabel >Otevřená</Form.ControlLabel>
+                                </Col>
+                                <Col xs={24} sm={12} md={12} lg={16}>
+                                    <Checkbox value={open} onChange={e => setOpen(!open)}></Checkbox>
+                                </Col>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <br />
+                    <Row>
+                        <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
+                            <Form.Group>
+                                <Col xs={24} sm={8} md={8} lg={6}>
+                                    <Form.ControlLabel >Poznámka</Form.ControlLabel>
+                                </Col>
+                                <Col xs={24} sm={12} md={12} lg={16}>
+                                    <CKEditor
+                                        config={{
+                                            language: 'cs',
+                                            toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote']
+                                        }}
+                                        editor={ClassicEditor}
+                                        data={note}
+                                        onChange={(event, editor) => {
+                                            //const data = editor.getData();
+                                            setNote(editor.getData());
+                                        }}
+                                    />
+                                </Col>
+                            </Form.Group>
+                        </Col>
+                    </Row>
+                    <br />
+                    <Col xs={24} sm={8} smOffset={8} md={8} mdOffset={8} lg={8} lgOffset={8}>
+                        <Button block color="cyan" appearance="primary" onClick={() => createGroup()} as={Link} to="/AllGroups" >Vytvořit skupinu</Button>
                     </Col>
-                </Row>
-                <br />
-                <Row>
-                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
-                        <Form.Group>
-                            <Col xs={24} sm={8} md={8} lg={6}>
-                                <Form.ControlLabel >Akce</Form.ControlLabel>
-                            </Col>
-                            <Col xs={24} sm={12} md={12} lg={16}>
-                                <SelectPicker block searchable={true} data={actionsSelector} value={action} onChange={e => setAction(e)} />
-                            </Col>
-                        </Form.Group>
-                    </Col>
-                </Row>
-                <br />
-                <Row>
-                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
-                        <Form.Group>
-                            <Col xs={24} sm={8} md={8} lg={6}>
-                                <Form.ControlLabel >Odpovědný lektor</Form.ControlLabel>
-                            </Col>
-                            <Col xs={24} sm={12} md={12} lg={16}>
-                                <SelectPicker block data={lectors} value={headLector} onChange={e => setHeadLector(e)}></SelectPicker>
-                            </Col>
-                        </Form.Group>
-                    </Col>
-                </Row>
-                <br />
-                <Row>
-                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
-                        <Form.Group>
-                            <Col xs={24} sm={8} md={8} lg={6}>
-                                <Form.ControlLabel >Počet Lektorů</Form.ControlLabel>
-                            </Col>
-                            <Col xs={24} sm={12} md={12} lg={16}>
-                                <InputNumber style={{ width: "100%" }} value={numberOfLectors} onChange={e => setNumberOfLectors(e)}></InputNumber>
-                            </Col>
-                        </Form.Group>
-                    </Col>
-                </Row>
-                <br />
-                <Row>
-                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
-                        <Form.Group>
-                            <Col xs={24} sm={8} md={8} lg={6}>
-                                <Form.ControlLabel >Poznámka k Lektorům</Form.ControlLabel>
-                            </Col>
-                            <Col xs={24} sm={12} md={12} lg={16}>
-                                <CKEditor
-                                    config={{
-                                        language: 'cs',
-                                        toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote']
-                                    }}
-                                    editor={ClassicEditor}
-                                    data={lectorNote}
-                                    onChange={(event, editor) => {
-                                        //const data = editor.getData();
-                                        setLectorNote(editor.getData());
-                                    }}
-                                />
-                            </Col>
-                        </Form.Group>
-                    </Col>
-                </Row>
-                <br />
-                <Row>
-                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
-                        <Form.Group>
-                            <Col xs={24} sm={8} md={8} lg={6}>
-                                <Form.ControlLabel >Kapacita</Form.ControlLabel>
-                            </Col>
-                            <Col xs={24} sm={12} md={12} lg={16}>
-                                <InputNumber style={{ width: "100%" }} value={capacity} onChange={e => setCapacity(e)}></InputNumber>
-                            </Col>
-                        </Form.Group>
-                    </Col>
-                </Row>
-                <br />
-                <Row>
-                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
-                        <Form.Group>
-                            <Col xs={24} sm={8} md={8} lg={6}>
-                                <Form.ControlLabel >Minimální ročník</Form.ControlLabel>
-                            </Col>
-                            <Col xs={24} sm={12} md={12} lg={16}>
-                                <SelectPicker block data={yearData} searchable={false} value={minYear} onChange={e => setMinYear(e)}></SelectPicker>
-                            </Col>
-                        </Form.Group>
-                    </Col>
-                </Row>
-                <br />
-                <Row>
-                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
-                        <Form.Group>
-                            <Col xs={24} sm={8} md={8} lg={6}>
-                                <Form.ControlLabel >Popis</Form.ControlLabel>
-                            </Col>
-                            <Col xs={24} sm={12} lg={16}>
-                                <CKEditor
-                                    config={{
-                                        language: 'cs',
-                                        toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote']
-                                    }}
-                                    editor={ClassicEditor}
-                                    data={desc}
-                                    onChange={(event, editor) => {
-                                        //const data = editor.getData();
-                                        setDesc(editor.getData());
-                                    }}
-                                />
-                            </Col>
-                        </Form.Group>
-                    </Col>
-                </Row>
-                <br />
-                <Row>
-                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
-                        <Form.Group>
-                            <Col xs={24} sm={8} md={8} lg={6}>
-                                <Form.ControlLabel >Otevřená</Form.ControlLabel>
-                            </Col>
-                            <Col xs={24} sm={12} md={12} lg={16}>
-                                <Checkbox value={open} onChange={e => setOpen(!open)}></Checkbox>
-                            </Col>
-                        </Form.Group>
-                    </Col>
-                </Row>
-                <br />
-                <Row>
-                    <Col xs={24} sm={24} md={22} mdOffset={2} lg={22} lgOffset={2}>
-                        <Form.Group>
-                            <Col xs={24} sm={8} md={8} lg={6}>
-                                <Form.ControlLabel >Poznámka</Form.ControlLabel>
-                            </Col>
-                            <Col xs={24} sm={12} md={12} lg={16}>
-                                <CKEditor
-                                    config={{
-                                        language: 'cs',
-                                        toolbar: ['bold', 'italic', 'link', 'bulletedList', 'numberedList', 'blockQuote']
-                                    }}
-                                    editor={ClassicEditor}
-                                    data={note}
-                                    onChange={(event, editor) => {
-                                        //const data = editor.getData();
-                                        setNote(editor.getData());
-                                    }}
-                                />
-                            </Col>
-                        </Form.Group>
-                    </Col>
-                </Row>
-                <br />
-                <Col xs={24} sm={8} smOffset={8} md={8} mdOffset={8} lg={8} lgOffset={8}>
-                <Button block color="cyan" appearance="primary" onClick={() => createGroup()} as={Link} to="/AllGroups" >Vytvořit skupinu</Button>
-                </Col>
-            </Form>
-        </Col>
-    )
+                </Form>
+            </Col>
+        )
+    }
 
 
 }
