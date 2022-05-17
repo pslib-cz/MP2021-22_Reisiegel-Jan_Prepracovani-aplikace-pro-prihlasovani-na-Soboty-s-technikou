@@ -17,7 +17,7 @@ export const Home = () => {
       <div /*className='text-center'*/>
         {
           accessToken ?
-          profile.completed_information ?
+          !profile.completed_information ?
             <Message style={{textAlign: "center"}} type="error" header="Nevyplněné informace" >
               <p>Nemůžete se přihlásit na jakoukoli akci, protože nemáte vyplněné nějaké důležité informace</p>
               <IconButton color='red' as={Link} to={"/EditUser"} icon={<Edit />} appearance='ghost' >Doplnit informace</IconButton>

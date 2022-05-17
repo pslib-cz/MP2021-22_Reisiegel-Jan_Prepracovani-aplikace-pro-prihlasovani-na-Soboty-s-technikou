@@ -89,7 +89,7 @@ namespace SobotySTechnikou.Areas.Identity.Pages.Account
             await _emailSender.SendEmailAsync(
                 Input.Email,
                 "Potvrďte váš email",
-                /*mailBody); //*/$"Prosím, potvrďte svou registraci <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>kliknutím zde</a>.");
+                mailBody); //$"Prosím, potvrďte svou registraci <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>kliknutím zde</a>.");
 
             ModelState.AddModelError(string.Empty, "Ověřovací email byl odeslán. Prosím, zkontrolujte svou emailovou schránku.");
             return Page();

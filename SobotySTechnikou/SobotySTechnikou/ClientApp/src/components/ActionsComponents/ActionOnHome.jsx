@@ -105,18 +105,21 @@ const ActionOnHome = () => {
                     </Panel>
                     <Col lg={24} xs={24} sm={24} md={24} style={{ position: "relative", bottom: "6em" }} >
 
-                        <Row style={{ marginBottom: "0.5em" }}>
+                        <Row style={{ marginBottom: "0.5em", textAlign: "center" }}>
 
                             <ButtonGroup style={{ width: "87%" }}>
                                 {
-                                    accessToken ? (
-                                        action.userIsInAction ? (
-                                            group.isUserAdded ?
-                                                <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { unenroll(group) }} disabled={false} >Odzapsat se</Button>
-                                                : <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { enroll(group) }} disabled={true} >Zapsat se</Button>
-                                        )
-                                            : <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { enroll(group) }} disabled={false} >Zapsat se</Button>
-                                    )
+                                    accessToken ?
+                                        profile.admin === "1" ? <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { enroll(group) }} disabled={true} >Zapsat se</Button> :
+                                            profile.lector === "1" ? <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { enroll(group) }} disabled={true} >Zapsat se</Button> :
+                                                (
+                                                    action.userIsInAction ? (
+                                                        group.isUserAdded ?
+                                                            <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { unenroll(group) }} disabled={false} >Odzapsat se</Button>
+                                                            : <Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { enroll(group) }} disabled={true} >Zapsat se</Button>
+                                                    ) :
+                                                        < Button style={{ width: "50%", border: "0.1em solid #2196f3" }} color="blue" appearance="subtle" onClick={() => { enroll(group) }} disabled={false} >Zapsat se</Button>
+                                                )
                                         : <Button
                                             style={{ width: "50%", border: "0.1em solid #2196f3" }}
                                             color="blue" appearance="subtle" onClick={() => { userManager.signinRedirect({ redirectUrl: "/" }) }}
@@ -243,10 +246,10 @@ const ActionOnHome = () => {
             </>
         )
     }
-    else if(error){
-        return(<ErrorMessage />)
+    else if (error) {
+        return (<ErrorMessage />)
     }
-    else return(<NotFound />)
+    else return (<NotFound />)
 
 }
 //userManager.signinRedirect({ redirectUrl: "/" })

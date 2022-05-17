@@ -5,7 +5,7 @@ import { Button, ButtonGroup, Col, Container, Divider, Grid, Panel, Row, Table }
 import { useAuthContext } from "../../providers/AuthProvider";
 import Unauthorized from "../general/Unauthorized";
 
-const yearData = [ "Nevybráno", "7. a nižší třída", "8. třída ZŠ", "9. třída ZŠ", "Vyšší třída (SŠ)"];
+const yearData = ["Nevybráno", "7. a nižší třída", "8. třída ZŠ", "9. třída ZŠ", "Vyšší třída (SŠ)"];
 
 const Profile = props => {
     const { mail } = useParams();
@@ -21,7 +21,7 @@ const Profile = props => {
         //console.log(accessToken);
         setError(false);
         //if ((accessToken == null)) {
-        if(mail){
+        if (mail) {
             axios.get("/api/Users/UserInfo?mail=" + mail, {
                 headers: {
                     "Content-Type": "application/json",
@@ -41,7 +41,7 @@ const Profile = props => {
                     setIsLoading(false);
                 })
         }
-        else{
+        else {
             axios.get("/api/Users/UserInfo", {
                 headers: {
                     "Content-Type": "application/json",
@@ -66,7 +66,7 @@ const Profile = props => {
     }
     const ClickCell = ({ rowData, dataKey, ...props }) => {
         const generateCertificate = () => {
-            axios.get("/api/Applications/Print",{
+            axios.get("/api/Applications/Print", {
                 headers: {
                     Authorization: "Bearer " + accessToken,
                     "Content-Type": "text/html"
@@ -83,44 +83,42 @@ const Profile = props => {
                 link.setAttribute('download', 'cektifikat.html')
                 document.body.appendChild(link);
                 link.click();
-            }).catch((error)=>{
+            }).catch((error) => {
                 console.log(error);
             })
         }
         return (
             <Table.Cell {...props}>
                 <ButtonGroup size="xs">
-                    
+
                     {
                         rowData.canEnroll ? <Button color="blue" appearance="primary" >Odhlásit</Button> : null
-                    } 
-                    {
-                        rowData.canGenerateCertificate ? <Button  color="blue" appearance="primary"
-                        onClick={e => {
-                            generateCertificate()
-                        }} >Generovat certifikát</Button> : null
                     }
-                    
+                    {
+                        rowData.canGenerateCertificate ? <Button color="blue" appearance="primary"
+                            onClick={e => {
+                                generateCertificate()
+                            }} >Generovat certifikát</Button> : null
+                    }
+
                 </ButtonGroup>
             </Table.Cell>
         )
     }
 
-    
+
 
     useEffect(() => {
         getUserData();
         //console.log(mail);
     }, [accessToken]);
-    if(mail){
-        if(profile.admin == undefined || !profile.admin === "1"){
-            return (
-                <Unauthorized admin={true} />
-            )
-        }
+    if (mail && (profile.admin == undefined || !profile.admin === "1")) {
+        return (
+            <Unauthorized admin={true} />
+        )
     }
-    else if(!accessToken){
-        
+    else if (!accessToken) {
+
         return (
             <Unauthorized />
         )
@@ -213,19 +211,19 @@ const Profile = props => {
                     <Col xs={24} sm={24} lg={15} lgOffset={4}>
                         <Panel shaded bordered header={"Skupiny"}>
                             <Table
-                            data = {userData.groups}
-                            autoHeight={true}
-                            loading={isLoading}
+                                data={userData.groups}
+                                autoHeight={true}
+                                loading={isLoading}
                             >
                                 <Table.Column align="center">
                                     <Table.HeaderCell>Název</Table.HeaderCell>
                                     <Table.Cell dataKey="name" />
                                 </Table.Column>
-                                <Table.Column  align="center">
+                                <Table.Column align="center">
                                     <Table.HeaderCell>Akce</Table.HeaderCell>
                                     <Table.Cell dataKey="actionName" />
                                 </Table.Column>
-                                <Table.Column  align="center">
+                                <Table.Column align="center">
                                     <Table.HeaderCell>Rok</Table.HeaderCell>
                                     <Table.Cell dataKey="year" />
                                 </Table.Column>

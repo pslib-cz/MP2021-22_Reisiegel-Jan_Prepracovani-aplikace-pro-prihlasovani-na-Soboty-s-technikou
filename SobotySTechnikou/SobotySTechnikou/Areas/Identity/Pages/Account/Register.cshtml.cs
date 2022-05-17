@@ -195,7 +195,7 @@ namespace SobotySTechnikou.Areas.Identity.Pages.Account
                     });
 
                     await _emailSender.SendEmailAsync(Input.Email, "Potvrďte váš email",
-                        /*mailBody);//*/$"Prosím, potvrďte svou registraci <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>kliknutím zde</a>.");
+                        mailBody);//$"Prosím, potvrďte svou registraci <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>kliknutím zde</a>.");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {

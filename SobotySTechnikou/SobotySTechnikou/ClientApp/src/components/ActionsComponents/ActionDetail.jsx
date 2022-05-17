@@ -166,7 +166,7 @@ const ActionDetail = () => {
         getData();
     }, [accessToken])
 
-    if(profile.lector === "1"){
+    if(!profile.lector === "1"){
         return (
             <Unauthorized lector={true} />
         )

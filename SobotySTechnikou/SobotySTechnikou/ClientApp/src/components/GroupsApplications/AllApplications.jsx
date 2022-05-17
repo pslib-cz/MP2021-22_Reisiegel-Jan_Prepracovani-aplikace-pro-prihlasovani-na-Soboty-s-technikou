@@ -97,7 +97,7 @@ const AllApplications = () => {
             <Table.Cell {...props}>
                 <ButtonGroup size="xs">
                     {
-                        rowData["cancelDate"] ? (
+                        !rowData["cancelDate"] ? (
                             <Button color="blue" appearance="primary"
                                 onClick={e => {
                                     generateCertificate()

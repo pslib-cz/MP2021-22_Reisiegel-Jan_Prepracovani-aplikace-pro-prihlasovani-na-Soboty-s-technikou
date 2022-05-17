@@ -1,10 +1,22 @@
 ﻿@using SobotySTechnikou.Prints.ViewModels
 @model EmailBodyVM
 
-<p>Vážený uchazeči, Vážená uchazečko,</p>
-<br />
-<p>rádi bychom tě pozvali k používání naší aplikace pro přihlašování na Soboty s technikou.</p>
-<p>Abys mohl/a využít aplikace naplno potvrď prosím funkčnost své e-mailové adresy kliknutím <a href="@HtmlEncoder.Encode(Model.CallBackURL)">zde</a></p>
-<br />
-<p>Rádi tě uvidíme na nějaké akci</p>
-<p>Tým SPŠSE</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <style type="text/css">
+    </style>
+</head>
+<body>
+    <p>Vážený uchazeči, Vážená uchazečko,</p>
+    <p>rádi bychom tě pozvali k používání naší aplikace pro přihlašování na Soboty s technikou.</p>
+    <p>Abys mohl/a využít aplikace naplno potvrď prosím funkčnost své e-mailové adresy kliknutím <a href="@Html.Raw(Model.CallBackURL)">zde</a></p>
+    <br />
+    <p>Rádi tě uvidíme na nějaké akci</p>
+    <p>Tým SPŠSE</p>
+</body>
+</html>
